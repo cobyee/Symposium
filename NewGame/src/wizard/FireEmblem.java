@@ -27,7 +27,7 @@ public class FireEmblem extends BasicGame
     public FireEmblem()
     {
         super("Fire Emblem game");
-    }
+    } 
 
     public static void main(String[] arguments)
     {
