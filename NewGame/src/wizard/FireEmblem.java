@@ -22,6 +22,13 @@ public class FireEmblem extends BasicGame
 	private float x = 64f, y = 64f;
 	private boolean[][] blocked;
 	private static final int SIZE = 64; 
+	private boolean canMove = true;
+	
+	private static Tile[][] grid = new Tile[10][10];
+	private int characterX = 1;
+	private int characterY = 1;
+	private static Tile tree = new Tile(true, false);
+	private static Tile open = new Tile(false,false);
 	
 	
     public FireEmblem()
@@ -31,6 +38,8 @@ public class FireEmblem extends BasicGame
 
     public static void main(String[] arguments)
     {
+    	populateGrid();
+    	grid[2][2].setBlocked(); 
         try
         {
             AppGameContainer app = new AppGameContainer(new FireEmblem());
@@ -62,37 +71,49 @@ public class FireEmblem extends BasicGame
     	
     	// build a collision map based on tile properties in the TileD map
     	blocked = new boolean[grassMap.getWidth()][grassMap.getHeight()];
-    	for (int xAxis=0;xAxis
     }
 
     @Override
     public void update(GameContainer container, int delta) throws SlickException
     {
     	  Input input = container.getInput();
-          if (input.isKeyDown(Input.KEY_UP))
-          {
+          if (input.isKeyDown(Input.KEY_UP) && movable(2))
+          { 
               sprite = up;
               sprite.update(delta);
               // The lower the delta the slowest the sprite will animate.
-              y -= delta * .8f;
+              y -= 64f;
+              canMove = false;
+              characterY-- ;
           }
-          else if (input.isKeyDown(Input.KEY_DOWN))
+          else if (input.isKeyDown(Input.KEY_DOWN) && movable(4) && characterY < 10)
           {
               sprite = down;
               sprite.update(delta);
-              y += delta * .8f;
+              y += 64f;
+              canMove = false;
+              characterY++;
           }
-          else if (input.isKeyDown(Input.KEY_LEFT))
+          else if (input.isKeyDown(Input.KEY_LEFT)&& movable(3) && characterX > 0)
           {
               sprite = left;
               sprite.update(delta);
-              x -= delta * .8f;
+              x -= 64f;
+              canMove = false;
+              characterX--;
           }
-          else if (input.isKeyDown(Input.KEY_RIGHT))
+          else if (input.isKeyDown(Input.KEY_RIGHT)&& movable(1) && characterX != 9)
           {
               sprite = right;
               sprite.update(delta);
-              x += delta * .8f;
+              x += 64f;
+        	  characterX ++;
+              canMove = false;
+          }
+          else if (input.isKeyDown(Input.KEY_SPACE) && !canMove) {
+        	  sprite = right;
+        	  sprite.update(delta);
+        	  canMove = true;
           }
     }
 
@@ -100,5 +121,41 @@ public class FireEmblem extends BasicGame
     {
     	grassMap.render(0,0);
     	sprite.draw((int)x, (int)y); 
+    }
+    
+    public boolean movable(int direction) {
+    	if(canMove) {
+    		//1 right, 2 up, 3 left, 4 down
+    		if(direction == 1 && characterX != 9) {
+    			if(grid[characterX+1][characterY].getBlocked()) {
+    				return false;
+    			}
+    		}
+    		if(direction == 2 && characterY != 0) {
+    			if(grid[characterX][characterY-1].getBlocked()) {
+    				return false;
+    			}
+    		}
+    		if(direction == 3 && characterX != 0) {
+    			if(grid[characterX-1][characterY].getBlocked()) {
+    				return false;
+    			}
+    		}
+    		if(direction == 4 && characterY != 9) {
+    			if(grid[characterX][characterY+1].getBlocked()) {
+    				return false;
+    			}
+    		}
+    		return true;
+    	}
+    	return false;
+    }
+    
+    public static void populateGrid() {
+    	for(int i = 0; i < 10; i++) {
+    		for(int j = 0; j < 10; j ++) {
+    			grid[i][j] = new Tile(false, false);
+    		}
+    	}
     }
 }
