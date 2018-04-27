@@ -1,5 +1,7 @@
 package wizard;
 
+import java.awt.Button;
+
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
@@ -19,16 +21,30 @@ public class FireEmblem extends BasicGame
 	
 	private TiledMap grassMap;
 	private Animation sprite, up, down, left, right;
+	private static Image button;
+	private static Image button2;
+	private static Image button3;
+	private static Image button4;
+	private static Image button5;
 	private float x = 64f, y = 64f;
 	private boolean[][] blocked;
 	private static final int SIZE = 64; 
 	private boolean canMove = true;
+	private int buttonX = 20;
+	private int buttonY = 640;
 	
 	private static Tile[][] grid = new Tile[10][10];
 	private int characterX = 1;
 	private int characterY = 1;
-	private static Tile tree = new Tile(true, false);
-	private static Tile open = new Tile(false,false);
+	private static Tile tree = new Tile(true, null);
+	private static Tile open = new Tile(false, new Characters("Joe", 10, 10, "resources/rpgTile066"));
+	
+	private static Image[] shownOptions = new Image[5];
+	private static Image[] menuOptions = new Image[5];
+	private static Image[] menuOptions2 = new Image[5];
+	
+	static int OptionPos = 0;
+	
 	
 	
     public FireEmblem()
@@ -37,13 +53,14 @@ public class FireEmblem extends BasicGame
     } 
 
     public static void main(String[] arguments)
-    {
+    {	
     	populateGrid();
-    	grid[2][2].setBlocked(); 
+    	grid[2][2].setBlocked();
+    	
         try
         {
             AppGameContainer app = new AppGameContainer(new FireEmblem());
-            app.setDisplayMode(640, 640, false);
+            app.setDisplayMode(640, 704, false);
             app.start();
         }
         catch (SlickException e)
@@ -56,6 +73,7 @@ public class FireEmblem extends BasicGame
     public void init(GameContainer container) throws SlickException
     {
     	grassMap = new TiledMap("resources/map.tmx");
+    	
     	Image [] movementUp = {new Image("resources/rpgTile009.png"), new Image("resources/rpgTile020.png")};
     	Image [] movementDown = {new Image("resources/rpgTile013.png"), new Image("resources/rpgTile020.png")};
     	Image [] movementLeft = {new Image("resources/rpgTile025.png"), new Image("resources/rpgTile008.png")};
@@ -71,6 +89,25 @@ public class FireEmblem extends BasicGame
     	
     	// build a collision map based on tile properties in the TileD map
     	blocked = new boolean[grassMap.getWidth()][grassMap.getHeight()];
+    	
+    	menuOptions[0] = new Image("resources/rpgTile020.png");
+        menuOptions[1] = new Image("resources/rpgTile021.png");
+        menuOptions[2] = new Image("resources/rpgTile022.png");
+        menuOptions[3] = new Image("resources/rpgTile023.png");
+        menuOptions[4] = new Image("resources/rpgTile024.png");
+        menuOptions2[0] = new Image("resources/rpgTile025.png");
+        menuOptions2[1] = new Image("resources/rpgTile026.png");
+        menuOptions2[2] = new Image("resources/rpgTile027.png");
+        menuOptions2[3] = new Image("resources/rpgTile028.png");
+        menuOptions2[4] = new Image("resources/rpgTile029.png");
+        
+        shownOptions[0] = new Image("resources/rpgTile020.png");
+        shownOptions[1] = new Image("resources/rpgTile021.png");
+        shownOptions[2] = new Image("resources/rpgTile022.png");
+        shownOptions[3] = new Image("resources/rpgTile023.png");
+        shownOptions[4] = new Image("resources/rpgTile024.png");
+        
+        updateButtons();
     }
 
     @Override
@@ -114,6 +151,18 @@ public class FireEmblem extends BasicGame
         	  sprite = right;
         	  sprite.update(delta);
         	  canMove = true;
+        	  
+        	  updateButtons();
+          }
+          else if (input.isKeyDown(Input.KEY_A) && canMove) {
+        	  OptionLeft();
+        	  updateButtons();
+        	  canMove = false;
+          }
+          else if (input.isKeyDown(Input.KEY_D) && canMove) {
+        	  OptionRight();
+        	  updateButtons();
+        	  canMove = false;
           }
     }
 
@@ -121,6 +170,11 @@ public class FireEmblem extends BasicGame
     {
     	grassMap.render(0,0);
     	sprite.draw((int)x, (int)y); 
+    	button.draw((int)buttonX, (int)buttonY);
+    	button2.draw((int)84, (int)buttonY);
+    	button3.draw(148, (int)buttonY);
+    	button4.draw(212, (int)buttonY);
+    	button5.draw(276, (int)buttonY);
     }
     
     public boolean movable(int direction) {
@@ -154,8 +208,37 @@ public class FireEmblem extends BasicGame
     public static void populateGrid() {
     	for(int i = 0; i < 10; i++) {
     		for(int j = 0; j < 10; j ++) {
-    			grid[i][j] = new Tile(false, false);
+    			grid[i][j] = new Tile(false, null);
     		}
     	}
+    }
+    
+    public static void OptionLeft() {
+    	if(OptionPos != 0) {
+    		shownOptions[OptionPos] = menuOptions[OptionPos];
+    		OptionPos--;
+    		shownOptions[OptionPos] = menuOptions2[OptionPos];
+    		System.out.println("fagd");
+    		System.out.print(menuOptions[OptionPos]);
+    	}
+    }
+    public static void OptionRight() {
+    	if(OptionPos != 4) {
+    		shownOptions[OptionPos] = menuOptions[OptionPos];
+    		OptionPos++;
+    		shownOptions[OptionPos] = menuOptions2[OptionPos];
+    		System.out.println(shownOptions[0]);
+    		System.out.println(shownOptions[1]);
+    		System.out.println(shownOptions[2]);
+    		System.out.println(shownOptions[3]);
+    		System.out.println(shownOptions[4]);
+    	}
+    }
+    public static void updateButtons() {
+    	button = shownOptions[0];
+    	button2 = shownOptions[1];
+    	button3 = shownOptions[2];
+    	button4 = shownOptions[3];
+    	button5 = shownOptions[4];
     }
 }

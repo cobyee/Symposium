@@ -4,10 +4,11 @@ public class Tile {
 
 	boolean isBlocked;
 	boolean isOccupied;
+	Characters character;
 	
-	public Tile(boolean isBlocked, boolean isOccupied) {
+	public Tile(boolean isBlocked, Characters character) {
 		this.isBlocked = isBlocked;
-		this.isOccupied = isOccupied;
+		this.character = character;
 	}
 	
 	public static void main(String[] arguments) {
