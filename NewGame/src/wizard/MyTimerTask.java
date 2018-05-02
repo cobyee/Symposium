@@ -13,10 +13,10 @@ public class MyTimerTask extends TimerTask {
         System.out.println("Timer task finished at:"+new Date());
     }
 
-    private void completeTask() {
+    void completeTask() {
         try {
-        	FireEmblem.canMove = !canMove;
-            Thread.sleep(1000);
+        	FireEmblem.setMovable(true);
+            Thread.sleep(400);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

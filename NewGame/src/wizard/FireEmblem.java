@@ -1,15 +1,18 @@
 package wizard;
 
 import java.awt.Button;
+import java.awt.Font;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.tiled.TiledMap;
 /**
  * @author panos
@@ -29,7 +32,7 @@ public class FireEmblem extends BasicGame
 	private float x = 64f, y = 64f;
 	private boolean[][] blocked;
 	private static final int SIZE = 64; 
-	private boolean canMove = true;
+	private static boolean canMove = true;
 	private int buttonX = 20;
 	private int buttonY = 640;
 	
@@ -43,6 +46,10 @@ public class FireEmblem extends BasicGame
 	private static Image[] menuOptions = new Image[5];
 	private static Image[] menuOptions2 = new Image[5];
 	
+	Font font = new Font("Verdana", Font.BOLD, 8);
+	TrueTypeFont trueTypeFont;
+
+
 	static int OptionPos = 0;
 	
 	
@@ -108,13 +115,20 @@ public class FireEmblem extends BasicGame
         shownOptions[4] = new Image("resources/rpgTile024.png");
         
         updateButtons();
+        
+     // initialise the font
+        font = new Font("Verdana", Font.BOLD, 8);
+        trueTypeFont = new TrueTypeFont(font, true);
+
+        // render some text to the screen
+      
     }
 
     @Override
     public void update(GameContainer container, int delta) throws SlickException
     {
     	  Input input = container.getInput();
-          if (input.isKeyDown(Input.KEY_UP) && movable(2))
+          if (input.isKeyDown(Input.KEY_UP) && movable(2) && characterY != 0)
           { 
               sprite = up;
               sprite.update(delta);
@@ -122,47 +136,52 @@ public class FireEmblem extends BasicGame
               y -= 64f;
               canMove = false;
               characterY-- ;
+              MyTimerTask timer = new MyTimerTask();
+              timer.completeTask();
           }
-          else if (input.isKeyDown(Input.KEY_DOWN) && movable(4) && characterY < 10)
+          if (input.isKeyDown(Input.KEY_DOWN) && movable(4) && characterY != 9)
           {
               sprite = down;
               sprite.update(delta);
               y += 64f;
               canMove = false;
               characterY++;
+              MyTimerTask timer = new MyTimerTask();
+              timer.completeTask();
           }
-          else if (input.isKeyDown(Input.KEY_LEFT)&& movable(3) && characterX > 0)
-          {
+          if (input.isKeyDown(Input.KEY_LEFT)&& movable(3) && characterX != 0)
+          { 
               sprite = left;
               sprite.update(delta);
               x -= 64f;
               canMove = false;
               characterX--;
+              MyTimerTask timer = new MyTimerTask();
+              timer.completeTask();
           }
-          else if (input.isKeyDown(Input.KEY_RIGHT)&& movable(1) && characterX != 9)
+          if (input.isKeyDown(Input.KEY_RIGHT)&& movable(1) && characterX != 9)
           {
               sprite = right;
               sprite.update(delta);
               x += 64f;
         	  characterX ++;
               canMove = false;
+              MyTimerTask timer = new MyTimerTask();
+              timer.completeTask();
           }
-          else if (input.isKeyDown(Input.KEY_SPACE) && !canMove) {
-        	  sprite = right;
-        	  sprite.update(delta);
-        	  canMove = true;
-        	  
-        	  updateButtons();
-          }
-          else if (input.isKeyDown(Input.KEY_A) && canMove) {
+          if (input.isKeyDown(Input.KEY_A) && canMove) {
         	  OptionLeft();
         	  updateButtons();
         	  canMove = false;
+        	    MyTimerTask timer = new MyTimerTask();
+        	    timer.completeTask();
           }
-          else if (input.isKeyDown(Input.KEY_D) && canMove) {
+          if (input.isKeyDown(Input.KEY_D) && canMove) {
         	  OptionRight();
         	  updateButtons();
         	  canMove = false;
+        	    MyTimerTask timer = new MyTimerTask();
+        	    timer.completeTask();
           }
     }
 
@@ -175,6 +194,8 @@ public class FireEmblem extends BasicGame
     	button3.draw(148, (int)buttonY);
     	button4.draw(212, (int)buttonY);
     	button5.draw(276, (int)buttonY);
+    	trueTypeFont.drawString(600.0f, 10.0f, "20/20", Color.black);
+    	
     }
     
     public boolean movable(int direction) {
@@ -240,5 +261,13 @@ public class FireEmblem extends BasicGame
     	button3 = shownOptions[2];
     	button4 = shownOptions[3];
     	button5 = shownOptions[4];
+    }
+    
+    public static boolean getMovable() {
+    	return canMove;
+    }
+    
+    public static void setMovable(boolean b) {
+    	canMove = b;
     }
 }
