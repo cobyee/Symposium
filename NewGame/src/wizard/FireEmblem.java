@@ -97,21 +97,21 @@ public class FireEmblem extends BasicGame
     	// build a collision map based on tile properties in the TileD map
     	blocked = new boolean[grassMap.getWidth()][grassMap.getHeight()];
     	
-    	menuOptions[0] = new Image("resources/rpgTile020.png");
-        menuOptions[1] = new Image("resources/rpgTile021.png");
-        menuOptions[2] = new Image("resources/rpgTile022.png");
-        menuOptions[3] = new Image("resources/rpgTile023.png");
+    	menuOptions[0] = new Image("resources/attack.png");
+        menuOptions[1] = new Image("resources/items.png");
+        menuOptions[2] = new Image("resources/magic.png");
+        menuOptions[3] = new Image("resources/move.png");
         menuOptions[4] = new Image("resources/rpgTile024.png");
-        menuOptions2[0] = new Image("resources/rpgTile025.png");
-        menuOptions2[1] = new Image("resources/rpgTile026.png");
-        menuOptions2[2] = new Image("resources/rpgTile027.png");
-        menuOptions2[3] = new Image("resources/rpgTile028.png");
+        menuOptions2[0] = new Image("resources/attackselected.png");
+        menuOptions2[1] = new Image("resources/itemsselected.png");
+        menuOptions2[2] = new Image("resources/magicselected.png");
+        menuOptions2[3] = new Image("resources/moveselected.png");
         menuOptions2[4] = new Image("resources/rpgTile029.png");
         
-        shownOptions[0] = new Image("resources/rpgTile020.png");
-        shownOptions[1] = new Image("resources/rpgTile021.png");
-        shownOptions[2] = new Image("resources/rpgTile022.png");
-        shownOptions[3] = new Image("resources/rpgTile023.png");
+        shownOptions[0] = new Image("resources/attackselected.png");
+        shownOptions[1] = new Image("resources/items.png");
+        shownOptions[2] = new Image("resources/magic.png");
+        shownOptions[3] = new Image("resources/move.png");
         shownOptions[4] = new Image("resources/rpgTile024.png");
         
         updateButtons();
