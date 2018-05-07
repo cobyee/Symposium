@@ -3,8 +3,7 @@ package wizard;
 public class Tile {
 
 	boolean isBlocked;
-	boolean isOccupied;
-	Characters character;
+	Characters character = null;
 	
 	public Tile(boolean isBlocked, Characters character) {
 		this.isBlocked = isBlocked;
@@ -20,5 +19,19 @@ public class Tile {
 	}
 	public boolean getBlocked() {
 		return isBlocked;
+	}
+	
+	public void placeCharacter(Characters character) {
+		this.character = character;
+	}
+	
+	public boolean isOccupied() {
+		if(character == null) {
+			return false;
+		}
+		return true;
+	}
+	public Characters getCharacter() {
+		return this.character;
 	}
 }

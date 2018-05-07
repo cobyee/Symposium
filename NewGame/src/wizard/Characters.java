@@ -13,5 +13,16 @@ public class Characters {
 		this.attack = attack;
 		this.picSource = picSource;
 	}
-	
+	public int getHp() {
+		return hp;
+	}
+	public int getAtk() {
+		return attack;
+	}
+	public void setHp(int hp) {
+		this.hp = hp;
+	}
+	public String getPic() {
+		return picSource;
+	}
 }

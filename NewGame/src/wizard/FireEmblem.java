@@ -24,6 +24,7 @@ public class FireEmblem extends BasicGame
 	
 	private TiledMap grassMap;
 	private Animation sprite, up, down, left, right;
+	private Animation enemys, eUp, eDown, eLeft, eRight;
 	private static Image button;
 	private static Image button2;
 	private static Image button3;
@@ -31,16 +32,14 @@ public class FireEmblem extends BasicGame
 	private static Image button5;
 	private float x = 64f, y = 64f;
 	private boolean[][] blocked;
-	private static final int SIZE = 64; 
 	private static boolean canMove = true;
 	private int buttonX = 20;
 	private int buttonY = 640;
+	private static Characters enemy1;
 	
 	private static Tile[][] grid = new Tile[10][10];
 	private int characterX = 1;
 	private int characterY = 1;
-	private static Tile tree = new Tile(true, null);
-	private static Tile open = new Tile(false, new Characters("Joe", 10, 10, "resources/rpgTile066"));
 	
 	private static Image[] shownOptions = new Image[5];
 	private static Image[] menuOptions = new Image[5];
@@ -50,9 +49,10 @@ public class FireEmblem extends BasicGame
 	TrueTypeFont trueTypeFont;
 
 
-	static int OptionPos = 0;
+	public static int OptionPos = 0;
 	
-	
+	static int ourlife = 10;
+	static int ouratk = 1;
 	
     public FireEmblem()
     {
@@ -63,6 +63,9 @@ public class FireEmblem extends BasicGame
     {	
     	populateGrid();
     	grid[2][2].setBlocked();
+    	enemy1 = new Characters("gay", 10, 5, "resources/rpgTile101.png");
+    	grid[1][2].placeCharacter(enemy1);
+    	grid[1][2].setBlocked();
     	
         try
         {
@@ -81,11 +84,20 @@ public class FireEmblem extends BasicGame
     {
     	grassMap = new TiledMap("resources/map.tmx");
     	
+    	enemy1 = new Characters("gay", 10, 5, "resources/rpgTile101.png");
+    	
     	Image [] movementUp = {new Image("resources/rpgTile009.png"), new Image("resources/rpgTile020.png")};
     	Image [] movementDown = {new Image("resources/rpgTile013.png"), new Image("resources/rpgTile020.png")};
     	Image [] movementLeft = {new Image("resources/rpgTile025.png"), new Image("resources/rpgTile008.png")};
     	Image [] movementRight = {new Image("resources/rpgTile026.png"), new Image("resources/rpgTile010.png")};
     	int [] duration = {300, 300}; 
+    	
+    	Image [] enemyDown = {new Image(enemy1.getPic()), new Image(enemy1.getPic())};
+    	
+    	eUp = new Animation(movementUp, duration, false);
+    	eDown = new Animation(enemyDown, duration, false);
+    	eLeft = new Animation(movementLeft, duration, false);
+    	eRight = new Animation(movementRight, duration, false);
     	
     	up = new Animation(movementUp, duration, false);
     	down = new Animation(movementDown, duration, false);
@@ -93,6 +105,7 @@ public class FireEmblem extends BasicGame
     	right = new Animation(movementRight, duration, false); 
 
     	sprite = right; 
+    	enemys = eDown;
     	
     	// build a collision map based on tile properties in the TileD map
     	blocked = new boolean[grassMap.getWidth()][grassMap.getHeight()];
@@ -171,17 +184,27 @@ public class FireEmblem extends BasicGame
           }
           if (input.isKeyDown(Input.KEY_A) && canMove) {
         	  OptionLeft();
+        	  
+        	  
         	  updateButtons();
         	  canMove = false;
-        	    MyTimerTask timer = new MyTimerTask();
-        	    timer.completeTask();
+        	  MyTimerTask timer = new MyTimerTask();
+        	  timer.completeTask();
           }
           if (input.isKeyDown(Input.KEY_D) && canMove) {
         	  OptionRight();
         	  updateButtons();
         	  canMove = false;
-        	    MyTimerTask timer = new MyTimerTask();
-        	    timer.completeTask();
+        	  MyTimerTask timer = new MyTimerTask();
+        	  timer.completeTask();
+          }
+          if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 0 && canMove && canAttack()) {
+        	  attack(grid[1][2].getCharacter());
+        	  System.out.println("i attacked");
+        	  System.out.println(grid[1][2].getCharacter().getHp());
+        	  canMove = false;
+      	      MyTimerTask timer = new MyTimerTask();
+      	      timer.completeTask();
           }
     }
 
@@ -195,7 +218,7 @@ public class FireEmblem extends BasicGame
     	button4.draw(212, (int)buttonY);
     	button5.draw(276, (int)buttonY);
     	trueTypeFont.drawString(600.0f, 10.0f, "20/20", Color.black);
-    	
+    	enemys.draw(64,128);
     }
     
     public boolean movable(int direction) {
@@ -226,6 +249,16 @@ public class FireEmblem extends BasicGame
     	return false;
     }
     
+    public boolean canAttack() {
+    	if(canMove) {
+    		if(grid[characterX][characterY - 1].isOccupied() || grid[characterX][characterY + 1].isOccupied() || grid[characterX-1][characterY].isOccupied() || 
+    				grid[characterX+1][characterY].isOccupied()) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
     public static void populateGrid() {
     	for(int i = 0; i < 10; i++) {
     		for(int j = 0; j < 10; j ++) {
@@ -239,8 +272,6 @@ public class FireEmblem extends BasicGame
     		shownOptions[OptionPos] = menuOptions[OptionPos];
     		OptionPos--;
     		shownOptions[OptionPos] = menuOptions2[OptionPos];
-    		System.out.println("fagd");
-    		System.out.print(menuOptions[OptionPos]);
     	}
     }
     public static void OptionRight() {
@@ -248,11 +279,6 @@ public class FireEmblem extends BasicGame
     		shownOptions[OptionPos] = menuOptions[OptionPos];
     		OptionPos++;
     		shownOptions[OptionPos] = menuOptions2[OptionPos];
-    		System.out.println(shownOptions[0]);
-    		System.out.println(shownOptions[1]);
-    		System.out.println(shownOptions[2]);
-    		System.out.println(shownOptions[3]);
-    		System.out.println(shownOptions[4]);
     	}
     }
     public static void updateButtons() {
@@ -270,4 +296,9 @@ public class FireEmblem extends BasicGame
     public static void setMovable(boolean b) {
     	canMove = b;
     }
+    public void attack(Characters enemya) {
+    	ourlife = enemya.getAtk() - ourlife;
+    	enemya.setHp(enemya.getHp()- ouratk);
+    }
+   
 }
