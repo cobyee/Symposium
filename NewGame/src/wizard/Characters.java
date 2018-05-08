@@ -6,12 +6,16 @@ public class Characters {
 	private int hp;
 	private int attack;
 	private String picSource;
+	private boolean ally;
+	private boolean canMove;
 	
-	public Characters(String name, int hp, int attack, String picSource) {
+	public Characters(String name, int hp, int attack, String picSource, boolean ally, boolean canMove) {
 		this.name = name;
 		this.hp = hp;
 		this.attack = attack;
 		this.picSource = picSource;
+		this.ally = ally;
+		this.canMove = canMove;
 	}
 	public int getHp() {
 		return hp;
@@ -24,5 +28,11 @@ public class Characters {
 	}
 	public String getPic() {
 		return picSource;
+	}
+	public boolean isAlly() {
+		return ally;
+	}
+	public boolean getcanMove() {
+		return canMove;
 	}
 }

@@ -24,7 +24,7 @@ public class FireEmblem extends BasicGame
 	
 	private TiledMap grassMap;
 	private Animation sprite, up, down, left, right;
-	private Animation enemys, eUp, eDown, eLeft, eRight;
+	private Animation enemys, eDown;
 	private static Image button;
 	private static Image button2;
 	private static Image button3;
@@ -36,6 +36,7 @@ public class FireEmblem extends BasicGame
 	private int buttonX = 20;
 	private int buttonY = 640;
 	private static Characters enemy1;
+	private Image test;
 	
 	private static Tile[][] grid = new Tile[10][10];
 	private int characterX = 1;
@@ -63,7 +64,7 @@ public class FireEmblem extends BasicGame
     {	
     	populateGrid();
     	grid[2][2].setBlocked();
-    	enemy1 = new Characters("gay", 10, 5, "resources/rpgTile101.png");
+    	enemy1 = new Characters("gay", 10, 5, "resources/rpgTile101.png", false, false);
     	grid[1][2].placeCharacter(enemy1);
     	grid[1][2].setBlocked();
     	
@@ -84,20 +85,17 @@ public class FireEmblem extends BasicGame
     {
     	grassMap = new TiledMap("resources/map.tmx");
     	
-    	enemy1 = new Characters("gay", 10, 5, "resources/rpgTile101.png");
+    	enemy1 = new Characters("gay", 10, 5, "resources/rpgTile101.png", false, false);
     	
-    	Image [] movementUp = {new Image("resources/rpgTile009.png"), new Image("resources/rpgTile020.png")};
-    	Image [] movementDown = {new Image("resources/rpgTile013.png"), new Image("resources/rpgTile020.png")};
-    	Image [] movementLeft = {new Image("resources/rpgTile025.png"), new Image("resources/rpgTile008.png")};
-    	Image [] movementRight = {new Image("resources/rpgTile026.png"), new Image("resources/rpgTile010.png")};
+    	Image [] movementUp = {new Image("resources/cursor.png"), new Image("resources/cursor.png")};
+    	Image [] movementDown = {new Image("resources/cursor.png"), new Image("resources/cursor.png")};
+    	Image [] movementLeft = {new Image("resources/cursor.png"), new Image("resources/cursor.png")};
+    	Image [] movementRight = {new Image("resources/cursor.png"), new Image("resources/cursor.png")};
     	int [] duration = {300, 300}; 
     	
     	Image [] enemyDown = {new Image(enemy1.getPic()), new Image(enemy1.getPic())};
     	
-    	eUp = new Animation(movementUp, duration, false);
     	eDown = new Animation(enemyDown, duration, false);
-    	eLeft = new Animation(movementLeft, duration, false);
-    	eRight = new Animation(movementRight, duration, false);
     	
     	up = new Animation(movementUp, duration, false);
     	down = new Animation(movementDown, duration, false);
@@ -114,18 +112,18 @@ public class FireEmblem extends BasicGame
         menuOptions[1] = new Image("resources/items.png");
         menuOptions[2] = new Image("resources/magic.png");
         menuOptions[3] = new Image("resources/move.png");
-        menuOptions[4] = new Image("resources/rpgTile024.png");
+        menuOptions[4] = new Image("resources/end.png");
         menuOptions2[0] = new Image("resources/attackselected.png");
         menuOptions2[1] = new Image("resources/itemsselected.png");
         menuOptions2[2] = new Image("resources/magicselected.png");
         menuOptions2[3] = new Image("resources/moveselected.png");
-        menuOptions2[4] = new Image("resources/rpgTile029.png");
+        menuOptions2[4] = new Image("resources/endselected.png");
         
         shownOptions[0] = new Image("resources/attackselected.png");
         shownOptions[1] = new Image("resources/items.png");
         shownOptions[2] = new Image("resources/magic.png");
         shownOptions[3] = new Image("resources/move.png");
-        shownOptions[4] = new Image("resources/rpgTile024.png");
+        shownOptions[4] = new Image("resources/end.png");
         
         updateButtons();
         
@@ -206,6 +204,9 @@ public class FireEmblem extends BasicGame
       	      MyTimerTask timer = new MyTimerTask();
       	      timer.completeTask();
           }
+          if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 3 && canMove && grid[characterX][characterY].getCharacter().isAlly() && grid[characterX][characterY].getCharacter().getcanMove()){
+        	  
+          }
     }
 
     public void render(GameContainer container, Graphics g) throws SlickException
@@ -219,6 +220,7 @@ public class FireEmblem extends BasicGame
     	button5.draw(276, (int)buttonY);
     	trueTypeFont.drawString(600.0f, 10.0f, "20/20", Color.black);
     	enemys.draw(64,128);
+
     }
     
     public boolean movable(int direction) {
@@ -251,10 +253,38 @@ public class FireEmblem extends BasicGame
     
     public boolean canAttack() {
     	if(canMove) {
-    		if(grid[characterX][characterY - 1].isOccupied() || grid[characterX][characterY + 1].isOccupied() || grid[characterX-1][characterY].isOccupied() || 
-    				grid[characterX+1][characterY].isOccupied()) {
-    			return true;
+    		if(characterX == 0 || characterX == 9 || characterY == 0 || characterY == 9) {
+    			if(characterX == 0) {
+    				if(grid[characterX][characterY - 1].isOccupied() || grid[characterX][characterY + 1].isOccupied() || 
+    						grid[characterX+1][characterY].isOccupied()) {
+    					return true;
+    				}
+    			}
+    			if(characterX == 9) {
+    				if(grid[characterX][characterY - 1].isOccupied() || grid[characterX][characterY + 1].isOccupied() || 
+    						grid[characterX-1][characterY].isOccupied()) {
+    					return true;
+    				}
+    			}
+    			if(characterY == 9) {
+    				if(grid[characterX][characterY - 1].isOccupied() || grid[characterX-1][characterY].isOccupied() || 
+    						grid[characterX+1][characterY].isOccupied()) {
+    					return true;
+    				}
+    			}
+    			if(characterY == 0) {
+    				if(grid[characterX][characterY + 1].isOccupied() || grid[characterX-1][characterY].isOccupied() || 
+    						grid[characterX+1][characterY].isOccupied()) {
+    					return true;
+    				}
+    			}
+    		} else {
+    			if(grid[characterX][characterY - 1].isOccupied() || grid[characterX][characterY + 1].isOccupied() || grid[characterX-1][characterY].isOccupied() || 
+    					grid[characterX+1][characterY].isOccupied()) {
+    				return true;
+    			}
     		}
+    		return false;
     	}
     	return false;
     }
@@ -300,5 +330,8 @@ public class FireEmblem extends BasicGame
     	ourlife = enemya.getAtk() - ourlife;
     	enemya.setHp(enemya.getHp()- ouratk);
     }
-   
+    public void createOptions() {
+    	
+    	
+    }
 }
