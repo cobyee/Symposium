@@ -8,14 +8,20 @@ public class Characters {
 	private String picSource;
 	private boolean ally;
 	private boolean canMove;
+	private int distance;
+	private int xCoordinate;
+	private int yCoordinate;
 	
-	public Characters(String name, int hp, int attack, String picSource, boolean ally, boolean canMove) {
+	public Characters(String name, int hp, int attack, String picSource, boolean ally, boolean canMove, int distance, int xCoord, int yCoord) {
 		this.name = name;
 		this.hp = hp;
 		this.attack = attack;
 		this.picSource = picSource;
 		this.ally = ally;
 		this.canMove = canMove;
+		this.distance = distance;
+		xCoordinate = xCoord;
+		yCoordinate = yCoord;
 	}
 	public int getHp() {
 		return hp;
@@ -35,4 +41,23 @@ public class Characters {
 	public boolean getcanMove() {
 		return canMove;
 	}
+	public int getDistance() {
+		return distance;
+	}
+	public int getX() {
+		return xCoordinate;
+	}
+	public int getY() {
+		return yCoordinate;
+	}
+	public void setX(int n) {
+		xCoordinate = n;
+	}
+	public void setY(int n) {
+		yCoordinate = n;
+	}
+	
+	
+	
+	
 }

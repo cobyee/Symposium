@@ -9,17 +9,27 @@ public class MyTimerTask extends TimerTask {
     @Override
     public void run() {
         System.out.println("Timer task started at:"+new Date());
-        completeTask();
+        //completeTask();
         System.out.println("Timer task finished at:"+new Date());
     }
 
-    void completeTask() {
-        try {
-        	FireEmblem.setMovable(true);
-            Thread.sleep(400);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    void completeTask(int n) {
+    	if(n == 0) {
+    		try {
+    			FireEmblem.setMovable(true);
+    			Thread.sleep(400);
+    		} catch (InterruptedException e) {
+    			e.printStackTrace();
+    		}
+    	}
+    	if(n == 1) {
+    		try {
+    			FireEmblem.setOptionMovable(true);
+    			Thread.sleep(400);
+    		} catch (InterruptedException e) {
+    			e.printStackTrace();
+    		}
+    	}
     }
     
     public static void main(String args[]){
