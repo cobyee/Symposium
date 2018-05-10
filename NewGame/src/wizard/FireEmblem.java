@@ -75,7 +75,7 @@ public class FireEmblem extends BasicGame
     	enemy1 = new Characters("Enemy", 10, 5, "resources/rpgTile101.png", false, false, 0, 1, 2);
     	grid[1][2].placeCharacter(enemy1);
     	grid[1][2].setBlocked();
-    	main = new Characters("Joe", 10, 6, "resources/asdf.png", false, false,5,1,1);
+    	main = new Characters("Joe", 10, 6, "resources/spriteFront.png", false, false,5,1,1);
     	test1 = new Characters("Ally", 10, 6, "resouces/asdf.png", false, false,1,4,4);
     	
         try
@@ -93,12 +93,12 @@ public class FireEmblem extends BasicGame
     @Override
     public void init(GameContainer container) throws SlickException
     {
-    	grassMap = new TiledMap("resources/map.tmx");
+    	grassMap = new TiledMap("resources/FEMap.tmx");
     	
-    	Image [] movementUp = {new Image("resources/cursor.png"), new Image("resources/cursor.png")};
-    	Image [] movementDown = {new Image("resources/cursor.png"), new Image("resources/cursor.png")};
-    	Image [] movementLeft = {new Image("resources/cursor.png"), new Image("resources/cursor.png")};
-    	Image [] movementRight = {new Image("resources/cursor.png"), new Image("resources/cursor.png")};
+    	Image [] movementUp = {new Image("resources/spriteUp.png"), new Image("resources/spriteUp.png")};
+    	Image [] movementDown = {new Image("resources/spriteFront.png"), new Image("resources/spriteFront.png")};
+    	Image [] movementLeft = {new Image("resources/spriteLeft.png"), new Image("resources/spriteLeft.png")};
+    	Image [] movementRight = {new Image("resources/spriteRight.png"), new Image("resources/spriteRight.png")};
     	Image [] test = {new Image("resources/asdf.png"), new Image("resources/asdf.png")};
     	int [] duration = {300, 300}; 
     	
@@ -113,7 +113,7 @@ public class FireEmblem extends BasicGame
     	pikaTest = new Animation(test, duration, false);
     	allyTest = new Animation(test, duration, false);
 
-    	sprite = right; 
+    	sprite = down; 
     	enemys = eDown;
     	
     	// build a collision map based on tile properties in the TileD map
@@ -159,8 +159,10 @@ public class FireEmblem extends BasicGame
     	 Input input = container.getInput();
          if (input.isKeyDown(Input.KEY_UP) && movable(2) && currentTurn.getY() != 0 && tileAmt != 0)
          { 
-             //sprite = up;
-             //sprite.update(delta);
+        	 if(currentTurn == turns[0]) {
+        		 sprite = up;
+        		 sprite.update(delta);
+        	 }
              // The lower the delta the slowest the sprite will animate.
              canMove = false;
              currentTurn.setY(currentTurn.getY()-1);
@@ -170,6 +172,10 @@ public class FireEmblem extends BasicGame
          }
          if (input.isKeyDown(Input.KEY_DOWN) && movable(4) && currentTurn.getY() != 9 && tileAmt != 0)
          {
+        	 if(currentTurn == turns[0]) {
+                 sprite = down;
+                 sprite.update(delta);
+        	 }
         	 System.out.println("dsf");
              canMove = false;
              currentTurn.setY(currentTurn.getY()+1);
@@ -179,6 +185,10 @@ public class FireEmblem extends BasicGame
          }
          if (input.isKeyDown(Input.KEY_LEFT)&& movable(3) && currentTurn.getX() != 0 && tileAmt != 0)
          { 
+        	 if(currentTurn == turns[0]) {
+        		 sprite = left;
+        		 sprite.update(delta);
+        	 }
              canMove = false;
              currentTurn.setX(currentTurn.getX()-1);
              MyTimerTask timer = new MyTimerTask();
@@ -187,6 +197,10 @@ public class FireEmblem extends BasicGame
          }
          if (input.isKeyDown(Input.KEY_RIGHT)&& movable(1) && currentTurn.getX() != 9 && tileAmt != 0)
          {
+        	 if(currentTurn == turns[0]) {
+        		 sprite = right;
+        		 sprite.update(delta);
+        	 }
              currentTurn.setX(currentTurn.getX()+1);
              canMove = false;
              MyTimerTask timer = new MyTimerTask();
@@ -238,16 +252,16 @@ public class FireEmblem extends BasicGame
     public void render(GameContainer container, Graphics g) throws SlickException
     {
     	grassMap.render(0,0);
-    //	sprite.draw(main.getX(), main.getY()); 
+    	sprite.draw(main.getX()*64, main.getY()*64); 
     	button.draw((int)buttonX, (int)buttonY);
     	button2.draw((int)84, (int)buttonY);
     	button3.draw(148, (int)buttonY);
     	button4.draw(212, (int)buttonY);
     	button5.draw(276, (int)buttonY);
-    	trueTypeFont.drawString(600.0f, 10.0f, "20/20", Color.black);
+    	trueTypeFont.drawString(600.0f, 10.0f, Integer.toString(currentTurn.getHp()), Color.black);
     	currentMoves.drawString(600.0f, 30.0f, Integer.toString(tileAmt), Color.black);
     	enemys.draw(64,128);
-    	pikaTest.draw(main.getX()*64, main.getY()*64);
+    	//pikaTest.draw(main.getX()*64, main.getY()*64);
     	allyTest.draw(test1.getX()*64,test1.getY()*64);
     }
     
