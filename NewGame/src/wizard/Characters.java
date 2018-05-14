@@ -11,8 +11,9 @@ public class Characters {
 	private int distance;
 	private int xCoordinate;
 	private int yCoordinate;
+	private boolean didAttack;
 	
-	public Characters(String name, int hp, int attack, String picSource, boolean ally, boolean canMove, int distance, int xCoord, int yCoord) {
+	public Characters(String name, int hp, int attack, String picSource, boolean ally, boolean canMove, int distance, int xCoord, int yCoord, boolean didattack) {
 		this.name = name;
 		this.hp = hp;
 		this.attack = attack;
@@ -22,6 +23,7 @@ public class Characters {
 		this.distance = distance;
 		xCoordinate = xCoord;
 		yCoordinate = yCoord;
+		this.didAttack = didattack;
 	}
 	public int getHp() {
 		return hp;
@@ -56,7 +58,12 @@ public class Characters {
 	public void setY(int n) {
 		yCoordinate = n;
 	}
-	
+	public boolean getDidAttack() {
+		return this.didAttack;
+	}
+	public void setDidAttack(boolean set) {
+		this.didAttack = set;
+	}
 	
 	
 	
