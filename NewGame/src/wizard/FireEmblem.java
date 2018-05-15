@@ -291,7 +291,10 @@ public class FireEmblem extends BasicGame
                  timer.completeTask(0);
              }
              if(input.isKeyDown(Input.KEY_ENTER) && Attackable(currentTurn)) {
-            	 
+            	 System.out.println("hi");
+            	 Fighting(currentTurn, grid[cursor.getX()][cursor.getY()].getCharacter());
+            	 MyTimerTask timer = new MyTimerTask();
+                 timer.completeTask(0);
              }
     		 
     	 }
@@ -432,9 +435,20 @@ public class FireEmblem extends BasicGame
 	public static void AttackSelection() {
 		cursormode = true;
 	}
-	public static void Attackable(Characters current) {
+	public static boolean Attackable(Characters current) {
 		if((cursor.getX()==current.getX()-1 || cursor.getX()==current.getX()+1)&&grid[cursor.getX()][cursor.getY()].isOccupied()) {
-			
+			return true;
 		}
+		if((cursor.getY()==current.getY()-1||cursor.getY()==current.getY()+1)&&grid[cursor.getX()][cursor.getY()].isOccupied()) {
+			return true;
+		}
+		return false;
+	}
+	public void Fighting(Characters us, Characters them) {
+		us.setHp(us.getHp()-them.getAtk());
+		them.setHp(them.getHp()-us.getAtk());
+		System.out.println(us.getHp()+" "+them.getHp());
+		cursormode = false;
 	}
 }
+
