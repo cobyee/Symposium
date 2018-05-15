@@ -29,25 +29,21 @@ public class FireEmblem extends BasicGame
 	
 	private int tileAmt = 0;
 	private TiledMap grassMap;
-	private Animation sprite, up, down, left, right, pikaTest, allyTest,Csprite;
+	private Animation sprite, up, down, left, right, allyTest,Csprite;
+	private Animation[] images = {sprite, up, down, left, right, allyTest, Csprite};
+	
 	private Animation enemys, eDown;
 	private static Image button;
 	private static Image button2;
 	private static Image button3;
 	private static Image button4;
 	private static Image button5;
-	private float x = 64f, y = 64f;
-	private boolean[][] blocked;
 	private static boolean canMove = false;
 	private static boolean chooseOption = true;
-	private int buttonX = 20;
-	private int buttonY = 640;
 	private static Characters enemy1;
 	private static boolean cursormode;
 	
 	private static Tile[][] grid = new Tile[10][10];
-	private int characterX = 1;
-	private int characterY = 1;
 	
 	private static Image[] shownOptions = new Image[5];
 	private static Image[] menuOptions = new Image[5];
@@ -58,9 +54,6 @@ public class FireEmblem extends BasicGame
 	TrueTypeFont currentMoves;
 
 	public static int OptionPos = 0;
-	
-	static int ourlife = 10;
-	static int ouratk = 1;
 	
 	private static Characters main;
 	
@@ -113,7 +106,6 @@ public class FireEmblem extends BasicGame
     	down = new Animation(movementDown, duration, false);
     	left = new Animation(movementLeft, duration, false);
     	right = new Animation(movementRight, duration, false); 
-    	pikaTest = new Animation(test, duration, false);
     	allyTest = new Animation(test, duration, false);
     	
     	sprite = down; 
@@ -122,7 +114,6 @@ public class FireEmblem extends BasicGame
     	cursormode = false;
     	
     	// build a collision map based on tile properties in the TileD map
-    	blocked = new boolean[grassMap.getWidth()][grassMap.getHeight()];
     	
     	menuOptions[0] = new Image("resources/attack.png");
         menuOptions[1] = new Image("resources/items.png");
@@ -231,7 +222,7 @@ public class FireEmblem extends BasicGame
          }
          if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 0 && currentTurn.getDidAttack()==false && canAttack()) {
         	 System.out.println("i attacked");
-        	 AttackSelection();
+        	 AttackSelection(currentTurn);
       	     MyTimerTask timer = new MyTimerTask();
       	     timer.completeTask(0);
       	     currentTurn.setDidAttack(true);
@@ -245,6 +236,7 @@ public class FireEmblem extends BasicGame
              }
          }
          if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 4 && chooseOption) {
+      	    currentTurn.setDidAttack(false);
         	System.out.println(turnLoc);
             turnLoc++;
              if(turnLoc > turns.length-1) {
@@ -289,9 +281,6 @@ public class FireEmblem extends BasicGame
                  canMove = false;
                  MyTimerTask timer = new MyTimerTask();
                  timer.completeTask(0);
-<<<<<<< HEAD
-             }
-=======
              }
              if(input.isKeyDown(Input.KEY_ENTER) && Attackable(currentTurn)) {
             	 System.out.println("hi");
@@ -299,8 +288,6 @@ public class FireEmblem extends BasicGame
             	 MyTimerTask timer = new MyTimerTask();
                  timer.completeTask(0);
              }
->>>>>>> branch 'master' of https://github.com/cobyee/Symposium.git
-    		 
     	 }
     }
 
@@ -308,15 +295,14 @@ public class FireEmblem extends BasicGame
     {
     	grassMap.render(0,0);
     	sprite.draw(main.getX()*64, main.getY()*64); 
-    	button.draw((int)buttonX, (int)buttonY);
-    	button2.draw((int)84, (int)buttonY);
-    	button3.draw(148, (int)buttonY);
-    	button4.draw(212, (int)buttonY);
-    	button5.draw(276, (int)buttonY);
+    	button.draw((int)20, (int)640);
+    	button2.draw((int)84, (int)640);
+    	button3.draw(148, (int)640);
+    	button4.draw(212, (int)640);
+    	button5.draw(276, (int)640);
     	trueTypeFont.drawString(600.0f, 10.0f, Integer.toString(currentTurn.getHp()), Color.black);
     	currentMoves.drawString(600.0f, 30.0f, Integer.toString(tileAmt), Color.black);
     	enemys.draw(64,128);
-    	//pikaTest.draw(main.getX()*64, main.getY()*64);
     	allyTest.draw(test1.getX()*64,test1.getY()*64);
     	Csprite.draw(cursor.getX()*64, cursor.getY()*64);
     }
@@ -376,7 +362,7 @@ public class FireEmblem extends BasicGame
     				}
     			}
     		} else {
-    			if(grid[currentTurn.getX()][characterY - 1].isOccupied() || grid[currentTurn.getX()][characterY + 1].isOccupied() || grid[currentTurn.getX()-1][characterY].isOccupied() || 
+    			if(grid[currentTurn.getX()][currentTurn.getY() - 1].isOccupied() || grid[currentTurn.getX()][currentTurn.getY() + 1].isOccupied() || grid[currentTurn.getX()-1][currentTurn.getY()].isOccupied() || 
     					grid[currentTurn.getX()+1][currentTurn.getY()].isOccupied()) {
     				System.out.println("attacked");
     				return true;
@@ -422,10 +408,6 @@ public class FireEmblem extends BasicGame
     public static void setMovable(boolean b) {
     	canMove = b;
     }
-    public void attack(Characters enemya) {
-    	ourlife = enemya.getAtk() - ourlife;
-    	enemya.setHp(enemya.getHp()- ouratk);
-    }
     public void createOptions() {
     	
     }
@@ -436,7 +418,9 @@ public class FireEmblem extends BasicGame
 	public static void moving() {
 		
 	}
-	public static void AttackSelection() {
+	public static void AttackSelection(Characters current) {
+		cursor.setX(current.getX());
+		cursor.setY(current.getY());
 		cursormode = true;
 	}
 	public static boolean Attackable(Characters current) {
@@ -453,6 +437,8 @@ public class FireEmblem extends BasicGame
 		them.setHp(them.getHp()-us.getAtk());
 		System.out.println(us.getHp()+" "+them.getHp());
 		cursormode = false;
+		cursor.setX(20);
+		cursor.setY(20);
 	}
 }
 
