@@ -95,7 +95,7 @@ public class FireEmblem extends BasicGame
     @Override
     public void init(GameContainer container) throws SlickException
     {
-    	grassMap = new TiledMap("resources/map.tmx");
+    	grassMap = new TiledMap("resources/map1.tmx");
     	
     	Image [] movementUp = {new Image("resources/spriteUp.png"), new Image("resources/spriteUp.png")};
     	Image [] movementDown = {new Image("resources/spriteFront.png"), new Image("resources/spriteFront.png")};
@@ -290,9 +290,9 @@ public class FireEmblem extends BasicGame
                  MyTimerTask timer = new MyTimerTask();
                  timer.completeTask(0);
              }
-             if(input.isKeyDown(Input.KEY_ENTER) && Attackable(currentTurn)) {
+             //if(input.isKeyDown(Input.KEY_ENTER) && Attackable(currentTurn)) {
             	 
-             }
+             //}
     		 
     	 }
     }
