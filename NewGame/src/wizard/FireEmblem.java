@@ -132,7 +132,7 @@ public class FireEmblem extends BasicGame
         shownOptions[3] = new Image("resources/move.png");
         shownOptions[4] = new Image("resources/end.png");
         
-        cursor = new Characters("cursor", 0, 0, "resources/cursor.png", false, true, 9999, 0, 0, true);
+        cursor = new Characters("cursor", 20, 20, "resources/cursor.png", false, true, 9999, 20, 20, true);
         
         updateButtons();
         
@@ -163,11 +163,8 @@ public class FireEmblem extends BasicGame
         		 sprite.update(delta);
         	 }
              // The lower the delta the slowest the sprite will animate.
-             canMove = false;
              currentTurn.setY(currentTurn.getY()-1);
-             MyTimerTask timer = new MyTimerTask();
-             timer.completeTask(0);
-             tileAmt--;
+             moveHelper();
          }
          if (input.isKeyDown(Input.KEY_DOWN) && movable(4) && currentTurn.getY() != 9 && tileAmt != 0)
          {
@@ -175,12 +172,8 @@ public class FireEmblem extends BasicGame
                  sprite = down;
                  sprite.update(delta);
         	 }
-        	 System.out.println("dsf");
-             canMove = false;
              currentTurn.setY(currentTurn.getY()+1);
-             MyTimerTask timer = new MyTimerTask();
-             timer.completeTask(0);
-             tileAmt--;
+             moveHelper();
          }
          if (input.isKeyDown(Input.KEY_LEFT)&& movable(3) && currentTurn.getX() != 0 && tileAmt != 0)
          { 
@@ -188,11 +181,8 @@ public class FireEmblem extends BasicGame
         		 sprite = left;
         		 sprite.update(delta);
         	 }
-             canMove = false;
              currentTurn.setX(currentTurn.getX()-1);
-             MyTimerTask timer = new MyTimerTask();
-             timer.completeTask(0);
-             tileAmt--;
+             moveHelper();
          }
          if (input.isKeyDown(Input.KEY_RIGHT)&& movable(1) && currentTurn.getX() != 9 && tileAmt != 0)
          {
@@ -201,24 +191,15 @@ public class FireEmblem extends BasicGame
         		 sprite.update(delta);
         	 }
              currentTurn.setX(currentTurn.getX()+1);
-             canMove = false;
-             MyTimerTask timer = new MyTimerTask();
-             timer.completeTask(0);
-             tileAmt--;
+             moveHelper();
          }
          if (input.isKeyDown(Input.KEY_A) && chooseOption) {
         	 OptionLeft();
-       	  	 updateButtons();
-        	 canMove = false;
-        	 MyTimerTask timer = new MyTimerTask();
-        	 timer.completeTask(1);
+        	 optionHelper();
          }
          if (input.isKeyDown(Input.KEY_D) && chooseOption) {
         	 OptionRight();
-        	 updateButtons();
-        	 canMove = false;
-        	 MyTimerTask timer = new MyTimerTask();
-        	 timer.completeTask(1);
+        	 optionHelper();
          }
          if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 0 && currentTurn.getDidAttack()==false && canAttack()) {
         	 System.out.println("i attacked");
@@ -250,37 +231,24 @@ public class FireEmblem extends BasicGame
     	 if (cursormode == true){
     		 if (input.isKeyDown(Input.KEY_UP) && cursor.getY() != 0)
              { 
-    			 Csprite.update(delta);
                  // The lower the delta the slowest the sprite will animate.
-                 canMove = false;
                  cursor.setY(cursor.getY()-1);
-                 MyTimerTask timer = new MyTimerTask();
-                 timer.completeTask(0);
+                 cursorHelper(delta);
              }
              if (input.isKeyDown(Input.KEY_DOWN) && cursor.getY() != 9)
              {
-                 Csprite.update(delta);
-            	 System.out.println("dsf");
-                 canMove = false;
                  cursor.setY(cursor.getY()+1);
-                 MyTimerTask timer = new MyTimerTask();
-                 timer.completeTask(0);
+                 cursorHelper(delta);
              }
              if (input.isKeyDown(Input.KEY_LEFT) && cursor.getX() != 0)
              { 
-            	 Csprite.update(delta);
-                 canMove = false;
                  cursor.setX(cursor.getX()-1);
-                 MyTimerTask timer = new MyTimerTask();
-                 timer.completeTask(0);
+                 cursorHelper(delta);
              }
              if (input.isKeyDown(Input.KEY_RIGHT) && cursor.getX() != 9)
              {
-            	 Csprite.update(delta);
                  cursor.setX(cursor.getX()+1);
-                 canMove = false;
-                 MyTimerTask timer = new MyTimerTask();
-                 timer.completeTask(0);
+                 cursorHelper(delta);
              }
              if(input.isKeyDown(Input.KEY_ENTER) && Attackable(currentTurn)) {
             	 System.out.println("hi");
@@ -307,6 +275,24 @@ public class FireEmblem extends BasicGame
     	Csprite.draw(cursor.getX()*64, cursor.getY()*64);
     }
     
+    public void cursorHelper(int delta) {
+    	Csprite.update(delta);
+        canMove = false;
+        MyTimerTask timer = new MyTimerTask();
+        timer.completeTask(0);
+    }
+    public void moveHelper() {
+    	canMove = false;
+        MyTimerTask timer = new MyTimerTask();
+        timer.completeTask(0);
+        tileAmt--;
+    }
+    public void optionHelper() {
+    	updateButtons();
+   	 	canMove = false;
+   	 	MyTimerTask timer = new MyTimerTask();
+   	 	timer.completeTask(1);
+    }
     public boolean movable(int direction) {
     	if(canMove) {
     		//1 right, 2 up, 3 left, 4 down
