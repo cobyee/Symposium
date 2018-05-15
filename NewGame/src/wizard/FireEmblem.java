@@ -290,9 +290,6 @@ public class FireEmblem extends BasicGame
                  MyTimerTask timer = new MyTimerTask();
                  timer.completeTask(0);
              }
-             //if(input.isKeyDown(Input.KEY_ENTER) && Attackable(currentTurn)) {
-            	 
-             //}
     		 
     	 }
     }
