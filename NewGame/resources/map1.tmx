@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextobjectid="1">
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" backgroundcolor="#00822b" nextobjectid="1">
  <tileset firstgid="1" source="Atlas.tsx"/>
  <tileset firstgid="1025" source="Atlas2.tsx"/>
+ <tileset firstgid="2049" name="tree" tilewidth="32" tileheight="32" tilecount="4" columns="2">
+  <image source="tree (1).png" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="2053" name="tree(1)" tilewidth="32" tileheight="32" tilecount="4" columns="2">
+  <image source="tree (1).png" width="64" height="64"/>
+ </tileset>
  <layer name="Tile Layer 1" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAACs3RsQ2AMBBD0QsJg0AmIUwCTAIsjmldICEbieK3T7pzSxHNWM3/znGP80fun3/tHf1zqpdKRIdy8XgDnBFVkzfBaWg2eQucFW0mb78ddJo8dV/eU/V4T9XjPVWP93zrcbyn6qn7chcIWnC6QAYAAA==
+   H4sIAAAAAAAACs2Tv2oCQRCH54znCWnUNxACGougT2Es8xQGrK5SkvSmTRmFxE5rC0ED+WPAdzCBJJj3iPkduwvDZFfvJIXFx+zBzrczO3svGaK5ZiWYO3gFR4EdD6QScgAuPKJLwRU4S/8v4z3nJiahwLVPztTGd+avb+aYRxLfWLuKmG/fU1ES15djtdXSytf0ic4FcX0TOKrMGfm6yL8WyFzX+w1Zr6Zf7ltYfKaOic4za06oI/eVwbFeyzpsDumS/Z6Chl7fgh7o+5tdBebLO+4v6nkKZuABnGypj8N9C+ZcgjfwDioJfUPkjAR3cNyDQZC8PjO3uq9iCfER8Qk8g8MdfIaSvv8POD7BV6D6tf1Dm3zGU9fxB/vXgLJELcS2r+g45s3fszwr+v4F9oxBmEAGAAA=
   </data>
  </layer>
 </map>

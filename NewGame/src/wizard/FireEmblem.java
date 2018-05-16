@@ -28,7 +28,7 @@ public class FireEmblem extends BasicGame
 	private static Characters cursor;
 	
 	private int tileAmt = 0;
-	private TiledMap grassMap;
+	//private TiledMap grassMap;
 	private Animation sprite, up, down, left, right, allyTest,Csprite;
 	private Animation[] images = {sprite, up, down, left, right, allyTest, Csprite};
 	
@@ -38,6 +38,7 @@ public class FireEmblem extends BasicGame
 	private static Image button3;
 	private static Image button4;
 	private static Image button5;
+	private static Image map;
 	private static boolean canMove = false;
 	private static boolean chooseOption = true;
 	private static Characters enemy1;
@@ -66,7 +67,24 @@ public class FireEmblem extends BasicGame
     public static void main(String[] arguments)
     {	
     	populateGrid();
-    	grid[2][2].setBlocked();
+    	for(int i = 0; i < 10; i++) {
+    		grid[i][0].setBlocked();
+    	}
+    	for(int i = 3; i < 10; i++) {
+    	    for(int j = 7; j < 10; j++) {
+    			grid[j][i].setBlocked();
+    		}
+    	}
+    	for(int i = 3; i < 5; i++) {
+    		for(int j = 0; j < 5; j++) {
+    			grid[j][i].setBlocked();
+    		}
+    	}
+    	for(int i = 5; i < 10; i++) {
+    		for(int j = 0; j < 2; j++) {
+    			grid[j][i].setBlocked();
+    		}
+    	}
     	enemy1 = new Characters("Enemy", 10, 5, "resources/asdf.png", false, false, 0, 1, 2, false);
     	grid[1][2].placeCharacter(enemy1);
     	grid[1][2].setBlocked();
@@ -88,8 +106,8 @@ public class FireEmblem extends BasicGame
     @Override
     public void init(GameContainer container) throws SlickException
     {
-    	grassMap = new TiledMap("resources/map1.tmx");
-    	
+    	//grassMap = new TiledMap("resources/map1.tmx");
+    	map = new Image("resources/FE Map.png");
     	Image [] movementUp = {new Image("resources/spriteUp.png"), new Image("resources/spriteUp.png")};
     	Image [] movementDown = {new Image("resources/spriteFront.png"), new Image("resources/spriteFront.png")};
     	Image [] movementLeft = {new Image("resources/spriteLeft.png"), new Image("resources/spriteLeft.png")};
@@ -261,7 +279,8 @@ public class FireEmblem extends BasicGame
 
     public void render(GameContainer container, Graphics g) throws SlickException
     {
-    	grassMap.render(0,0);
+    	map.draw(0,0);
+    	//grassMap.render(0,0);
     	sprite.draw(main.getX()*64, main.getY()*64); 
     	button.draw((int)20, (int)640);
     	button2.draw((int)84, (int)640);
