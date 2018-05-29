@@ -2,6 +2,7 @@ package wizard;
 
 import java.awt.Button;
 import java.awt.Font;
+import java.util.ArrayList;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.AppGameContainer;
@@ -13,7 +14,10 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.tiled.TiledMap;
+
+import sun.java2d.loops.DrawRect;
 /**
  * @author panos
  */
@@ -22,9 +26,9 @@ import org.newdawn.slick.tiled.TiledMap;
 public class FireEmblem extends BasicGame
 {
 	private static Characters test1;
-	private Characters[] turns = {main, test1};
+	private static ArrayList<Characters> turns = new ArrayList<Characters>();
 	private int turnLoc = 0;
-	private Characters currentTurn = turns[turnLoc];
+	private Characters currentTurn = turns.get(turnLoc);
 	private static Characters cursor;
 	
 	private int tileAmt = 0;
@@ -49,6 +53,10 @@ public class FireEmblem extends BasicGame
 	private static Image[] shownOptions = new Image[5];
 	private static Image[] menuOptions = new Image[5];
 	private static Image[] menuOptions2 = new Image[5];
+	
+	private static double currentPer;
+	 
+
 	
 	Font font = new Font("Verdana", Font.BOLD, 8);
 	TrueTypeFont trueTypeFont;
@@ -89,7 +97,9 @@ public class FireEmblem extends BasicGame
     	grid[1][2].placeCharacter(enemy1);
     	grid[1][2].setBlocked();
     	main = new Characters("Joe", 10, 6, "resources/spriteFront.png", false, false,5,1,1, false);
+    	turns.add(main);
     	test1 = new Characters("Ally", 10, 6, "resouces/asdf.png", false, false,1,4,4,false);
+    	turns.add(test1);
     	
         try
         {
@@ -160,7 +170,7 @@ public class FireEmblem extends BasicGame
         currentMoves = new TrueTypeFont(font,true);
 
         // render some text to the screen
-      
+        updateHealth();
     }
 
     @Override
@@ -176,7 +186,7 @@ public class FireEmblem extends BasicGame
     	 if (cursormode == false) {
          if (input.isKeyDown(Input.KEY_UP) && movable(2) && currentTurn.getY() != 0 && tileAmt != 0)
          { 
-        	 if(currentTurn == turns[0]) {
+        	 if(currentTurn == turns.get(0)) {
         		 sprite = up;
         		 sprite.update(delta);
         	 }
@@ -186,7 +196,7 @@ public class FireEmblem extends BasicGame
          }
          if (input.isKeyDown(Input.KEY_DOWN) && movable(4) && currentTurn.getY() != 9 && tileAmt != 0)
          {
-        	 if(currentTurn == turns[0]) {
+        	 if(currentTurn == turns.get(0)) {
                  sprite = down;
                  sprite.update(delta);
         	 }
@@ -195,7 +205,7 @@ public class FireEmblem extends BasicGame
          }
          if (input.isKeyDown(Input.KEY_LEFT)&& movable(3) && currentTurn.getX() != 0 && tileAmt != 0)
          { 
-        	 if(currentTurn == turns[0]) {
+        	 if(currentTurn == turns.get(0)) {
         		 sprite = left;
         		 sprite.update(delta);
         	 }
@@ -204,7 +214,7 @@ public class FireEmblem extends BasicGame
          }
          if (input.isKeyDown(Input.KEY_RIGHT)&& movable(1) && currentTurn.getX() != 9 && tileAmt != 0)
          {
-        	 if(currentTurn == turns[0]) {
+        	 if(currentTurn == turns.get(0)) {
         		 sprite = right;
         		 sprite.update(delta);
         	 }
@@ -238,12 +248,16 @@ public class FireEmblem extends BasicGame
       	    currentTurn.setDidAttack(false);
         	System.out.println(turnLoc);
             turnLoc++;
-             if(turnLoc > turns.length-1) {
+             if(turnLoc > turns.size()-1) {
             		turnLoc = 0;
         	 }
-        	 currentTurn = turns[turnLoc];
+        	 currentTurn = turns.get(turnLoc);
       	     MyTimerTask timer = new MyTimerTask();
       	     timer.completeTask(0);
+      	     OptionPos = 0;
+      	     resetButtons();
+      	     updateButtons();
+      	     updateHealth();
          }
     	 }
     	 if (cursormode == true){
@@ -273,6 +287,7 @@ public class FireEmblem extends BasicGame
             	 Fighting(currentTurn, grid[cursor.getX()][cursor.getY()].getCharacter());
             	 MyTimerTask timer = new MyTimerTask();
                  timer.completeTask(0);
+                 updateHealth();
              }
     	 }
     }
@@ -287,11 +302,14 @@ public class FireEmblem extends BasicGame
     	button3.draw(148, (int)640);
     	button4.draw(212, (int)640);
     	button5.draw(276, (int)640);
-    	trueTypeFont.drawString(600.0f, 10.0f, Integer.toString(currentTurn.getHp()), Color.black);
+    	trueTypeFont.drawString(600.0f, 10.0f, Double.toString(currentTurn.getHp()), Color.black);
     	currentMoves.drawString(600.0f, 30.0f, Integer.toString(tileAmt), Color.black);
     	enemys.draw(64,128);
     	allyTest.draw(test1.getX()*64,test1.getY()*64);
     	Csprite.draw(cursor.getX()*64, cursor.getY()*64);
+    	g.drawRect(500, 10, 110, 20);
+    	g.fillRect(500, 10, (int)(currentPer*110), 20);
+    	g.setColor(Color.red);
     }
     
     public void cursorHelper(int delta) {
@@ -406,6 +424,14 @@ public class FireEmblem extends BasicGame
     	button5 = shownOptions[4];
     }
     
+    public static void resetButtons() throws SlickException {
+        shownOptions[0] = new Image("resources/attackselected.png");
+        shownOptions[1] = new Image("resources/items.png");
+        shownOptions[2] = new Image("resources/magic.png");
+        shownOptions[3] = new Image("resources/move.png");
+        shownOptions[4] = new Image("resources/end.png");
+    }
+    
     public static boolean getMovable() {
     	return canMove;
     }
@@ -445,5 +471,13 @@ public class FireEmblem extends BasicGame
 		cursor.setX(20);
 		cursor.setY(20);
 	}
+	public void updateHealth() {
+		currentPer=currentTurn.getHp()/currentTurn.getMaxHp();
+		if (currentPer <= 0) {
+			turns.remove(turnLoc);
+			currentTurn = turns.get(turnLoc);
+		}
+	}
+	
 }
 

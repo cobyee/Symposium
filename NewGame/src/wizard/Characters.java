@@ -3,8 +3,8 @@ package wizard;
 public class Characters {
 
 	private String name;
-	private int hp;
-	private int attack;
+	private double hp;
+	private double attack;
 	private String picSource;
 	private boolean ally;
 	private boolean canMove;
@@ -12,10 +12,12 @@ public class Characters {
 	private int xCoordinate;
 	private int yCoordinate;
 	private boolean didAttack;
+	private double currentHp;
 	
-	public Characters(String name, int hp, int attack, String picSource, boolean ally, boolean canMove, int distance, int xCoord, int yCoord, boolean didattack) {
+	public Characters(String name, double hp, double attack, String picSource, boolean ally, boolean canMove, int distance, int xCoord, int yCoord, boolean didattack) {
 		this.name = name;
 		this.hp = hp;
+		this.currentHp = hp;
 		this.attack = attack;
 		this.picSource = picSource;
 		this.ally = ally;
@@ -25,14 +27,17 @@ public class Characters {
 		yCoordinate = yCoord;
 		this.didAttack = didattack;
 	}
-	public int getHp() {
-		return hp;
+	public double getHp() {
+		return currentHp;
 	}
-	public int getAtk() {
+	public double getAtk() {
 		return attack;
 	}
-	public void setHp(int hp) {
-		this.hp = hp;
+	public void setHp(double hp) {
+		this.currentHp = hp;
+	}
+	public double getMaxHp() {
+		return this.hp;
 	}
 	public String getPic() {
 		return picSource;
