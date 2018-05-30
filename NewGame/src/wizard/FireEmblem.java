@@ -34,7 +34,7 @@ public class FireEmblem extends BasicGame
 	private int tileAmt = 0;
 	//private TiledMap grassMap;
 	private Animation sprite, up, down, left, right, allyTest,Csprite;
-	private Animation[] images = {sprite, up, down, left, right, allyTest, Csprite};
+	private Animation[] images = {sprite, allyTest};
 	
 	private Animation enemys, eDown;
 	private static Image button;
@@ -93,12 +93,12 @@ public class FireEmblem extends BasicGame
     			grid[j][i].setBlocked();
     		}
     	}
-    	enemy1 = new Characters("Enemy", 10, 5, "resources/asdf.png", false, false, 0, 1, 2, false);
+    	enemy1 = new Characters("Enemy", 10, 5, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 0, 1, 2, false);
     	grid[1][2].placeCharacter(enemy1);
     	grid[1][2].setBlocked();
-    	main = new Characters("Joe", 10, 6, "resources/spriteFront.png", false, false,5,1,1, false);
+    	main = new Characters("Joe", 10, 6, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, false, false,5,1,1, false);
     	turns.add(main);
-    	test1 = new Characters("Ally", 10, 6, "resouces/asdf.png", false, false,1,4,4,false);
+    	test1 = new Characters("Ally", 10, 6, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false,1,4,4,false);
     	turns.add(test1);
     	
         try
@@ -126,7 +126,7 @@ public class FireEmblem extends BasicGame
     	Image [] test = {new Image("resources/asdf.png"), new Image("resources/asdf.png")};
     	int [] duration = {300, 300}; 
     	
-    	Image [] enemyDown = {new Image(enemy1.getPic()), new Image(enemy1.getPic())};
+    	Image [] enemyDown = {new Image(enemy1.getPicU()), new Image(enemy1.getPicU())};
     	
     	eDown = new Animation(enemyDown, duration, false);
     	
@@ -160,7 +160,7 @@ public class FireEmblem extends BasicGame
         shownOptions[3] = new Image("resources/move.png");
         shownOptions[4] = new Image("resources/end.png");
         
-        cursor = new Characters("cursor", 20, 20, "resources/cursor.png", false, true, 9999, 20, 20, true);
+        cursor = new Characters("cursor", 20, 20, "resources/cursor.png","resources/cursor.png","resources/cursor.png","resources/cursor.png", 3, false, true, 9999, 20, 20, true);
         
         updateButtons();
         
@@ -187,7 +187,7 @@ public class FireEmblem extends BasicGame
          if (input.isKeyDown(Input.KEY_UP) && movable(2) && currentTurn.getY() != 0 && tileAmt != 0)
          { 
         	 if(currentTurn == turns.get(0)) {
-        		 sprite = up;
+        		 currentTurn.setFace(0);
         		 sprite.update(delta);
         	 }
              // The lower the delta the slowest the sprite will animate.
@@ -197,7 +197,7 @@ public class FireEmblem extends BasicGame
          if (input.isKeyDown(Input.KEY_DOWN) && movable(4) && currentTurn.getY() != 9 && tileAmt != 0)
          {
         	 if(currentTurn == turns.get(0)) {
-                 sprite = down;
+                 currentTurn.setFace(3);
                  sprite.update(delta);
         	 }
              currentTurn.setY(currentTurn.getY()+1);
@@ -206,7 +206,7 @@ public class FireEmblem extends BasicGame
          if (input.isKeyDown(Input.KEY_LEFT)&& movable(3) && currentTurn.getX() != 0 && tileAmt != 0)
          { 
         	 if(currentTurn == turns.get(0)) {
-        		 sprite = left;
+        		 currentTurn.setFace(1);
         		 sprite.update(delta);
         	 }
              currentTurn.setX(currentTurn.getX()-1);
@@ -215,7 +215,7 @@ public class FireEmblem extends BasicGame
          if (input.isKeyDown(Input.KEY_RIGHT)&& movable(1) && currentTurn.getX() != 9 && tileAmt != 0)
          {
         	 if(currentTurn == turns.get(0)) {
-        		 sprite = right;
+        		 currentTurn.setFace(2);
         		 sprite.update(delta);
         	 }
              currentTurn.setX(currentTurn.getX()+1);
@@ -294,9 +294,9 @@ public class FireEmblem extends BasicGame
 
     public void render(GameContainer container, Graphics g) throws SlickException
     {
+    	System.out.println(turns.size());
     	map.draw(0,0);
     	//grassMap.render(0,0);
-    	sprite.draw(main.getX()*64, main.getY()*64); 
     	button.draw((int)20, (int)640);
     	button2.draw((int)84, (int)640);
     	button3.draw(148, (int)640);
@@ -305,11 +305,36 @@ public class FireEmblem extends BasicGame
     	trueTypeFont.drawString(600.0f, 10.0f, Double.toString(currentTurn.getHp()), Color.black);
     	currentMoves.drawString(600.0f, 30.0f, Integer.toString(tileAmt), Color.black);
     	enemys.draw(64,128);
-    	allyTest.draw(test1.getX()*64,test1.getY()*64);
     	Csprite.draw(cursor.getX()*64, cursor.getY()*64);
     	g.drawRect(500, 10, 110, 20);
     	g.fillRect(500, 10, (int)(currentPer*110), 20);
     	g.setColor(Color.red);
+    	if(turns.size()>0) {
+    	for (Characters d: turns) {
+    		Image[] asdf = {new Image(d.getPicU()), new Image(d.getPicU())};
+    		if (d.getFace() == 0) {
+    			 Image[] u = {new Image(d.getPicU()), new Image(d.getPicU())};
+    			 asdf = u;
+    		}
+    		if (d.getFace() == 1) {
+    			 Image[] r = {new Image(d.getPicR()), new Image(d.getPicR())};	
+    			 asdf = r;
+    		}
+    		if(d.getFace()==2) {
+    			Image[] l = {new Image(d.getPicL()), new Image(d.getPicL())};
+    			asdf = l;
+    		}
+    		if(d.getFace()==3) {
+    			 Image[] fda = {new Image(d.getPicD()), new Image(d.getPicD())};
+    			 asdf = fda;
+    		}
+    		int [] duration = {300, 300}; 
+    		Animation df = new Animation(asdf,duration, false);
+    		df.draw(d.getX()*64, d.getY()*64);
+    	}
+    	}else {
+    		System.out.println("game over");
+    	}
     }
     
     public void cursorHelper(int delta) {
@@ -457,7 +482,7 @@ public class FireEmblem extends BasicGame
 	public static boolean Attackable(Characters current) {
 		if((cursor.getX()==current.getX()-1 || cursor.getX()==current.getX()+1)&&grid[cursor.getX()][cursor.getY()].isOccupied()) {
 			return true;
-		}
+		} 
 		if((cursor.getY()==current.getY()-1||cursor.getY()==current.getY()+1)&&grid[cursor.getX()][cursor.getY()].isOccupied()) {
 			return true;
 		}
@@ -473,10 +498,17 @@ public class FireEmblem extends BasicGame
 	}
 	public void updateHealth() {
 		currentPer=currentTurn.getHp()/currentTurn.getMaxHp();
+		if(turns.size() >0) {
+		checkDead();
+		}
+	}
+	public void checkDead() {
 		if (currentPer <= 0) {
 			turns.remove(turnLoc);
 			currentTurn = turns.get(turnLoc);
+			updateHealth();
 		}
+		
 	}
 	
 }

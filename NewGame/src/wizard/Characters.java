@@ -5,7 +5,10 @@ public class Characters {
 	private String name;
 	private double hp;
 	private double attack;
-	private String picSource;
+	private String picSourceU;
+	private String picSourceR;
+	private String picSourceL;
+	private String picSourceD;
 	private boolean ally;
 	private boolean canMove;
 	private int distance;
@@ -13,19 +16,24 @@ public class Characters {
 	private int yCoordinate;
 	private boolean didAttack;
 	private double currentHp;
+	private int face;
 	
-	public Characters(String name, double hp, double attack, String picSource, boolean ally, boolean canMove, int distance, int xCoord, int yCoord, boolean didattack) {
+	public Characters(String name, double hp, double attack, String picSourceU, String picSourceR, String picSourceL, String picSourceD, int face, boolean ally, boolean canMove, int distance, int xCoord, int yCoord, boolean didattack) {
 		this.name = name;
 		this.hp = hp;
 		this.currentHp = hp;
 		this.attack = attack;
-		this.picSource = picSource;
+		this.picSourceU = picSourceU;
+		this.picSourceR = picSourceR;
+		this.picSourceL = picSourceL;
+		this.picSourceD = picSourceD;
 		this.ally = ally;
 		this.canMove = canMove;
 		this.distance = distance;
 		xCoordinate = xCoord;
 		yCoordinate = yCoord;
 		this.didAttack = didattack;
+		this.face = face;
 	}
 	public double getHp() {
 		return currentHp;
@@ -39,8 +47,17 @@ public class Characters {
 	public double getMaxHp() {
 		return this.hp;
 	}
-	public String getPic() {
-		return picSource;
+	public String getPicU() {
+		return picSourceU;
+	}
+	public String getPicR() {
+		return picSourceR;
+	}
+	public String getPicL() {
+		return picSourceL;
+	}
+	public String getPicD() {
+		return picSourceD;
 	}
 	public boolean isAlly() {
 		return ally;
@@ -68,6 +85,12 @@ public class Characters {
 	}
 	public void setDidAttack(boolean set) {
 		this.didAttack = set;
+	}
+	public int getFace() {
+		return face;
+	}
+	public void setFace(int face) {
+		this.face = face;
 	}
 	
 	
