@@ -19,13 +19,12 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.tiled.TiledMap;
 
 import sun.java2d.loops.DrawRect;
-/**
+ /**
  * @author panos
  */
 
 //-Djava.library.path=C:\Users\BT_1N3_27\git\Symposium\NewGame\lib\slick
-public class FireEmblem extends BasicGame
-{
+public class FireEmblem extends BasicGame {
 	private static Characters test1;
 	private static ArrayList<Characters> turns = new ArrayList<Characters>();
 	private int turnLoc = 0;
@@ -67,13 +66,11 @@ public class FireEmblem extends BasicGame
 	private static Characters main;
 	
 	
-    public FireEmblem()
-    {
-        super("Fire Emblem game");
+    public FireEmblem() {
+    	super("Fire Emblem game");
     } 
 
-    public static void main(String[] arguments)
-    {	
+    public static void main(String[] arguments) {	
     	populateGrid();
     	for(int i = 0; i < 10; i++) {
     		grid[i][0].setBlocked();
@@ -115,8 +112,7 @@ public class FireEmblem extends BasicGame
     }
 
     @Override
-    public void init(GameContainer container) throws SlickException
-    {
+    public void init(GameContainer container) throws SlickException {
     	//grassMap = new TiledMap("resources/map1.tmx");
     	map = new Image("resources/FE Map.png");
     	Image [] movementUp = {new Image("resources/spriteUp.png"), new Image("resources/spriteUp.png")};
@@ -141,8 +137,6 @@ public class FireEmblem extends BasicGame
     	Csprite = new Animation(cursord, duration, false);
     	enemys = eDown;
     	cursormode = false;
-    	
-    	// build a collision map based on tile properties in the TileD map
     	
     	menuOptions[0] = new Image("resources/attack.png");
         menuOptions[1] = new Image("resources/items.png");
@@ -175,111 +169,101 @@ public class FireEmblem extends BasicGame
     }
 
     @Override
-    public void update(GameContainer container, int delta) throws SlickException
-    {
-    	 //change later
+    public void update(GameContainer container, int delta) throws SlickException {
     	 if(tileAmt > 0) {
     		 chooseOption = false;
     	 }else {
     		 chooseOption = true;
     	 }
     	 Input input = container.getInput();
-    	 if (cursormode == false) {
-         if (input.isKeyDown(Input.KEY_UP) && movable(2) && currentTurn.getY() != 0 && tileAmt != 0)
-         { 
-        	 if(currentTurn == turns.get(0)) {
-        		 currentTurn.setFace(0);
-        		 sprite.update(delta);
-        	 }
-             // The lower the delta the slowest the sprite will animate.
-             currentTurn.setY(currentTurn.getY()-1);
-             moveHelper();
-         }
-         if (input.isKeyDown(Input.KEY_DOWN) && movable(4) && currentTurn.getY() != 9 && tileAmt != 0)
-         {
-        	 if(currentTurn == turns.get(0)) {
-                 currentTurn.setFace(3);
-                 sprite.update(delta);
-        	 }
-             currentTurn.setY(currentTurn.getY()+1);
-             moveHelper();
-         }
-         if (input.isKeyDown(Input.KEY_LEFT)&& movable(3) && currentTurn.getX() != 0 && tileAmt != 0)
-         { 
-        	 if(currentTurn == turns.get(0)) {
-        		 currentTurn.setFace(1);
-        		 sprite.update(delta);
-        	 }
-             currentTurn.setX(currentTurn.getX()-1);
-             moveHelper();
-         }
-         if (input.isKeyDown(Input.KEY_RIGHT)&& movable(1) && currentTurn.getX() != 9 && tileAmt != 0)
-         {
-        	 if(currentTurn == turns.get(0)) {
-        		 currentTurn.setFace(2);
-        		 sprite.update(delta);
-        	 }
-             currentTurn.setX(currentTurn.getX()+1);
-             moveHelper();
-         }
-         if (input.isKeyDown(Input.KEY_A) && chooseOption) {
-        	 OptionLeft();
-        	 optionHelper();
-         }
-         if (input.isKeyDown(Input.KEY_D) && chooseOption) {
-        	 OptionRight();
-        	 optionHelper();
-         }
-         if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 0 && currentTurn.getDidAttack()==false && canAttack()) {
-        	 System.out.println("i attacked");
-        	 AttackSelection(currentTurn);
-      	     MyTimerTask timer = new MyTimerTask();
-      	     timer.completeTask(0);
-      	     currentTurn.setDidAttack(true);
-         }
-         if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 3 ){
-        	 tileAmt = currentTurn.getDistance();
-             canMove = true;
-             chooseOption = false;
-             if(tileAmt == 0) {
-            	 chooseOption = true;
-             }
-         }
-         if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 4 && chooseOption) {
-      	    currentTurn.setDidAttack(false);
-        	System.out.println(turnLoc);
-            turnLoc++;
-             if(turnLoc > turns.size()-1) {
-            		turnLoc = 0;
-        	 }
-        	 currentTurn = turns.get(turnLoc);
-      	     MyTimerTask timer = new MyTimerTask();
-      	     timer.completeTask(0);
-      	     OptionPos = 0;
-      	     resetButtons();
-      	     updateButtons();
-      	     updateHealth();
-         }
+    	 if(cursormode == false) {
+    		 if(input.isKeyDown(Input.KEY_UP) && movable(2) && currentTurn.getY() != 0 && tileAmt != 0) { 
+    			 if(currentTurn == turns.get(0)) {
+    				 currentTurn.setFace(0);
+    				 sprite.update(delta);
+    			 }
+    			 // The lower the delta the slowest the sprite will animate.
+    			 currentTurn.setY(currentTurn.getY()-1);
+    			 moveHelper();
+    		 }
+    		 if(input.isKeyDown(Input.KEY_DOWN) && movable(4) && currentTurn.getY() != 9 && tileAmt != 0) {
+    			 if(currentTurn == turns.get(0)) {
+    				 currentTurn.setFace(3);
+    				 sprite.update(delta);
+    			 }
+    			 currentTurn.setY(currentTurn.getY()+1);
+    			 moveHelper();
+    		 }
+    		 if (input.isKeyDown(Input.KEY_LEFT)&& movable(3) && currentTurn.getX() != 0 && tileAmt != 0) { 
+    			 if(currentTurn == turns.get(0)) {
+    				 currentTurn.setFace(1);
+    				 sprite.update(delta);
+    			 }
+    			 currentTurn.setX(currentTurn.getX()-1);
+             	moveHelper();
+    		 }
+    		 if (input.isKeyDown(Input.KEY_RIGHT)&& movable(1) && currentTurn.getX() != 9 && tileAmt != 0) {
+    			 if(currentTurn == turns.get(0)) {
+    				 currentTurn.setFace(2);
+    				 sprite.update(delta);
+    			 }
+    			 currentTurn.setX(currentTurn.getX()+1);
+    			 moveHelper();
+    		 }
+    		 if (input.isKeyDown(Input.KEY_A) && chooseOption) {
+    			 OptionLeft();
+    			 optionHelper();
+    		 }
+    		 if (input.isKeyDown(Input.KEY_D) && chooseOption) {
+    			 OptionRight();
+    			 optionHelper();
+    		 }
+    		 if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 0 && currentTurn.getDidAttack()==false && canAttack()) {
+    			 System.out.println("i attacked");
+    			 AttackSelection(currentTurn);
+    			 MyTimerTask timer = new MyTimerTask();
+    			 timer.completeTask(0);
+    			 currentTurn.setDidAttack(true);
+    		 }
+    		 if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 3 ){
+    			 tileAmt = currentTurn.getDistance();
+    			 canMove = true;
+    			 chooseOption = false;
+    			 if(tileAmt == 0) {
+    				 chooseOption = true;
+    			 }
+    		 }
+    		 if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 4 && chooseOption) {
+    			 currentTurn.setDidAttack(false);
+    			 System.out.println(turnLoc);
+    			 turnLoc++;
+    			 if(turnLoc > turns.size()-1) {
+    				 turnLoc = 0;
+    			 }
+    			 currentTurn = turns.get(turnLoc);
+    			 MyTimerTask timer = new MyTimerTask();
+    			 timer.completeTask(0);
+    			 OptionPos = 0;
+    			 resetButtons();
+    			 updateButtons();
+    			 updateHealth();
+    		 }
     	 }
     	 if (cursormode == true){
-    		 if (input.isKeyDown(Input.KEY_UP) && cursor.getY() != 0)
-             { 
+    		 if (input.isKeyDown(Input.KEY_UP) && cursor.getY() != 0) { 
                  // The lower the delta the slowest the sprite will animate.
                  cursor.setY(cursor.getY()-1);
                  cursorHelper(delta);
              }
-             if (input.isKeyDown(Input.KEY_DOWN) && cursor.getY() != 9)
-             {
+             if (input.isKeyDown(Input.KEY_DOWN) && cursor.getY() != 9) {
                  cursor.setY(cursor.getY()+1);
                  cursorHelper(delta);
              }
-             if (input.isKeyDown(Input.KEY_LEFT) && cursor.getX() != 0)
-             { 
+             if (input.isKeyDown(Input.KEY_LEFT) && cursor.getX() != 0) { 
                  cursor.setX(cursor.getX()-1);
                  cursorHelper(delta);
              }
-             if (input.isKeyDown(Input.KEY_RIGHT) && cursor.getX() != 9)
-             {
+             if (input.isKeyDown(Input.KEY_RIGHT) && cursor.getX() != 9)  {
                  cursor.setX(cursor.getX()+1);
                  cursorHelper(delta);
              }
@@ -293,8 +277,7 @@ public class FireEmblem extends BasicGame
     	 }
     }
 
-    public void render(GameContainer container, Graphics g) throws SlickException
-    {
+    public void render(GameContainer container, Graphics g) throws SlickException {
     	System.out.println(turns.size());
     	map.draw(0,0);
     	//grassMap.render(0,0);
@@ -312,30 +295,31 @@ public class FireEmblem extends BasicGame
     	g.fillRect(500, 10, (int)(currentPer*110), 20);
     	g.setColor(Color.red);
     	if(turns.size()>0) {
-    	for (Characters d: turns) {
-    		Image[] asdf = {new Image(d.getPicU()), new Image(d.getPicU())};
-    		if (d.getFace() == 0) {
-    			 Image[] u = {new Image(d.getPicU()), new Image(d.getPicU())};
-    			 asdf = u;
+    		for (Characters d: turns) {
+    			Image[] asdf = {new Image(d.getPicU()), new Image(d.getPicU())};
+    			if (d.getFace() == 0) {
+    				Image[] u = {new Image(d.getPicU()), new Image(d.getPicU())};
+    				asdf = u;
+    			}
+    			if (d.getFace() == 1) {
+    				Image[] r = {new Image(d.getPicR()), new Image(d.getPicR())};	
+    				asdf = r;
+    			}
+    			if(d.getFace()==2) {
+    				Image[] l = {new Image(d.getPicL()), new Image(d.getPicL())};
+    				asdf = l;
+    			}
+    			if(d.getFace()==3) {
+    				Image[] fda = {new Image(d.getPicD()), new Image(d.getPicD())};
+    				asdf = fda;
+    			}
+    			int [] duration = {300, 300}; 
+    			Animation df = new Animation(asdf,duration, false);
+    			df.draw(d.getX()*64, d.getY()*64);
     		}
-    		if (d.getFace() == 1) {
-    			 Image[] r = {new Image(d.getPicR()), new Image(d.getPicR())};	
-    			 asdf = r;
-    		}
-    		if(d.getFace()==2) {
-    			Image[] l = {new Image(d.getPicL()), new Image(d.getPicL())};
-    			asdf = l;
-    		}
-    		if(d.getFace()==3) {
-    			 Image[] fda = {new Image(d.getPicD()), new Image(d.getPicD())};
-    			 asdf = fda;
-    		}
-    		int [] duration = {300, 300}; 
-    		Animation df = new Animation(asdf,duration, false);
-    		df.draw(d.getX()*64, d.getY()*64);
+    	} else {
+    		System.out.println("game over");
     	}
-    	}else {
-    		System.out.println("game over");}
     	for(int i = 0; i < turns.size(); i++) {
     		if(specificPerc(turns.get(i)) > 0) {
     			g.drawRect(turns.get(i).getX() * 64 + 10, turns.get(i).getY() * 64, 44, 2);
@@ -392,39 +376,39 @@ public class FireEmblem extends BasicGame
     }
     
     public boolean canAttack() {
-    		if(currentTurn.getX() == 0 || currentTurn.getX() == 9 || currentTurn.getY() == 0 || currentTurn.getY() == 9) {
-    			if(currentTurn.getX() == 0) {
-    				if(grid[currentTurn.getX()][currentTurn.getY() - 1].isOccupied() || grid[currentTurn.getX()][currentTurn.getY() + 1].isOccupied() || 
-    						grid[currentTurn.getX()+1][currentTurn.getY()].isOccupied()) {
-    					return true;
-    				}
-    			}
-    			if(currentTurn.getX() == 9) {
-    				if(grid[currentTurn.getX()][currentTurn.getY() - 1].isOccupied() || grid[currentTurn.getX()][currentTurn.getY() + 1].isOccupied() || 
-    						grid[currentTurn.getX()-1][currentTurn.getY()].isOccupied()) {
-    					return true;
-    				}
-    			}
-    			if(currentTurn.getY() == 9) {
-    				if(grid[currentTurn.getX()][currentTurn.getY() - 1].isOccupied() || grid[currentTurn.getX()-1][currentTurn.getY()].isOccupied() || 
-    						grid[currentTurn.getX()+1][currentTurn.getY()].isOccupied()) {
-    					return true;
-    				}
-    			}
-    			if(currentTurn.getY() == 0) {
-    				if(grid[currentTurn.getX()][currentTurn.getY() + 1].isOccupied() || grid[currentTurn.getX()-1][currentTurn.getY()].isOccupied() || 
-    						grid[currentTurn.getX()+1][currentTurn.getY()].isOccupied()) {
-    					return true;
-    				}
-    			}
-    		} else {
-    			if(grid[currentTurn.getX()][currentTurn.getY() - 1].isOccupied() || grid[currentTurn.getX()][currentTurn.getY() + 1].isOccupied() || grid[currentTurn.getX()-1][currentTurn.getY()].isOccupied() || 
+    	if(currentTurn.getX() == 0 || currentTurn.getX() == 9 || currentTurn.getY() == 0 || currentTurn.getY() == 9) {
+    		if(currentTurn.getX() == 0) {
+    			if(grid[currentTurn.getX()][currentTurn.getY() - 1].isOccupied() || grid[currentTurn.getX()][currentTurn.getY() + 1].isOccupied() || 
     					grid[currentTurn.getX()+1][currentTurn.getY()].isOccupied()) {
-    				System.out.println("attacked");
     				return true;
     			}
     		}
-    		return false;
+    		if(currentTurn.getX() == 9) {
+    			if(grid[currentTurn.getX()][currentTurn.getY() - 1].isOccupied() || grid[currentTurn.getX()][currentTurn.getY() + 1].isOccupied() || 
+    					grid[currentTurn.getX()-1][currentTurn.getY()].isOccupied()) {
+    				return true;
+    			}
+    		}
+    		if(currentTurn.getY() == 9) {
+    			if(grid[currentTurn.getX()][currentTurn.getY() - 1].isOccupied() || grid[currentTurn.getX()-1][currentTurn.getY()].isOccupied() || 
+    					grid[currentTurn.getX()+1][currentTurn.getY()].isOccupied()) {
+    				return true;
+    			}
+    		}
+    		if(currentTurn.getY() == 0) {
+    			if(grid[currentTurn.getX()][currentTurn.getY() + 1].isOccupied() || grid[currentTurn.getX()-1][currentTurn.getY()].isOccupied() || 
+    					grid[currentTurn.getX()+1][currentTurn.getY()].isOccupied()) {
+    				return true;
+    			}
+    		}
+    	} else {
+    		if(grid[currentTurn.getX()][currentTurn.getY() - 1].isOccupied() || grid[currentTurn.getX()][currentTurn.getY() + 1].isOccupied() || grid[currentTurn.getX()-1][currentTurn.getY()].isOccupied() || 
+    				grid[currentTurn.getX()+1][currentTurn.getY()].isOccupied()) {
+    			System.out.println("attacked");
+    			return true;
+    		}
+    	}
+    	return false;
     }
     
     public static void populateGrid() {
@@ -472,16 +456,11 @@ public class FireEmblem extends BasicGame
     public static void setMovable(boolean b) {
     	canMove = b;
     }
-    public void createOptions() {
-    	
-    }
 
 	public static void setOptionMovable(boolean b) {
 		chooseOption = b;
 	}
-	public static void moving() {
-		
-	}
+	
 	public static void AttackSelection(Characters current) {
 		cursor.setX(current.getX());
 		cursor.setY(current.getY());
