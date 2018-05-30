@@ -1,6 +1,7 @@
 package wizard;
 
 import java.awt.Button;
+import java.awt.Component;
 import java.awt.Font;
 import java.util.ArrayList;
 
@@ -32,7 +33,6 @@ public class FireEmblem extends BasicGame
 	private static Characters cursor;
 	
 	private int tileAmt = 0;
-	//private TiledMap grassMap;
 	private Animation sprite, up, down, left, right, allyTest,Csprite;
 	private Animation[] images = {sprite, up, down, left, right, allyTest, Csprite};
 	
@@ -98,6 +98,7 @@ public class FireEmblem extends BasicGame
     	grid[1][2].setBlocked();
     	main = new Characters("Joe", 10, 6, "resources/spriteFront.png", false, false,5,1,1, false);
     	turns.add(main);
+    	turns.add(enemy1);
     	test1 = new Characters("Ally", 10, 6, "resouces/asdf.png", false, false,1,4,4,false);
     	turns.add(test1);
     	
@@ -307,9 +308,13 @@ public class FireEmblem extends BasicGame
     	enemys.draw(64,128);
     	allyTest.draw(test1.getX()*64,test1.getY()*64);
     	Csprite.draw(cursor.getX()*64, cursor.getY()*64);
-    	g.drawRect(500, 10, 110, 20);
-    	g.fillRect(500, 10, (int)(currentPer*110), 20);
-    	g.setColor(Color.red);
+    	for(int i = 0; i < turns.size(); i++) {
+    		if(specificPerc(turns.get(i)) > 0) {
+    			g.drawRect(turns.get(i).getX() * 64 + 7, turns.get(i).getY() * 64, 50, 3);
+        		g.fillRect(turns.get(i).getX() * 64 + 7, turns.get(i).getY() * 64, (int)(specificPerc(turns.get(i))*50), 3);
+        		g.setColor(Color.red);
+    		}
+    	}
     }
     
     public void cursorHelper(int delta) {
@@ -478,6 +483,8 @@ public class FireEmblem extends BasicGame
 			currentTurn = turns.get(turnLoc);
 		}
 	}
-	
+	public double specificPerc(Characters c) {
+		return c.getHp()/c.getMaxHp();
+	}
 }
 
