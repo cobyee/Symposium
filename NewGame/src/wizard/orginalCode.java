@@ -24,7 +24,7 @@ import sun.java2d.loops.DrawRect;
  */
 
 //-Djava.library.path=C:\Users\BT_1N3_27\git\Symposium\NewGame\lib\slick
-public class FireEmblem extends BasicGame
+public class orginalCode extends BasicGame
 {
 	private static Characters test1;
 	private static ArrayList<Characters> turns = new ArrayList<Characters>();
