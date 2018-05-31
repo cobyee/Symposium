@@ -17,8 +17,9 @@ public class Characters {
 	private boolean didAttack;
 	private double currentHp;
 	private int face;
+	private String[] skills = new String[4];
 	
-	public Characters(String name, double hp, double attack, String picSourceU, String picSourceR, String picSourceL, String picSourceD, int face, boolean ally, boolean canMove, int distance, int xCoord, int yCoord, boolean didattack) {
+	public Characters(String name, double hp, double attack, String picSourceU, String picSourceR, String picSourceL, String picSourceD, int face, boolean ally, boolean canMove, int distance, int xCoord, int yCoord, boolean didattack, String skill1, String skill2, String skill3, String skill4) {
 		this.name = name;
 		this.hp = hp;
 		this.currentHp = hp;
@@ -34,6 +35,10 @@ public class Characters {
 		yCoordinate = yCoord;
 		this.didAttack = didattack;
 		this.face = face;
+		skills[0] = skill1;
+		skills[1] = skill2;
+		skills[2] = skill3;
+		skills[3] = skill4;
 	}
 	public double getHp() {
 		return currentHp;
@@ -92,7 +97,8 @@ public class Characters {
 	public void setFace(int face) {
 		this.face = face;
 	}
-	
-	
+	public String[] getSkill() {
+		return skills;
+	}
 	
 }

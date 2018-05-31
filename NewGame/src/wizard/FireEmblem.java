@@ -22,6 +22,9 @@ import sun.java2d.loops.DrawRect;
  /**
  * @author panos
  */
+//https://www.imagefu.com/create/button
+
+//http://roguebasin.roguelikedevelopment.org/index.php?title=Roguelike_Intelligence
 
 //-Djava.library.path=C:\Users\BT_1N3_27\git\Symposium\NewGame\lib\slick
 public class FireEmblem extends BasicGame {
@@ -46,12 +49,16 @@ public class FireEmblem extends BasicGame {
 	private static boolean chooseOption = true;
 	private static Characters enemy1;
 	private static boolean cursormode;
+	private static boolean skillmenu;
 	
 	private static Tile[][] grid = new Tile[10][10];
 	
 	private static Image[] shownOptions = new Image[5];
 	private static Image[] menuOptions = new Image[5];
 	private static Image[] menuOptions2 = new Image[5];
+	
+	private static Image[] skillOptions = new Image[5];
+	private static Image[] skillOptions2 = new Image[5];
 	
 	private static double currentPer;
 	 
@@ -90,12 +97,12 @@ public class FireEmblem extends BasicGame {
     			grid[j][i].setBlocked();
     		}
     	}
-    	enemy1 = new Characters("Enemy", 10, 5, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 0, 1, 2, false);
+    	enemy1 = new Characters("Enemy", 10, 5, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 0, 1, 2, false,"fireball", "heal", "mysticshot", "finalspark");
     	grid[1][2].placeCharacter(enemy1);
     	grid[1][2].setBlocked();
-    	main = new Characters("Joe", 10, 6, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, false, false,5,1,1, false);
+    	main = new Characters("Joe", 10, 6, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, false, false,5,1,1, false,"fireball", "explosion", "mysticshot", "finalspark");
     	turns.add(main);
-    	test1 = new Characters("Ally", 10, 6, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false,1,4,4,false);
+    	test1 = new Characters("Ally", 10, 6, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false,1,4,4,false, "fireball", "heal", "mysticshot", "finalspark");
     	turns.add(enemy1);
     	turns.add(test1);
     	
@@ -137,6 +144,7 @@ public class FireEmblem extends BasicGame {
     	Csprite = new Animation(cursord, duration, false);
     	enemys = eDown;
     	cursormode = false;
+    	skillmenu = false;
     	
     	menuOptions[0] = new Image("resources/attack.png");
         menuOptions[1] = new Image("resources/items.png");
@@ -155,7 +163,7 @@ public class FireEmblem extends BasicGame {
         shownOptions[3] = new Image("resources/move.png");
         shownOptions[4] = new Image("resources/end.png");
         
-        cursor = new Characters("cursor", 20, 20, "resources/cursor.png","resources/cursor.png","resources/cursor.png","resources/cursor.png", 3, false, true, 9999, 20, 20, true);
+        cursor = new Characters("cursor", 20, 20, "resources/cursor.png","resources/cursor.png","resources/cursor.png","resources/cursor.png", 3, false, true, 9999, 20, 20, true, null, null, null, null);
         
         updateButtons();
         
@@ -224,6 +232,9 @@ public class FireEmblem extends BasicGame {
     			 MyTimerTask timer = new MyTimerTask();
     			 timer.completeTask(0);
     			 currentTurn.setDidAttack(true);
+    		 }
+    		 if(input.isKeyDown(Input.KEY_ENTER)&& OptionPos == 2) {
+    			 changeOptionSkills();
     		 }
     		 if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 3 ){
     			 tileAmt = currentTurn.getDistance();
@@ -499,6 +510,15 @@ public class FireEmblem extends BasicGame {
 	}
 	public double specificPerc(Characters c) {
 		return c.getHp()/c.getMaxHp();
+	}
+	public void changeOptionSkills() throws SlickException {
+		skillmenu = true;
+		for(int i=0; i<skillOptions.length-1; i++) {
+			skillOptions[i] = new Image("resources/"+currentTurn.getSkill()[i]+".png");
+		}
+		for(int i=0;i<skillOptions2.length-1;i++) {
+			skillOptions2[i] = new Image("resources/"+currentTurn.getSkill()[i]+"selected.png");
+		}
 	}
 }
 
