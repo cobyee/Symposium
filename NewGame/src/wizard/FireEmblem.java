@@ -25,12 +25,17 @@ import sun.java2d.loops.DrawRect;
 
 //-Djava.library.path=C:\Users\BT_1N3_27\git\Symposium\NewGame\lib\slick
 public class FireEmblem extends BasicGame {
+	
+	private Inventory inventory = new Inventory();
+	private ArrayList<Item> items = new ArrayList<Item>();
+	
 	private static Characters test1;
 	private static ArrayList<Characters> turns = new ArrayList<Characters>();
 	private int turnLoc = 0;
 	private Characters currentTurn = turns.get(turnLoc);
 	private static Characters cursor;
 	
+	private boolean pickingItem = false;
 	private int tileAmt = 0;
 	private Animation sprite, up, down, left, right, allyTest,Csprite;
 	private Animation[] images = {sprite, allyTest};
@@ -42,6 +47,7 @@ public class FireEmblem extends BasicGame {
 	private static Image button4;
 	private static Image button5;
 	private static Image map;
+	private static Image itemScreen;
 	private static boolean canMove = false;
 	private static boolean chooseOption = true;
 	private static Characters enemy1;
@@ -54,14 +60,14 @@ public class FireEmblem extends BasicGame {
 	private static Image[] menuOptions2 = new Image[5];
 	
 	private static double currentPer;
-	 
-
 	
 	Font font = new Font("Verdana", Font.BOLD, 8);
 	TrueTypeFont trueTypeFont;
 	TrueTypeFont currentMoves;
+	TrueTypeFont smallPotion;
 
 	public static int OptionPos = 0;
+	public static int ItemPos = 0;
 	
 	private static Characters main;
 	
@@ -115,6 +121,10 @@ public class FireEmblem extends BasicGame {
     public void init(GameContainer container) throws SlickException {
     	//grassMap = new TiledMap("resources/map1.tmx");
     	map = new Image("resources/FE Map.png");
+    	for(Item i : Inventory.getInventory()) {
+    		items.add(i);
+    	}
+    	itemScreen = new Image("resources/scroll.png");
     	Image [] movementUp = {new Image("resources/spriteUp.png"), new Image("resources/spriteUp.png")};
     	Image [] movementDown = {new Image("resources/spriteFront.png"), new Image("resources/spriteFront.png")};
     	Image [] movementLeft = {new Image("resources/spriteLeft.png"), new Image("resources/spriteLeft.png")};
@@ -164,6 +174,7 @@ public class FireEmblem extends BasicGame {
         trueTypeFont = new TrueTypeFont(font, true);
         currentMoves = new TrueTypeFont(font,true);
 
+        
         // render some text to the screen
         updateHealth();
     }
@@ -224,6 +235,10 @@ public class FireEmblem extends BasicGame {
     			 MyTimerTask timer = new MyTimerTask();
     			 timer.completeTask(0);
     			 currentTurn.setDidAttack(true);
+    			 updateHealth();
+    		 }
+    		 if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 1) {
+    			 pickingItem = true;
     		 }
     		 if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 3 ){
     			 tileAmt = currentTurn.getDistance();
@@ -288,12 +303,8 @@ public class FireEmblem extends BasicGame {
     	button5.draw(276, (int)640);
     	trueTypeFont.drawString(600.0f, 10.0f, Double.toString(currentTurn.getHp()), Color.black);
     	currentMoves.drawString(600.0f, 30.0f, Integer.toString(tileAmt), Color.black);
-    	enemys.draw(64,128);
-    	Csprite.draw(cursor.getX()*64, cursor.getY()*64);
     	
-    	g.drawRect(500, 10, 110, 20);
-    	g.fillRect(500, 10, (int)(currentPer*110), 20);
-    	g.setColor(Color.red);
+    	
     	if(turns.size()>0) {
     		for (Characters d: turns) {
     			Image[] asdf = {new Image(d.getPicU()), new Image(d.getPicU())};
@@ -325,6 +336,20 @@ public class FireEmblem extends BasicGame {
     			g.drawRect(turns.get(i).getX() * 64 + 10, turns.get(i).getY() * 64, 44, 2);
         		g.fillRect(turns.get(i).getX() * 64 + 10, turns.get(i).getY() * 64, (int)(specificPerc(turns.get(i))*44), 2);
         		g.setColor(Color.red);
+    		}
+    	}
+    	Csprite.draw(cursor.getX()*64, cursor.getY()*64);
+    	if(pickingItem) {
+    		itemScreen.draw(50,50);
+    		int y = 70;
+    		for(int i = 0; i < items.size(); i++) {
+    	        TrueTypeFont words = new TrueTypeFont(new Font("Verdana", Font.BOLD, 8),true);
+    	        if(i == ItemPos) {
+    	        	words.drawString(70.0f,y, items.get(i).getName(), Color.blue);
+    	        } else {
+    	        	words.drawString(70.0f,y, items.get(i).getName(), Color.black);
+    	        }
+    	        y+=30;
     		}
     	}
     }
@@ -466,6 +491,7 @@ public class FireEmblem extends BasicGame {
 		cursor.setY(current.getY());
 		cursormode = true;
 	}
+	
 	public static boolean Attackable(Characters current) {
 		if((cursor.getX()==current.getX()-1 || cursor.getX()==current.getX()+1)&&grid[cursor.getX()][cursor.getY()].isOccupied()) {
 			return true;
@@ -486,7 +512,7 @@ public class FireEmblem extends BasicGame {
 	public void updateHealth() {
 		currentPer=currentTurn.getHp()/currentTurn.getMaxHp();
 		if(turns.size() >0) {
-		checkDead();
+			checkDead();
 		}
 	}
 	public void checkDead() {
@@ -500,5 +526,6 @@ public class FireEmblem extends BasicGame {
 	public double specificPerc(Characters c) {
 		return c.getHp()/c.getMaxHp();
 	}
+	
 }
 
