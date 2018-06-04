@@ -195,7 +195,18 @@ public class FireEmblem extends BasicGame {
     		 chooseOption = true;
     	 }
     	 Input input = container.getInput();
-    	 if(cursormode == false) {
+    	 if(skillmenu) {
+    		 if (input.isKeyDown(Input.KEY_A) && chooseOption) {
+    			 
+    			 OptionLeft();
+    			 optionHelper();
+    		 }
+    		 if (input.isKeyDown(Input.KEY_D) && chooseOption) {
+    			 OptionRight();
+    			 optionHelper();
+    		 }
+    	 }
+    	 else if(cursormode == false) {
     		 if(input.isKeyDown(Input.KEY_UP) && movable(2) && currentTurn.getY() != 0 && tileAmt != 0) { 
     			 if(currentTurn == turns.get(0)) {
     				 currentTurn.setFace(0);
@@ -275,7 +286,7 @@ public class FireEmblem extends BasicGame {
     			 updateHealth();
     		 }
     	 }
-    	 if (cursormode == true){
+    	 else if (cursormode == true){
     		 if (input.isKeyDown(Input.KEY_UP) && cursor.getY() != 0) { 
                  // The lower the delta the slowest the sprite will animate.
                  cursor.setY(cursor.getY()-1);
@@ -456,17 +467,26 @@ public class FireEmblem extends BasicGame {
     }
     
     public static void OptionLeft() {
-    	if(OptionPos != 0) {
+    	if(OptionPos != 0 && skillmenu == false) {
     		shownOptions[OptionPos] = menuOptions[OptionPos];
     		OptionPos--;
     		shownOptions[OptionPos] = menuOptions2[OptionPos];
+    	}else if(OptionPos != 0) {
+    		shownOptions[OptionPos] = skillOptions[OptionPos];
+    		OptionPos--;
+    		shownOptions[OptionPos] = skillOptions2[OptionPos];
     	}
     }
     public static void OptionRight() {
-    	if(OptionPos != 4) {
+    	if(OptionPos != 4 && skillmenu == false) {
     		shownOptions[OptionPos] = menuOptions[OptionPos];
     		OptionPos++;
     		shownOptions[OptionPos] = menuOptions2[OptionPos];
+    	}else if(OptionPos != 4) {
+    		shownOptions[OptionPos] = skillOptions[OptionPos];
+    		OptionPos++;
+    		shownOptions[OptionPos] = skillOptions2[OptionPos];
+    		
     	}
     }
     public static void updateButtons() {
@@ -545,6 +565,12 @@ public class FireEmblem extends BasicGame {
 		for(int i=0;i<skillOptions2.length-1;i++) {
 			skillOptions2[i] = new Image("resources/"+currentTurn.getSkill()[i]+"selected.png");
 		}
+		shownOptions[0] = skillOptions[0];
+		shownOptions[1] = skillOptions[1];
+		shownOptions[2] = skillOptions[2];
+		shownOptions[3] = skillOptions[3];
+		shownOptions[4] = "resources/"
+		shownOptions[OptionPos] = skillOptions2[OptionPos];
 	}
 }
 
