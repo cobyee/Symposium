@@ -38,7 +38,7 @@ public class FireEmblem extends BasicGame {
 	private Characters currentTurn = turns.get(turnLoc);
 	private static Characters cursor;
 	
-	private boolean pickingItem = false;
+	private static boolean pickingItem = false;
 	private int tileAmt = 0;
 	private Animation sprite, up, down, left, right, allyTest,Csprite;
 	private Animation[] images = {sprite, allyTest};
@@ -206,8 +206,8 @@ public class FireEmblem extends BasicGame {
     			 optionHelper();
     		 }
     	 }
-    	 else if(cursormode == false) {
-    		 if(input.isKeyDown(Input.KEY_UP) && movable(2) && currentTurn.getY() != 0 && tileAmt != 0) { 
+    	 if(cursormode == false) {
+    		 if(input.isKeyDown(Input.KEY_W) && movable(2) && currentTurn.getY() != 0 && tileAmt != 0) { 
     			 if(currentTurn == turns.get(0)) {
     				 currentTurn.setFace(0);
     				 sprite.update(delta);
@@ -216,7 +216,7 @@ public class FireEmblem extends BasicGame {
     			 currentTurn.setY(currentTurn.getY()-1);
     			 moveHelper();
     		 }
-    		 if(input.isKeyDown(Input.KEY_DOWN) && movable(4) && currentTurn.getY() != 9 && tileAmt != 0) {
+    		 if(input.isKeyDown(Input.KEY_S) && movable(4) && currentTurn.getY() != 9 && tileAmt != 0) {
     			 if(currentTurn == turns.get(0)) {
     				 currentTurn.setFace(3);
     				 sprite.update(delta);
@@ -224,7 +224,7 @@ public class FireEmblem extends BasicGame {
     			 currentTurn.setY(currentTurn.getY()+1);
     			 moveHelper();
     		 }
-    		 if (input.isKeyDown(Input.KEY_LEFT)&& movable(3) && currentTurn.getX() != 0 && tileAmt != 0) { 
+    		 if (input.isKeyDown(Input.KEY_A)&& movable(3) && currentTurn.getX() != 0 && tileAmt != 0) { 
     			 if(currentTurn == turns.get(0)) {
     				 currentTurn.setFace(1);
     				 sprite.update(delta);
@@ -232,7 +232,7 @@ public class FireEmblem extends BasicGame {
     			 currentTurn.setX(currentTurn.getX()-1);
              	moveHelper();
     		 }
-    		 if (input.isKeyDown(Input.KEY_RIGHT)&& movable(1) && currentTurn.getX() != 9 && tileAmt != 0) {
+    		 if (input.isKeyDown(Input.KEY_D)&& movable(1) && currentTurn.getX() != 9 && tileAmt != 0) {
     			 if(currentTurn == turns.get(0)) {
     				 currentTurn.setFace(2);
     				 sprite.update(delta);
@@ -272,7 +272,6 @@ public class FireEmblem extends BasicGame {
     		 }
     		 if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 4 && chooseOption) {
     			 currentTurn.setDidAttack(false);
-    			 System.out.println(turnLoc);
     			 turnLoc++;
     			 if(turnLoc > turns.size()-1) {
     				 turnLoc = 0;
@@ -286,36 +285,53 @@ public class FireEmblem extends BasicGame {
     			 updateHealth();
     		 }
     	 }
-    	 else if (cursormode == true){
-    		 if (input.isKeyDown(Input.KEY_UP) && cursor.getY() != 0) { 
+    	 if (cursormode == true){
+    		 if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
                  // The lower the delta the slowest the sprite will animate.
                  cursor.setY(cursor.getY()-1);
                  cursorHelper(delta);
              }
-             if (input.isKeyDown(Input.KEY_DOWN) && cursor.getY() != 9) {
+             if (input.isKeyDown(Input.KEY_S) && cursor.getY() != 9) {
                  cursor.setY(cursor.getY()+1);
                  cursorHelper(delta);
              }
-             if (input.isKeyDown(Input.KEY_LEFT) && cursor.getX() != 0) { 
+             if (input.isKeyDown(Input.KEY_A) && cursor.getX() != 0) { 
                  cursor.setX(cursor.getX()-1);
                  cursorHelper(delta);
              }
-             if (input.isKeyDown(Input.KEY_RIGHT) && cursor.getX() != 9)  {
+             if (input.isKeyDown(Input.KEY_D) && cursor.getX() != 9)  {
                  cursor.setX(cursor.getX()+1);
                  cursorHelper(delta);
              }
              if(input.isKeyDown(Input.KEY_ENTER) && Attackable(currentTurn)) {
-            	 System.out.println("hi");
             	 Fighting(currentTurn, grid[cursor.getX()][cursor.getY()].getCharacter());
             	 MyTimerTask timer = new MyTimerTask();
                  timer.completeTask(0);
                  updateHealth();
              }
     	 }
+    	 if(pickingItem) {
+    		 if (input.isKeyDown(Input.KEY_W)) { 
+    			 if(ItemPos > 0) {
+                	 MyTimerTask timer = new MyTimerTask();
+                     timer.completeTask(2);
+    				 ItemPos --;
+    			 }
+             }
+             if (input.isKeyDown(Input.KEY_S)) {
+            	 if(ItemPos < items.size()-1) {
+                	 MyTimerTask timer = new MyTimerTask();
+                     timer.completeTask(2);
+                     ItemPos ++;
+            	 }
+             }
+             if(input.isKeyDown(Input.KEY_ESCAPE)) {
+            	 pickingItem = false;
+             }
+    	 }
     }
 
     public void render(GameContainer container, Graphics g) throws SlickException {
-    	System.out.println(turns.size());
     	map.draw(0,0);
     	//grassMap.render(0,0);
     	button.draw((int)20, (int)640);
@@ -362,7 +378,7 @@ public class FireEmblem extends BasicGame {
     	}
     	Csprite.draw(cursor.getX()*64, cursor.getY()*64);
     	if(pickingItem) {
-    		itemScreen.draw(50,50);
+    		itemScreen.draw(45,50);
     		int y = 70;
     		for(int i = 0; i < items.size(); i++) {
     	        TrueTypeFont words = new TrueTypeFont(new Font("Verdana", Font.BOLD, 8),true);
@@ -515,6 +531,10 @@ public class FireEmblem extends BasicGame {
 
 	public static void setOptionMovable(boolean b) {
 		chooseOption = b;
+	}
+	
+	public static void setOptionItem(boolean b) {
+		pickingItem = b;
 	}
 	
 	public static void AttackSelection(Characters current) {

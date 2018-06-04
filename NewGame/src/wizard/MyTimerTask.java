@@ -30,6 +30,14 @@ public class MyTimerTask extends TimerTask {
     			e.printStackTrace();
     		}
     	}
+    	if(n == 2) {
+    		try {
+    			FireEmblem.setOptionItem(true);
+    			Thread.sleep(200);
+    		} catch (InterruptedException e) {
+    			e.printStackTrace();
+    		}
+    	}
     }
     
     public static void main(String args[]){
