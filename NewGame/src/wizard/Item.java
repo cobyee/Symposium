@@ -4,9 +4,13 @@ public class Item {
 
 	String name;
 	int amt;
+	String source;
+	String desc;
 	
-	public Item(String name, int amt) {
+	public Item(String name, int amt, String source, String desc) {
 		this.name=name;
+		this.source = source;
+		this.desc = desc;
 	}
 	
 	public int getAmt() {
@@ -19,6 +23,14 @@ public class Item {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public String getSource() {
+		return source;
+	}
+
+	public String getDescription() {
+		return desc;
 	}
 	
 }

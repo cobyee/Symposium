@@ -17,12 +17,14 @@ public class Characters {
 	private boolean didAttack;
 	private double currentHp;
 	private int face;
+	private double mana;
 	private String[] skills = new String[4];
 	
-	public Characters(String name, double hp, double attack, String picSourceU, String picSourceR, String picSourceL, String picSourceD, int face, boolean ally, boolean canMove, int distance, int xCoord, int yCoord, boolean didattack, String skill1, String skill2, String skill3, String skill4) {
+	public Characters(String name, double hp, double attack, double mana, String picSourceU, String picSourceR, String picSourceL, String picSourceD, int face, boolean ally, boolean canMove, int distance, int xCoord, int yCoord, boolean didattack, String skill1, String skill2, String skill3, String skill4) {
 		this.name = name;
 		this.hp = hp;
 		this.currentHp = hp;
+		this.mana = mana;
 		this.attack = attack;
 		this.picSourceU = picSourceU;
 		this.picSourceR = picSourceR;

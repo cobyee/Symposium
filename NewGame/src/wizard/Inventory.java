@@ -8,8 +8,8 @@ public class Inventory {
 	static ArrayList<Item> inventory = new ArrayList<Item>();
 	
 	public Inventory() {
-		Item smallPotion = new HpItem("Small Potion", 5, 10);
-		Item mediumPotion = new HpItem("Medium Potion", 1, 20);
+		HpItem smallPotion = new HpItem("Small Potion", 5, 10, "resources/smallPotion.png","Restore 20 HP");
+		HpItem mediumPotion = new HpItem("Medium Potion", 1, 20, "resources/mediumPotion.png", "Restore 50 HP");
 		inventory.add(smallPotion);
 		inventory.add(mediumPotion);
 	}
