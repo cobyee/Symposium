@@ -51,6 +51,7 @@ public class FireEmblem extends BasicGame {
 	private static Image button5;
 	private static Image map;
 	private static Image itemScreen;
+	private static Image shownImage;
 	private static boolean canMove = false;
 	private static boolean chooseOption = true;
 	private static Characters enemy1;
@@ -104,12 +105,12 @@ public class FireEmblem extends BasicGame {
     			grid[j][i].setBlocked();
     		}
     	}
-    	enemy1 = new Characters("Enemy", 10, 5, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 0, 1, 2, false,"fireball", "heal", "mysticshot", "finalspark");
+    	enemy1 = new Characters("Enemy", 10, 5, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 0, 1, 2, false,"fireball", "heal", "mysticshot", "finalspark");
     	grid[1][2].placeCharacter(enemy1);
     	grid[1][2].setBlocked();
-    	main = new Characters("Joe", 10, 6, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, false, false,5,1,1, false,"fireball", "explosion", "mysticshot", "finalspark");
+    	main = new Characters("Joe", 10, 6, 10, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, false, false,5,1,1, false,"fireball", "explosion", "mysticshot", "finalspark");
     	turns.add(main);
-    	test1 = new Characters("Ally", 10, 6, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false,1,4,4,false, "fireball", "heal", "mysticshot", "finalspark");
+    	test1 = new Characters("Ally", 10, 6, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false,1,4,4,false, "fireball", "heal", "mysticshot", "finalspark");
     	turns.add(enemy1);
     	turns.add(test1);
     	
@@ -174,7 +175,7 @@ public class FireEmblem extends BasicGame {
         shownOptions[3] = new Image("resources/move.png");
         shownOptions[4] = new Image("resources/end.png");
         
-        cursor = new Characters("cursor", 20, 20, "resources/cursor.png","resources/cursor.png","resources/cursor.png","resources/cursor.png", 3, false, true, 9999, 20, 20, true, null, null, null, null);
+        cursor = new Characters("cursor", 20, 20, 0, "resources/cursor.png","resources/cursor.png","resources/cursor.png","resources/cursor.png", 3, false, true, 9999, 20, 20, true, null, null, null, null);
         
         updateButtons();
         
@@ -214,7 +215,8 @@ public class FireEmblem extends BasicGame {
     			 
     		 }
     	 }
-    	 else if(cursormode == false) {
+
+    	 else if(!cursormode && !pickingItem) {
     		 if(input.isKeyDown(Input.KEY_W) && movable(2) && currentTurn.getY() != 0 && tileAmt != 0) { 
     			 if(currentTurn == turns.get(0)) {
     				 currentTurn.setFace(0);
@@ -338,6 +340,11 @@ public class FireEmblem extends BasicGame {
              if(input.isKeyDown(Input.KEY_ESCAPE)) {
             	 pickingItem = false;
              }
+             if(input.isKeyDown(Input.KEY_ENTER)) {
+            	 if(items.get(ItemPos) instanceof HpItem) {
+            	 currentTurn.setHp(currentTurn.getHp() +  items.get(ItemPos).getRestoration());
+            	 }
+             }
     	 }
     }
 
@@ -399,6 +406,10 @@ public class FireEmblem extends BasicGame {
     	        }
     	        y+=30;
     		}
+        	shownImage = new Image(items.get(ItemPos).getSource());
+    		shownImage.draw(420,120);
+	        TrueTypeFont description = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 16),true);
+	        description.drawString(415.0f, 300.0f, items.get(ItemPos).getDescription(), Color.black);
     	}
     }
     
