@@ -74,6 +74,7 @@ public class FireEmblem extends BasicGame {
 	TrueTypeFont smallPotion;
 
 	public static int OptionPos = 0;
+	public static int SkillPos = 0;
 	public static int ItemPos = 0;
 	
 	private static Characters main;
@@ -197,16 +198,23 @@ public class FireEmblem extends BasicGame {
     	 Input input = container.getInput();
     	 if(skillmenu) {
     		 if (input.isKeyDown(Input.KEY_A) && chooseOption) {
-    			 
-    			 OptionLeft();
+    			 SkillLeft();
+    			 updateSkill();
     			 optionHelper();
     		 }
     		 if (input.isKeyDown(Input.KEY_D) && chooseOption) {
-    			 OptionRight();
+    			 SkillRight();
+    			 updateSkill();
     			 optionHelper();
     		 }
+    		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 4) {
+    			 updateMenu();
+    			 optionHelper();
+    			 skillmenu = false;
+    			 
+    		 }
     	 }
-    	 if(cursormode == false) {
+    	 else if(cursormode == false) {
     		 if(input.isKeyDown(Input.KEY_W) && movable(2) && currentTurn.getY() != 0 && tileAmt != 0) { 
     			 if(currentTurn == turns.get(0)) {
     				 currentTurn.setFace(0);
@@ -260,7 +268,9 @@ public class FireEmblem extends BasicGame {
     			 pickingItem = true;
     		 }
     		 if(input.isKeyDown(Input.KEY_ENTER)&& OptionPos == 2) {
+    			 SkillPos=0;
     			 changeOptionSkills();
+    			 updateButtons();
     		 }
     		 if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 3 ){
     			 tileAmt = currentTurn.getDistance();
@@ -285,7 +295,7 @@ public class FireEmblem extends BasicGame {
     			 updateHealth();
     		 }
     	 }
-    	 if (cursormode == true){
+    	 else if (cursormode == true){
     		 if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
                  // The lower the delta the slowest the sprite will animate.
                  cursor.setY(cursor.getY()-1);
@@ -483,26 +493,31 @@ public class FireEmblem extends BasicGame {
     }
     
     public static void OptionLeft() {
-    	if(OptionPos != 0 && skillmenu == false) {
+    	if(OptionPos != 0) {
     		shownOptions[OptionPos] = menuOptions[OptionPos];
     		OptionPos--;
     		shownOptions[OptionPos] = menuOptions2[OptionPos];
-    	}else if(OptionPos != 0) {
-    		shownOptions[OptionPos] = skillOptions[OptionPos];
-    		OptionPos--;
-    		shownOptions[OptionPos] = skillOptions2[OptionPos];
     	}
     }
     public static void OptionRight() {
-    	if(OptionPos != 4 && skillmenu == false) {
+    	if(OptionPos != 4) {
     		shownOptions[OptionPos] = menuOptions[OptionPos];
     		OptionPos++;
     		shownOptions[OptionPos] = menuOptions2[OptionPos];
-    	}else if(OptionPos != 4) {
-    		shownOptions[OptionPos] = skillOptions[OptionPos];
-    		OptionPos++;
-    		shownOptions[OptionPos] = skillOptions2[OptionPos];
-    		
+    	}
+    }
+    public static void SkillLeft() {
+    	if(SkillPos != 0) {
+    		shownOptions[SkillPos] = skillOptions[SkillPos];
+    		SkillPos--;
+    		shownOptions[SkillPos] = skillOptions2[SkillPos];
+    	}
+    }
+    public static void SkillRight() {
+    	if(SkillPos != 4) {
+    		shownOptions[SkillPos] = skillOptions[SkillPos];
+    		SkillPos++;
+    		shownOptions[SkillPos] = skillOptions2[SkillPos];
     	}
     }
     public static void updateButtons() {
@@ -585,12 +600,25 @@ public class FireEmblem extends BasicGame {
 		for(int i=0;i<skillOptions2.length-1;i++) {
 			skillOptions2[i] = new Image("resources/"+currentTurn.getSkill()[i]+"selected.png");
 		}
+		skillOptions[4] = new Image("resources/back.png");
+		skillOptions2[4] = new Image("resources/backselected.png");
+		updateSkill();
+	}
+	public void updateSkill() {
 		shownOptions[0] = skillOptions[0];
 		shownOptions[1] = skillOptions[1];
 		shownOptions[2] = skillOptions[2];
 		shownOptions[3] = skillOptions[3];
-		shownOptions[4] = "resources/"
-		shownOptions[OptionPos] = skillOptions2[OptionPos];
+		shownOptions[4] = skillOptions[4];
+		shownOptions[SkillPos] = skillOptions2[SkillPos];
+	}
+	public void updateMenu() {
+		shownOptions[0] = menuOptions[0];
+		shownOptions[1] = menuOptions[1];
+		shownOptions[2] = menuOptions[2];
+		shownOptions[3] = menuOptions[3];
+		shownOptions[4] = menuOptions[4];
+		shownOptions[OptionPos] = menuOptions2[OptionPos];
 	}
 }
 
