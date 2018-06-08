@@ -27,6 +27,8 @@ import sun.java2d.loops.DrawRect;
 //http://roguebasin.roguelikedevelopment.org/index.php?title=Roguelike_Intelligence
 
 //-Djava.library.path=C:\Users\BT_1N3_27\git\Symposium\NewGame\lib\slick
+
+//https://mrbubblewand.wordpress.com/page/8/?archives-list=1
 public class FireEmblem extends BasicGame {
 	
 	private Inventory inventory = new Inventory();
@@ -39,9 +41,11 @@ public class FireEmblem extends BasicGame {
 	private static Characters cursor;
 	
 	private static boolean pickingItem = false;
+	private static boolean isHealing = false;
 	private int tileAmt = 0;
 	private Animation sprite, up, down, left, right, allyTest,Csprite;
-	private Animation[] images = {sprite, allyTest};
+	//private Animation h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12,h13,h14,h15,h16,h17;
+	private Animation healing;
 	
 	private Animation enemys, eDown;
 	private static Image button;
@@ -54,6 +58,7 @@ public class FireEmblem extends BasicGame {
 	private static Image shownImage;
 	private static boolean canMove = false;
 	private static boolean chooseOption = true;
+	private static boolean doneHealing = false;
 	private static Characters enemy1;
 	private static boolean cursormode;
 	private static boolean skillmenu;
@@ -73,6 +78,8 @@ public class FireEmblem extends BasicGame {
 	private static Image[] skillOptions2 = new Image[5];
 	
 	private static double currentPer;
+	
+	private static boolean healingStarted;
 	
 	Font font = new Font("Verdana", Font.BOLD, 8);
 	TrueTypeFont trueTypeFont;
@@ -143,9 +150,16 @@ public class FireEmblem extends BasicGame {
     	Image [] movementDown = {new Image("resources/spriteFront.png"), new Image("resources/spriteFront.png")};
     	Image [] movementLeft = {new Image("resources/spriteLeft.png"), new Image("resources/spriteLeft.png")};
     	Image [] movementRight = {new Image("resources/spriteRight.png"), new Image("resources/spriteRight.png")};
-    	Image[] cursord = {new Image("resources/cursor.png"), new Image("resources/cursor.png")};
+    	Image [] cursord = {new Image("resources/cursor.png"), new Image("resources/cursor.png")};
+    	Image [] healingPics = {new Image("resources/heal1.png"),new Image("resources/heal2.png"),new Image("resources/heal3.png"),
+    			new Image("resources/heal4.png"),new Image("resources/heal5.png"),new Image("resources/heal6.png"),
+    			new Image("resources/heal7.png"),new Image("resources/heal8.png"),new Image("resources/heal9.png"),
+    			new Image("resources/heal10.png"),new Image("resources/heal11.png"),new Image("resources/heal12.png"),
+    			new Image("resources/heal13.png"),new Image("resources/heal14.png"),new Image("resources/heal15.png"),
+    			new Image("resources/heal16.png"),new Image("resources/heal17.png")};
     	Image [] test = {new Image("resources/asdf.png"), new Image("resources/asdf.png")};
-    	int [] duration = {300, 300}; 
+    	int [] duration = {300,300};
+    	int [] healingDuration = {100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100};
     	
     	Image [] enemyDown = {new Image(enemy1.getPicU()), new Image(enemy1.getPicU())};
     	
@@ -156,6 +170,7 @@ public class FireEmblem extends BasicGame {
     	left = new Animation(movementLeft, duration, false);
     	right = new Animation(movementRight, duration, false); 
     	allyTest = new Animation(test, duration, false);
+    	healing = new Animation(healingPics,healingDuration,true);
     	
     	sprite = down; 
     	Csprite = new Animation(cursord, duration, false);
@@ -284,11 +299,16 @@ public class FireEmblem extends BasicGame {
     		 }
     		 if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 1) {
     			 pickingItem = true;
+    			 MyTimerTask timer = new MyTimerTask();
+    			 timer.completeTask(0);
+    			 System.out.println("Opened");
     		 }
     		 if(input.isKeyDown(Input.KEY_ENTER)&& OptionPos == 2) {
     			 SkillPos=0;
     			 changeOptionSkills();
     			 updateButtons();
+    			 MyTimerTask timer = new MyTimerTask();
+    			 timer.completeTask(0);
     		 }
     		 if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 3 ){
     			 tileAmt = currentTurn.getDistance();
@@ -297,6 +317,8 @@ public class FireEmblem extends BasicGame {
     			 if(tileAmt == 0) {
     				 chooseOption = true;
     			 }
+    			 MyTimerTask timer = new MyTimerTask();
+    			 timer.completeTask(0);
     		 }
     		 if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 4 && chooseOption) {
     			 currentTurn.setDidAttack(false);
@@ -387,7 +409,7 @@ public class FireEmblem extends BasicGame {
                  cursorHelper(delta);
              }
     	 }
-    	 if(pickingItem) {
+    	 else if(pickingItem) {
     		 if (input.isKeyDown(Input.KEY_W)) { 
     			 if(ItemPos > 0) {
                 	 MyTimerTask timer = new MyTimerTask();
@@ -404,6 +426,14 @@ public class FireEmblem extends BasicGame {
              }
              if(input.isKeyDown(Input.KEY_ESCAPE)) {
             	 pickingItem = false;
+             }
+             if(input.isKeyDown(Input.KEY_ENTER)) {
+            	 if(items.get(ItemPos) instanceof HpItem) {
+            		 //currentTurn.setHp(currentTurn.getHp() +  items.get(ItemPos).getRestoration());
+            		 isHealing = true;
+            		 healingStarted = true;
+            	 }
+            	 System.out.println("I healed");
              }
     	 }
     }
@@ -471,9 +501,27 @@ public class FireEmblem extends BasicGame {
 	        TrueTypeFont description = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 16),true);
 	        description.drawString(415.0f, 300.0f, items.get(ItemPos).getDescription(), Color.black);
     	}
+    	if(isHealing) {
+    		doneHealing = false;
+    		pickingItem = false;
+    		healing.draw(currentTurn.getX()*64,currentTurn.getY()*64+10);
+    		if(healingStarted) {
+    			healingStarted = false;
+    			healingMethod();
+    		}
+    		if(doneHealing) {
+    			System.out.println("sdf");
+
+    		}
+    	}
     }
     
-    public void cursorHelper(int delta) {
+    private void healingMethod() {
+		MyTimerTask timer = new MyTimerTask();
+   	 	timer.completeTask(3);
+	}
+
+	public void cursorHelper(int delta) {
     	Csprite.update(delta);
         canMove = false;
         MyTimerTask timer = new MyTimerTask();
@@ -691,7 +739,7 @@ public class FireEmblem extends BasicGame {
 		shownOptions[4] = menuOptions[4];
 		shownOptions[OptionPos] = menuOptions2[OptionPos];
 	}
-	public void `	(String name) {
+	public void	(String name) {
 		if (name.equals("explosion")) {
 			damageskill = 30;
 			skillmodedamage = true;
@@ -767,6 +815,9 @@ public class FireEmblem extends BasicGame {
 		}
 		}
 		return false;
+	}
+	public static void stopHealingAnimation() {
+		isHealing = false;
 	}
 }
 
