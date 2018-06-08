@@ -33,7 +33,15 @@ public class MyTimerTask extends TimerTask {
     	if(n == 2) {
     		try {
     			FireEmblem.setOptionItem(true);
-    			Thread.sleep(200);
+    			Thread.sleep(100);
+    		} catch (InterruptedException e) {
+    			e.printStackTrace();
+    		}
+    	}
+    	if(n==3) {
+    		try {
+    			Thread.sleep(1700);
+    			FireEmblem.stopHealingAnimation();
     		} catch (InterruptedException e) {
     			e.printStackTrace();
     		}
