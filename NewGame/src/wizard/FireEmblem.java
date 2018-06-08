@@ -57,6 +57,11 @@ public class FireEmblem extends BasicGame {
 	private static Characters enemy1;
 	private static boolean cursormode;
 	private static boolean skillmenu;
+	private static boolean skillmodeheal;
+	private static boolean skillmodedamage;
+	private static int damageskill;
+	private static int healskill;
+	private static int skillmanaused;
 	
 	private static Tile[][] grid = new Tile[10][10];
 	
@@ -212,7 +217,18 @@ public class FireEmblem extends BasicGame {
     			 updateMenu();
     			 optionHelper();
     			 skillmenu = false;
-    			 
+    		 }
+    		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 0) {
+    			 useSkill(currentTurn.getSkill()[0]);
+    		 }
+    		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 1) {
+    			 useSkill(currentTurn.getSkill()[1]);
+    		 }
+    		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 2) {
+    			 useSkill(currentTurn.getSkill()[2]);
+    		 }
+    		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 3) {
+    			 useSkill(currentTurn.getSkill()[3]);
     		 }
     	 }
 
@@ -297,7 +313,7 @@ public class FireEmblem extends BasicGame {
     			 updateHealth();
     		 }
     	 }
-    	 else if (cursormode == true){
+    	 else if (cursormode == true && skillmodedamage == false && skillmodeheal == false){
     		 if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
                  // The lower the delta the slowest the sprite will animate.
                  cursor.setY(cursor.getY()-1);
@@ -322,6 +338,55 @@ public class FireEmblem extends BasicGame {
                  updateHealth();
              }
     	 }
+    	 else if (cursormode == true && skillmodedamage == true) {
+    		 if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
+                 // The lower the delta the slowest the sprite will animate.
+                 cursor.setY(cursor.getY()-1);
+                 cursorHelper(delta);
+             }
+             if (input.isKeyDown(Input.KEY_S) && cursor.getY() != 9) {
+                 cursor.setY(cursor.getY()+1);
+                 cursorHelper(delta);
+             }
+             if (input.isKeyDown(Input.KEY_A) && cursor.getX() != 0) { 
+                 cursor.setX(cursor.getX()-1);
+                 cursorHelper(delta);
+             }
+             if (input.isKeyDown(Input.KEY_D) && cursor.getX() != 9)  {
+                 cursor.setX(cursor.getX()+1);
+                 cursorHelper(delta);
+             }
+             if (input.isKeyDown(Input.KEY_ENTER) && checkTargettable()) {
+            	 grid[cursor.getX()][cursor.getY()].getCharacter().setHp(grid[cursor.getX()][cursor.getY()].getCharacter().getHp()-damageskill);
+            	 grid[cursor.getX()][cursor.getY()].getCharacter().setMana(grid[cursor.getX()][cursor.getY()].getCharacter().getMana() - skillmanaused);
+            	 cursormode = false;
+            	 skillmodedamage = false;
+            	 updateHealth();
+            	 updateMenu();
+            	 updateButtons();
+            	 MyTimerTask timer = new MyTimerTask();
+                 timer.completeTask(0);
+             }
+    	 }
+    	 else if (cursormode == true && skillmodeheal == true) {
+    		 if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
+                 // The lower the delta the slowest the sprite will animate.
+                 cursor.setY(cursor.getY()-1);
+                 cursorHelper(delta);
+             }
+             if (input.isKeyDown(Input.KEY_S) && cursor.getY() != 9) {
+                 cursor.setY(cursor.getY()+1);
+                 cursorHelper(delta);
+             }
+             if (input.isKeyDown(Input.KEY_A) && cursor.getX() != 0) { 
+                 cursor.setX(cursor.getX()-1);
+                 cursorHelper(delta);
+             }
+             if (input.isKeyDown(Input.KEY_D) && cursor.getX() != 9)  {
+                 cursor.setX(cursor.getX()+1);
+                 cursorHelper(delta);
+             }
+    	 }
     	 if(pickingItem) {
     		 if (input.isKeyDown(Input.KEY_W)) { 
     			 if(ItemPos > 0) {
@@ -339,11 +404,6 @@ public class FireEmblem extends BasicGame {
              }
              if(input.isKeyDown(Input.KEY_ESCAPE)) {
             	 pickingItem = false;
-             }
-             if(input.isKeyDown(Input.KEY_ENTER)) {
-            	 if(items.get(ItemPos) instanceof HpItem) {
-            	 currentTurn.setHp(currentTurn.getHp() +  items.get(ItemPos).getRestoration());
-            	 }
              }
     	 }
     }
@@ -630,6 +690,83 @@ public class FireEmblem extends BasicGame {
 		shownOptions[3] = menuOptions[3];
 		shownOptions[4] = menuOptions[4];
 		shownOptions[OptionPos] = menuOptions2[OptionPos];
+	}
+	public void `	(String name) {
+		if (name.equals("explosion")) {
+			damageskill = 30;
+			skillmodedamage = true;
+			cursormode = true;
+			skillmanaused = 40;
+			skillmenu = false;
+			cursor.setX(currentTurn.getX());
+			cursor.setY(currentTurn.getY());
+		}
+		if(name.equals("finalspark")) {
+			damageskill = 50;
+			skillmodedamage = true;
+			cursormode = true;
+			skillmanaused = 70;
+			skillmenu = false;
+			cursor.setX(currentTurn.getX());
+			cursor.setY(currentTurn.getY());
+			MyTimerTask timer = new MyTimerTask();
+	        timer.completeTask(0);
+		}
+		if(name.equals("fireball")) {
+			damageskill = 20;
+			skillmodedamage = true;
+			cursormode = true;
+			skillmanaused = 30;
+			skillmenu = false;
+			cursor.setX(currentTurn.getX());
+			cursor.setY(currentTurn.getY());
+			System.out.println("dsaf");
+			MyTimerTask timer = new MyTimerTask();
+	        timer.completeTask(0);
+		}
+		if(name.equals("heal")) {
+			healskill = 30;
+			skillmodeheal = true;
+			cursormode = true;
+			skillmanaused = 50;
+			skillmenu = false;
+			cursor.setX(currentTurn.getX());
+			cursor.setY(currentTurn.getY());
+			MyTimerTask timer = new MyTimerTask();
+	        timer.completeTask(0);
+		}
+		if(name.equals("mysticshot")) {
+			damageskill = 10;
+			skillmodedamage = true;
+			cursormode = true;
+			skillmanaused = 15;
+			skillmenu = false;
+			cursor.setX(currentTurn.getX());
+			cursor.setY(currentTurn.getY());
+			MyTimerTask timer = new MyTimerTask();
+	        timer.completeTask(0);
+		}
+		if(name.equals("waterblast")) {
+			damageskill = 25;
+			skillmodedamage = true;
+			cursormode = true;
+			skillmanaused = 35;
+			skillmenu = false;
+			cursor.setX(currentTurn.getX());
+			cursor.setY(currentTurn.getY());
+			MyTimerTask timer = new MyTimerTask();
+	        timer.completeTask(0);
+		}
+	}
+	public boolean checkTargettable() {
+		if (Math.abs(cursor.getX()-currentTurn.getX()) < 3) {
+		if (Math.abs(cursor.getY()-currentTurn.getY()) < 3) {
+		if (grid[cursor.getX()][cursor.getY()].getCharacter() != null) {
+			return true;
+		}
+		}
+		}
+		return false;
 	}
 }
 

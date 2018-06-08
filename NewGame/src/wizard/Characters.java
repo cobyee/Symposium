@@ -37,6 +37,7 @@ public class Characters {
 		yCoordinate = yCoord;
 		this.didAttack = didattack;
 		this.face = face;
+		this.mana = mana;
 		skills[0] = skill1;
 		skills[1] = skill2;
 		skills[2] = skill3;
@@ -102,5 +103,10 @@ public class Characters {
 	public String[] getSkill() {
 		return skills;
 	}
-	
+	public double getMana() {
+		return mana;
+	}
+	public void setMana(double manad) {
+		mana = manad;
+	}
 }
