@@ -117,12 +117,12 @@ public class FireEmblem extends BasicGame {
     			grid[j][i].setBlocked();
     		}
     	}
-    	enemy1 = new Characters("Enemy", 10, 5, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 0, 1, 2, false,"fireball", "heal", "mysticshot", "finalspark");
+    	enemy1 = new Characters("Enemy", 10, 5, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 0, 1, 2, false,"fireball", "heal", "mysticshot", "finalspark");
     	grid[1][2].placeCharacter(enemy1);
     	grid[1][2].setBlocked();
-    	main = new Characters("Joe", 10, 6, 10, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, false, false,5,1,1, false,"fireball", "explosion", "mysticshot", "finalspark");
+    	main = new Characters("Joe", 10, 6, 10, 10, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, false, false,5,1,1, false,"fireball", "explosion", "mysticshot", "finalspark");
     	turns.add(main);
-    	test1 = new Characters("Ally", 10, 6, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false,1,4,4,false, "fireball", "heal", "mysticshot", "finalspark");
+    	test1 = new Characters("Ally", 10, 6, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false,1,4,4,false, "fireball", "heal", "mysticshot", "finalspark");
     	turns.add(enemy1);
     	turns.add(test1);
     	
@@ -195,7 +195,7 @@ public class FireEmblem extends BasicGame {
         shownOptions[3] = new Image("resources/move.png");
         shownOptions[4] = new Image("resources/end.png");
         
-        cursor = new Characters("cursor", 20, 20, 0, "resources/cursor.png","resources/cursor.png","resources/cursor.png","resources/cursor.png", 3, false, true, 9999, 20, 20, true, null, null, null, null);
+        cursor = new Characters("cursor", 20, 20, 0, 0, "resources/cursor.png","resources/cursor.png","resources/cursor.png","resources/cursor.png", 3, false, true, 9999, 20, 20, true, null, null, null, null);
         
         updateButtons();
         
@@ -246,7 +246,6 @@ public class FireEmblem extends BasicGame {
     			 useSkill(currentTurn.getSkill()[3]);
     		 }
     	 }
-
     	 else if(!cursormode && !pickingItem) {
     		 if(input.isKeyDown(Input.KEY_W) && movable(2) && currentTurn.getY() != 0 && tileAmt != 0) { 
     			 if(currentTurn == turns.get(0)) {
@@ -380,14 +379,23 @@ public class FireEmblem extends BasicGame {
              }
              if (input.isKeyDown(Input.KEY_ENTER) && checkTargettable()) {
             	 grid[cursor.getX()][cursor.getY()].getCharacter().setHp(grid[cursor.getX()][cursor.getY()].getCharacter().getHp()-damageskill);
-            	 grid[cursor.getX()][cursor.getY()].getCharacter().setMana(grid[cursor.getX()][cursor.getY()].getCharacter().getMana() - skillmanaused);
+            	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
             	 cursormode = false;
             	 skillmodedamage = false;
-            	 updateHealth();
             	 updateMenu();
             	 updateButtons();
+            	 updateHealth();
+            	 cursor.setX(20);
+    			 cursor.setY(20);
             	 MyTimerTask timer = new MyTimerTask();
                  timer.completeTask(0);
+             }
+             if (input.isKeyDown(Input.KEY_ESCAPE)) {
+            	 cursormode = false;
+            	 skillmodedamage = false;
+            	 skillmenu = true;
+            	 cursor.setX(20);
+            	 cursor.setY(20);
              }
     	 }
     	 else if (cursormode == true && skillmodeheal == true) {
@@ -408,6 +416,7 @@ public class FireEmblem extends BasicGame {
                  cursor.setX(cursor.getX()+1);
                  cursorHelper(delta);
              }
+             
     	 }
     	 else if(pickingItem) {
     		 if (input.isKeyDown(Input.KEY_W)) { 
@@ -478,9 +487,16 @@ public class FireEmblem extends BasicGame {
     	}
     	for(int i = 0; i < turns.size(); i++) {
     		if(specificPerc(turns.get(i)) > 0) {
-    			g.drawRect(turns.get(i).getX() * 64 + 10, turns.get(i).getY() * 64, 44, 2);
-        		g.fillRect(turns.get(i).getX() * 64 + 10, turns.get(i).getY() * 64, (int)(specificPerc(turns.get(i))*44), 2);
-        		g.setColor(Color.red);
+    			g.setColor(Color.red);
+    			g.drawRect(turns.get(i).getX() * 64 + 10, (turns.get(i).getY() * 64)-2, 44, 2);
+        		g.fillRect(turns.get(i).getX() * 64 + 10, (turns.get(i).getY() * 64)-2, (int)(specificPerc(turns.get(i))*44), 2);
+    		}
+    	}
+    	for (int l = 0; l<turns.size(); l++) {
+    		if(specificPercMana(turns.get(l)) > 0) {
+    			g.setColor(Color.blue);
+    			g.drawRect(turns.get(l).getX() * 64 + 10, turns.get(l).getY() * 64, 44, 2);
+    			g.fillRect(turns.get(l).getX() * 64 + 10, turns.get(l).getY() * 64, (int)(specificPercMana(turns.get(l))*44), 2);
     		}
     	}
     	Csprite.draw(cursor.getX()*64, cursor.getY()*64);
@@ -706,10 +722,18 @@ public class FireEmblem extends BasicGame {
 			currentTurn = turns.get(turnLoc);
 			updateHealth();
 		}
-		
+		for (int q = 0; q < turns.size(); q++) {
+			if (specificPerc(turns.get(q))<=0) {
+				turns.remove(q);
+				updateHealth();
+			}
+		}
 	}
 	public double specificPerc(Characters c) {
 		return c.getHp()/c.getMaxHp();
+	}
+	public double specificPercMana(Characters c) {
+		return c.getMana()/c.getMaxMana();
 	}
 	public void changeOptionSkills() throws SlickException {
 		skillmenu = true;
@@ -739,7 +763,7 @@ public class FireEmblem extends BasicGame {
 		shownOptions[4] = menuOptions[4];
 		shownOptions[OptionPos] = menuOptions2[OptionPos];
 	}
-	public void	(String name) {
+	public void useSkill(String name) {
 		if (name.equals("explosion")) {
 			damageskill = 30;
 			skillmodedamage = true;

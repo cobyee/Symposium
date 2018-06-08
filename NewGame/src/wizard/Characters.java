@@ -19,8 +19,9 @@ public class Characters {
 	private int face;
 	private double mana;
 	private String[] skills = new String[4];
+	private double maxMana;
 	
-	public Characters(String name, double hp, double attack, double mana, String picSourceU, String picSourceR, String picSourceL, String picSourceD, int face, boolean ally, boolean canMove, int distance, int xCoord, int yCoord, boolean didattack, String skill1, String skill2, String skill3, String skill4) {
+	public Characters(String name, double hp, double attack, double mana, double maxMana, String picSourceU, String picSourceR, String picSourceL, String picSourceD, int face, boolean ally, boolean canMove, int distance, int xCoord, int yCoord, boolean didattack, String skill1, String skill2, String skill3, String skill4) {
 		this.name = name;
 		this.hp = hp;
 		this.currentHp = hp;
@@ -38,6 +39,7 @@ public class Characters {
 		this.didAttack = didattack;
 		this.face = face;
 		this.mana = mana;
+		this.maxMana = maxMana;
 		skills[0] = skill1;
 		skills[1] = skill2;
 		skills[2] = skill3;
@@ -108,5 +110,8 @@ public class Characters {
 	}
 	public void setMana(double manad) {
 		mana = manad;
+	}
+	public double getMaxMana() {
+		return maxMana;
 	}
 }
