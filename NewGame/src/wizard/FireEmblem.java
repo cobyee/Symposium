@@ -14,6 +14,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
@@ -44,10 +45,20 @@ public class FireEmblem extends BasicGameState {
 	private static int setted;
 	private static boolean pickingItem = false;
 	private static boolean isHealing = false;
+	private static boolean isFireball = false;
+	private static boolean isExplosion = false;
+	private static boolean isWaterblast = false;
+	private static boolean isFinalspark = false;
+	private static boolean isThunder = false;
 	private int tileAmt = 0;
 	private Animation sprite, up, down, left, right, allyTest,Csprite;
 	//private Animation h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12,h13,h14,h15,h16,h17;
 	private Animation healing;
+	private Animation fireballani;
+	private Animation explosionani;
+	private Animation waterblastani;
+	private Animation finalsparkani;
+	private Animation thunderani;
 	
 	private Animation enemys, eDown;
 	private static Image button;
@@ -71,6 +82,9 @@ public class FireEmblem extends BasicGameState {
 	private static int skillmanaused;
 	private static boolean keyDown;
 	
+	private static int targetplaceX;
+	private static int targetplaceY;
+	
 	private static Tile[][] grid = new Tile[10][10];
 	
 	private static Image[] shownOptions = new Image[5];
@@ -88,6 +102,7 @@ public class FireEmblem extends BasicGameState {
 	TrueTypeFont trueTypeFont;
 	TrueTypeFont currentMoves;
 	TrueTypeFont smallPotion;
+	private String skillname;
 
 	public static int OptionPos = 0;
 	public static int SkillPos = 0;
@@ -113,6 +128,61 @@ public class FireEmblem extends BasicGameState {
 	  };
 	  thread.start();
 	}
+    private void FireballMethod() {
+    	isFireball = true;
+    	Thread thread = new Thread(){
+		    public void run(){
+		    	 MyTimerTask timer = new MyTimerTask();
+                 timer.completeTask(3);
+                 isFireball = false;
+		    }
+	  };
+	  thread.start();
+    }
+    private void ThunderMethod() {
+    	isThunder = true;
+    	Thread thread = new Thread(){
+		    public void run(){
+		    	 MyTimerTask timer = new MyTimerTask();
+                 timer.completeTask(3);
+                 isThunder = false;
+		    }
+	  };
+	  thread.start();
+    }
+    private void FinalsparkMethod() {
+    	isFinalspark = true;
+    	Thread thread = new Thread(){
+		    public void run(){
+		    	 MyTimerTask timer = new MyTimerTask();
+                 timer.completeTask(3);
+                 isFinalspark = false;
+		    }
+	  };
+	  thread.start();
+    }
+    private void WaterblastMethod() {
+    	isWaterblast = true;
+    	Thread thread = new Thread(){
+		    public void run(){
+		    	 MyTimerTask timer = new MyTimerTask();
+                 timer.completeTask(3);
+                 isWaterblast = false;
+		    }
+	  };
+	  thread.start();
+    }
+    private void ExplosionMethod() {
+    	isExplosion = true;
+    	Thread thread = new Thread(){
+		    public void run(){
+		    	 MyTimerTask timer = new MyTimerTask();
+                 timer.completeTask(3);
+                 isExplosion = false;
+		    }
+	  };
+	  thread.start();
+    }
 
 	public void cursorHelper(int delta) {
     	Csprite.update(delta);
@@ -390,7 +460,7 @@ public class FireEmblem extends BasicGameState {
 			MyTimerTask timer = new MyTimerTask();
 	        timer.completeTask(0);
 		}
-		if(name.equals("mysticshot")) {
+		if(name.equals("thunder")) {
 			damageskill = 10;
 			skillmodedamage = true;
 			cursormode = true;
@@ -412,6 +482,7 @@ public class FireEmblem extends BasicGameState {
 			MyTimerTask timer = new MyTimerTask();
 	        timer.completeTask(0);
 		}
+		this.skillname = name;
 	}
 	public boolean checkTargettable() {
 		if (Math.abs(cursor.getX()-currentTurn.getX()) < 3) {
@@ -473,14 +544,14 @@ public class FireEmblem extends BasicGameState {
     			grid[j][i].setBlocked();
     		}
     	}
-    	enemy1 = new Characters("Enemy", 10, 5, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 0, 1, 2, false,"fireball", "heal", "mysticshot", "finalspark");
+    	enemy1 = new Characters("Enemy", 10, 5, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 0, 1, 2, false,"fireball", "heal", "thunder", "finalspark");
     	grid[1][2].placeCharacter(enemy1);
     	grid[1][2].setBlocked();
-    	main = new Characters("Joe", 10, 6, 10, 10, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,1,1, false,"fireball", "explosion", "mysticshot", "finalspark");
+    	main = new Characters("Joe", 10, 6, 10, 10, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,1,1, false,"fireball", "explosion", "thunder", "finalspark");
     	turns.add(main);
     	grid[1][1].placeCharacter(main);
     	grid[1][1].setBlocked();
-    	test1 = new Characters("Ally", 10, 6, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, true, false,1,4,4,false, "fireball", "heal", "mysticshot", "finalspark");
+    	test1 = new Characters("Ally", 10, 6, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, true, false,1,4,4,false, "waterblast", "heal", "thunder", "finalspark");
     	turns.add(enemy1);
     	turns.add(test1);
     	grid[4][4].placeCharacter(test1);
@@ -511,7 +582,11 @@ public class FireEmblem extends BasicGameState {
     	int [] healingDuration = {100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100};
     	
     	Image [] enemyDown = {new Image(enemy1.getPicU()), new Image(enemy1.getPicU())};
-    	
+    	SpriteSheet fbs = new SpriteSheet("resources/fireballanimate.png", 64,64);
+    	SpriteSheet es = new SpriteSheet("resources/explosionanimate.png",64,64);
+    	SpriteSheet ws = new SpriteSheet("resources/waterblastanimate.png",64,64);
+    	SpriteSheet ts = new SpriteSheet("resources/thunderanimate.png",64,64);
+    	SpriteSheet fss = new SpriteSheet("resources/finalsparkanimate.png",64,64);
     	eDown = new Animation(enemyDown, duration, false);
     	
     	up = new Animation(movementUp, duration, false);
@@ -520,6 +595,11 @@ public class FireEmblem extends BasicGameState {
     	right = new Animation(movementRight, duration, false); 
     	allyTest = new Animation(test, duration, false);
     	healing = new Animation(healingPics,healingDuration,true);
+    	fireballani = new Animation(fbs, 100);
+    	explosionani = new Animation(es,100);
+    	waterblastani = new Animation(ws,100);
+    	thunderani = new Animation(ts,100);
+    	finalsparkani = new Animation(fss,100);
     	
     	sprite = down; 
     	Csprite = new Animation(cursord, duration, false);
@@ -636,6 +716,22 @@ public class FireEmblem extends BasicGameState {
     	if (isHealing) {
     	healing.draw(currentTurn.getX()*64,currentTurn.getY()*64+10);
     	}
+    	if (isFireball) {
+    	fireballani.draw(targetplaceX*64,targetplaceY*64);
+    	}
+    	if (isExplosion) {
+    	explosionani.draw(targetplaceX*64,targetplaceY*64);
+    	}
+    	if (isThunder) {
+    	thunderani.draw(targetplaceX*64,targetplaceY*64);
+    	}
+    	if (isWaterblast) {
+    	waterblastani.draw(targetplaceX*64,targetplaceY*64);
+    	}
+    	if (isFinalspark) {
+    	finalsparkani.draw(targetplaceX*64,targetplaceY*64);
+    	}
+    	
    // 		if(healingStarted) {
    // 			healingStarted = false;
    // 			healingMethod();
@@ -821,6 +917,23 @@ public class FireEmblem extends BasicGameState {
                 cursorHelper(delta);
             }
             if (input.isKeyDown(Input.KEY_ENTER) && checkTargettable() && grid[cursor.getX()][cursor.getY()].getCharacter().isAlly() == false) {
+             targetplaceX = cursor.getX(); 
+             targetplaceY = cursor.getY();
+             if (skillname.equals("fireball")) {
+            	 FireballMethod();
+             }
+             if (skillname.equals("thunder")) {
+            	 ThunderMethod();
+             }
+             if (skillname.equals("explosion")){
+            	 ExplosionMethod();
+             }
+             if (skillname.equals("waterblast")) {
+            	 WaterblastMethod();
+             }
+             if (skillname.equals("finalspark")) {
+            	 FinalsparkMethod();
+             }
            	 grid[cursor.getX()][cursor.getY()].getCharacter().setHp(grid[cursor.getX()][cursor.getY()].getCharacter().getHp()-damageskill);
            	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
            	 cursormode = false;
