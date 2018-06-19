@@ -31,7 +31,7 @@ public class Application extends StateBasedGame {
         // The first state added will be the one that is loaded first, when the application is launched
     	this.addState(new MainMenu());
     	this.addState(new SelectionScreen());
-    	this.addState(new FireEmblem());
+    	this.addState(new LevelOne());
     }
 	
     public static void main(String[] arguments) {	

@@ -31,10 +31,9 @@ import sun.java2d.loops.DrawRect;
 //-Djava.library.path=C:\Users\BT_1N3_27\git\Symposium\NewGame\lib\slick
 
 //https://mrbubblewand.wordpress.com/page/8/?archives-list=1
-public class FireEmblem extends BasicGameState {
+public class LevelOne extends BasicGameState {
 	
-	private Inventory inventory = new Inventory();
-	private ArrayList<Item> items = new ArrayList<Item>();
+	private ArrayList<Item> items = SelectionScreen.getInventory();
 	
 	private static Characters test1;
 	private static ArrayList<Characters> turns = new ArrayList<Characters>();
@@ -52,7 +51,6 @@ public class FireEmblem extends BasicGameState {
 	private static boolean isThunder = false;
 	private int tileAmt = 0;
 	private Animation sprite, up, down, left, right, allyTest,Csprite;
-	//private Animation h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12,h13,h14,h15,h16,h17;
 	private Animation healing;
 	private Animation fireballani;
 	private Animation explosionani;
@@ -111,7 +109,7 @@ public class FireEmblem extends BasicGameState {
 	private static Characters main;
 	
 	
-    public FireEmblem() {
+    public LevelOne() {
     	super();
     } 
     
@@ -558,11 +556,7 @@ public class FireEmblem extends BasicGameState {
     	keyDown = false;
     	currentTurn = turns.get(turnLoc);
     	
-    	//grassMap = new TiledMap("resources/map1.tmx");
     	map = new Image("resources/FE Map.png");
-    	for(Item i : Inventory.getInventory()) {
-    		items.add(i);
-    	}
     	
     	itemScreen = new Image("resources/scroll.png");
     	Image [] movementUp = {new Image("resources/spriteUp.png"), new Image("resources/spriteUp.png")};
@@ -703,37 +697,26 @@ public class FireEmblem extends BasicGameState {
     		shownImage.draw(420,120);
 	        TrueTypeFont description = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 16),true);
 	        description.drawString(415.0f, 300.0f, items.get(ItemPos).getDescription(), Color.black);
-	        System.out.println("dsfasdf");
+	        System.out.println(items.get(ItemPos).getAmt());
     	}
     	if (isHealing) {
-    	healing.draw(currentTurn.getX()*64,currentTurn.getY()*64+10);
+    		healing.draw(currentTurn.getX()*64,currentTurn.getY()*64+10);
     	}
     	if (isFireball) {
-    	fireballani.draw(targetplaceX*64,targetplaceY*64);
+    		fireballani.draw(targetplaceX*64,targetplaceY*64);
     	}
     	if (isExplosion) {
-    	explosionani.draw(targetplaceX*64,targetplaceY*64);
+    		explosionani.draw(targetplaceX*64,targetplaceY*64);
     	}
     	if (isThunder) {
-    	thunderani.draw(targetplaceX*64,targetplaceY*64);
+    		thunderani.draw(targetplaceX*64,targetplaceY*64);
     	}
     	if (isWaterblast) {
-    	waterblastani.draw(targetplaceX*64,targetplaceY*64);
+    		waterblastani.draw(targetplaceX*64,targetplaceY*64);
     	}
     	if (isFinalspark) {
-    	finalsparkani.draw(targetplaceX*64,targetplaceY*64);
+    		finalsparkani.draw(targetplaceX*64,targetplaceY*64);
     	}
-    	
-   // 		if(healingStarted) {
-   // 			healingStarted = false;
-   // 			healingMethod();
-   // 		}
-   // 		healing.
-   // 		if(doneHealing) {
-   // 			System.out.println("sdf");
-
-   // 		}
-    //	}
 	}
 
 	@Override
@@ -991,32 +974,33 @@ public class FireEmblem extends BasicGameState {
    		 if (input.isKeyDown(Input.KEY_W)) { 
    			 if(ItemPos > 0) {
                	 MyTimerTask timer = new MyTimerTask();
-                    timer.completeTask(2);
+                 timer.completeTask(2);
    				 ItemPos --;
    			 }
-            }
-            if (input.isKeyDown(Input.KEY_S)) {
+   		 }
+         if (input.isKeyDown(Input.KEY_S)) {
            	 if(ItemPos < items.size()-1) {
-               	 MyTimerTask timer = new MyTimerTask();
-                    timer.completeTask(2);
-                    ItemPos ++;
-           	 }
-            }
-            if(input.isKeyDown(Input.KEY_ESCAPE)) {
-           	 pickingItem = false;
-            }
-            if(input.isKeyDown(Input.KEY_ENTER)) {
-           	 if(items.get(ItemPos) instanceof HpItem) {
-           		 //currentTurn.setHp(currentTurn.getHp() +  items.get(ItemPos).getRestoration());
            		 MyTimerTask timer = new MyTimerTask();
-                    timer.completeTask(2);
+           		 timer.completeTask(2);
+           		 ItemPos ++;
+           	 }
+         }
+         if(input.isKeyDown(Input.KEY_ESCAPE)) {
+        	 pickingItem = false;
+         }
+         if(input.isKeyDown(Input.KEY_ENTER) && items.get(ItemPos).getAmt() != 0) {
+        	 if(items.get(ItemPos) instanceof HpItem) {
+           		 currentTurn.setHp(currentTurn.getHp() + ((HpItem) items.get(ItemPos)).getRestoration());
+           		 if(currentTurn.getMaxHp() > currentTurn.getHp()) {
+           			 currentTurn.setHp(currentTurn.getMaxHp());
+           		 }
+           		 items.get(ItemPos).setAmt(items.get(ItemPos).getAmt()-1);
+           		 MyTimerTask timer = new MyTimerTask();
+                 timer.completeTask(2);
            		 pickingItem = false;
            		 healingMethod();
-
-           		 
            	 }
-           	 System.out.println("I healed");
-            }
+         }
    	 }
 	}
 

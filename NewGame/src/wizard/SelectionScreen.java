@@ -1,5 +1,7 @@
 package wizard;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -11,9 +13,15 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class SelectionScreen extends BasicGameState {
 
+	private Inventory inventory = new Inventory();
+	private static ArrayList<Item> items = new ArrayList<Item>();
+	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
-		
+		for(Item i: Inventory.getInventory()) {
+			items.add(i);
+			System.out.println(i.getAmt());
+		}
 	}
 
 	@Override
@@ -37,6 +45,10 @@ public class SelectionScreen extends BasicGameState {
 	public int getID() {
 		// TODO Auto-generated method stub
 		return 2;
+	}
+	
+	public static ArrayList<Item> getInventory(){
+		return items;
 	}
 
 }

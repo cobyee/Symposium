@@ -16,7 +16,7 @@ public class MyTimerTask extends TimerTask {
     void completeTask(int n) {
     	if(n == 0) {
     		try {
-    			FireEmblem.setMovable(true);
+    			LevelOne.setMovable(true);
     			Thread.sleep(400);
     		} catch (InterruptedException e) {
     			e.printStackTrace();
@@ -24,7 +24,7 @@ public class MyTimerTask extends TimerTask {
     	}
     	if(n == 1) {
     		try {
-    			FireEmblem.setOptionMovable(true);
+    			LevelOne.setOptionMovable(true);
     			Thread.sleep(400);
     		} catch (InterruptedException e) {
     			e.printStackTrace();
@@ -32,7 +32,7 @@ public class MyTimerTask extends TimerTask {
     	}
     	if(n == 2) {
     		try {
-    			FireEmblem.setOptionItem(true);
+    			LevelOne.setOptionItem(true);
     			Thread.sleep(100);
     		} catch (InterruptedException e) {
     			e.printStackTrace();
@@ -41,7 +41,7 @@ public class MyTimerTask extends TimerTask {
     	if(n==3) {
     		try {
     			Thread.sleep(1700);
-    			FireEmblem.stopHealingAnimation();
+    			LevelOne.stopHealingAnimation();
     		} catch (InterruptedException e) {
     			e.printStackTrace();
     		}

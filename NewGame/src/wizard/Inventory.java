@@ -14,8 +14,7 @@ public class Inventory {
 		inventory.add(mediumPotion);
 	}
 	
-	public static void main(String[] args) {
-
+	public static void main(String[] args) {a
 	}
 	
 	public static ArrayList<Item> getInventory(){
