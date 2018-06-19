@@ -33,8 +33,7 @@ import sun.java2d.loops.DrawRect;
 //https://mrbubblewand.wordpress.com/page/8/?archives-list=1
 public class LevelOne extends BasicGameState {
 	
-	private Inventory inventory = new Inventory();
-	private ArrayList<Item> items = new ArrayList<Item>();
+	private ArrayList<Item> items = SelectionScreen.getInventory();
 	
 	private static Characters test1;
 	private static ArrayList<Characters> turns = new ArrayList<Characters>();
