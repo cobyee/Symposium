@@ -46,6 +46,14 @@ public class MyTimerTask extends TimerTask {
     			e.printStackTrace();
     		}
     	}
+    	if(n==4) {
+    		try {
+    			MainMenu.setMovable();
+    			Thread.sleep(200);
+    		} catch(InterruptedException e) {
+    			e.printStackTrace();
+    		}
+    	}
     }
     
     public static void main(String args[]){
