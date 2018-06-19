@@ -6,7 +6,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class Application extends StateBasedGame {
-
+//asddas
 	   // Game state identifiers
     public static final int SPLASHSCREEN = 0;
     public static final int MAINMENU     = 1;
