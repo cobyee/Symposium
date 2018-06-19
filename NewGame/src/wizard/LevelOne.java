@@ -589,9 +589,6 @@ public class LevelOne extends BasicGameState {
     	
     	//grassMap = new TiledMap("resources/map1.tmx");
     	map = new Image("resources/FE Map.png");
-    	for(Item i : Inventory.getInventory()) {
-    		items.add(i);
-    	}
     	
     	itemScreen = new Image("resources/scroll.png");
     	Image [] movementUp = {new Image("resources/spriteUp.png"), new Image("resources/spriteUp.png")};
