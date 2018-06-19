@@ -13,8 +13,4 @@ public class HpItem extends Item {
 		return healthRestored;
 	}
 	
-	public String getPic() {
-		return source;
-	}
-	
 }

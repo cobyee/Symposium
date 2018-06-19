@@ -41,7 +41,6 @@ public class LevelOne extends BasicGameState {
 	private Characters currentTurn;
 	private static Characters cursor;
 	
-	private static int setted;
 	private static boolean pickingItem = false;
 	private static boolean isHealing = false;
 	private static boolean isFireball = false;
@@ -49,6 +48,7 @@ public class LevelOne extends BasicGameState {
 	private static boolean isWaterblast = false;
 	private static boolean isFinalspark = false;
 	private static boolean isThunder = false;
+	private static boolean usedItem = false;
 	private int tileAmt = 0;
 	private Animation sprite, up, down, left, right, allyTest,Csprite;
 	private Animation healing;
@@ -57,6 +57,7 @@ public class LevelOne extends BasicGameState {
 	private Animation waterblastani;
 	private Animation finalsparkani;
 	private Animation thunderani;
+	private Animation manapothealani;
 	
 	private Animation enemys, eDown;
 	private static Image button;
@@ -120,7 +121,6 @@ public class LevelOne extends BasicGameState {
 		    	 MyTimerTask timer = new MyTimerTask();
                  timer.completeTask(3);
                  isHealing = false;
-                 System.out.println("sdfdfsd");
 		    }
 	  };
 	  thread.start();
@@ -256,7 +256,6 @@ public class LevelOne extends BasicGameState {
     	} else {
     		if(grid[currentTurn.getX()][currentTurn.getY() - 1].isOccupied() || grid[currentTurn.getX()][currentTurn.getY() + 1].isOccupied() || grid[currentTurn.getX()-1][currentTurn.getY()].isOccupied() || 
     				grid[currentTurn.getX()+1][currentTurn.getY()].isOccupied()) {
-    			System.out.println("attacked");
     			return true;
     		}
     	}
@@ -349,7 +348,6 @@ public class LevelOne extends BasicGameState {
 	public void Fighting(Characters us, Characters them) {
 		us.setHp(us.getHp()-them.getAtk());
 		them.setHp(them.getHp()-us.getAtk());
-		System.out.println(us.getHp()+" "+them.getHp());
 		cursormode = false;
 		cursor.setX(20);
 		cursor.setY(20);
@@ -360,7 +358,6 @@ public class LevelOne extends BasicGameState {
 				turns.get(i).setHp(turns.get(i).getMaxHp());
 			}
 		}
-		
 		currentPer=currentTurn.getHp()/currentTurn.getMaxHp();
 		if(turns.size() >0) {
 			checkDead();
@@ -442,7 +439,6 @@ public class LevelOne extends BasicGameState {
 			skillmenu = false;
 			cursor.setX(currentTurn.getX());
 			cursor.setY(currentTurn.getY());
-			System.out.println("dsaf");
 			MyTimerTask timer = new MyTimerTask();
 	        timer.completeTask(0);
 		}
@@ -541,14 +537,14 @@ public class LevelOne extends BasicGameState {
     			grid[j][i].setBlocked();
     		}
     	}
-    	enemy1 = new Characters("Enemy", 10, 5, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 0, 1, 2, false,"fireball", "heal", "thunder", "finalspark");
+    	enemy1 = new Characters("Enemy", 60, 5, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 0, 1, 2, false,"fireball", "heal", "thunder", "finalspark");
     	grid[1][2].placeCharacter(enemy1);
     	grid[1][2].setBlocked();
-    	main = new Characters("Joe", 10, 6, 10, 10, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,1,1, false,"fireball", "explosion", "thunder", "finalspark");
+    	main = new Characters("Joe", 60, 6, 10, 10, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,1,1, false,"fireball", "explosion", "thunder", "finalspark");
     	turns.add(main);
     	grid[1][1].placeCharacter(main);
     	grid[1][1].setBlocked();
-    	test1 = new Characters("Ally", 10, 6, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, true, false,1,4,4,false, "waterblast", "heal", "thunder", "finalspark");
+    	test1 = new Characters("Ally", 60, 6, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, true, false,1,4,4,false, "waterblast", "heal", "thunder", "finalspark");
     	turns.add(enemy1);
     	turns.add(test1);
     	grid[4][4].placeCharacter(test1);
@@ -639,7 +635,6 @@ public class LevelOne extends BasicGameState {
     	trueTypeFont.drawString(600.0f, 10.0f, Double.toString(currentTurn.getHp()), Color.black);
     	currentMoves.drawString(600.0f, 30.0f, Integer.toString(tileAmt), Color.black);
     	
-    	
     	if(turns.size()>0) {
     		for (Characters d: turns) {
     			Image[] asdf = {new Image(d.getPicU()), new Image(d.getPicU())};
@@ -696,11 +691,15 @@ public class LevelOne extends BasicGameState {
         	shownImage = new Image(items.get(ItemPos).getSource());
     		shownImage.draw(420,120);
 	        TrueTypeFont description = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 16),true);
-	        description.drawString(415.0f, 300.0f, items.get(ItemPos).getDescription(), Color.black);
-	        System.out.println(items.get(ItemPos).getAmt());
+	        description.drawString(400.0f, 300.0f, items.get(ItemPos).getDescription(), Color.black);
     	}
     	if (isHealing) {
-    		healing.draw(currentTurn.getX()*64,currentTurn.getY()*64+10);
+    		if(currentTurn.get(itemPos) instanceof HPItem) {
+    			healing.draw(currentTurn.getX()*64,currentTurn.getY()*64+10);
+    		}
+    		if(currentTurn.get(itemPos) instanceof ManaItem) {
+    			
+    		}
     	}
     	if (isFireball) {
     		fireballani.draw(targetplaceX*64,targetplaceY*64);
@@ -803,18 +802,16 @@ public class LevelOne extends BasicGameState {
    			 optionHelper();
    		 }
    		 if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 0 && currentTurn.getDidAttack()==false && canAttack()) {
-   			 System.out.println("i attacked");
    			 AttackSelection(currentTurn);
    			 MyTimerTask timer = new MyTimerTask();
    			 timer.completeTask(0);
    			 currentTurn.setDidAttack(true);
    			 updateHealth();
    		 }
-   		 if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 1) {
+   		 if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 1 && !usedItem) {
    			 pickingItem = true;
    			 MyTimerTask timer = new MyTimerTask();
    			 timer.completeTask(1);
-   			 System.out.println("Opened");
    		 }
    		 if(input.isKeyDown(Input.KEY_ENTER)&& OptionPos == 2) {
    			 SkillPos=0;
@@ -923,11 +920,11 @@ public class LevelOne extends BasicGameState {
                 updateMap();
             }
             if (input.isKeyDown(Input.KEY_ESCAPE)) {
-           	 cursormode = false;
-           	 skillmodedamage = false;
-           	 skillmenu = true;
-           	 cursor.setX(20);
-           	 cursor.setY(20);
+            	cursormode = false;
+            	skillmodedamage = false;
+           	 	skillmenu = true;
+           	 	cursor.setX(20);
+           	 	cursor.setY(20);
             }
    	 }
    	 else if (cursormode == true && skillmodeheal == true) {
@@ -991,7 +988,7 @@ public class LevelOne extends BasicGameState {
          if(input.isKeyDown(Input.KEY_ENTER) && items.get(ItemPos).getAmt() != 0) {
         	 if(items.get(ItemPos) instanceof HpItem) {
            		 currentTurn.setHp(currentTurn.getHp() + ((HpItem) items.get(ItemPos)).getRestoration());
-           		 if(currentTurn.getMaxHp() > currentTurn.getHp()) {
+           		 if(currentTurn.getMaxHp() < currentTurn.getHp()) {
            			 currentTurn.setHp(currentTurn.getMaxHp());
            		 }
            		 items.get(ItemPos).setAmt(items.get(ItemPos).getAmt()-1);
@@ -1000,6 +997,18 @@ public class LevelOne extends BasicGameState {
            		 pickingItem = false;
            		 healingMethod();
            	 }
+        	 if(items.get(ItemPos) instanceof ManaItem) {
+           		 currentTurn.setMana(currentTurn.getMana() + ((ManaItem) items.get(ItemPos)).getRestoration());
+           		 if(currentTurn.getMaxMana() < currentTurn.getMana()) {
+           			 currentTurn.setMana(currentTurn.getMaxMana());
+           		 }
+           		 items.get(ItemPos).setAmt(items.get(ItemPos).getAmt()-1);
+           		 MyTimerTask timer = new MyTimerTask();
+                 timer.completeTask(2);
+           		 pickingItem = false;
+           		 healingMethod();
+        	 }
+        	 usedItem = true;
          }
    	 }
 	}

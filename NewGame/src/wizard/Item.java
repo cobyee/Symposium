@@ -11,6 +11,7 @@ public class Item {
 		this.name=name;
 		this.source = source;
 		this.desc = desc;
+		this.amt = amt;
 	}
 	
 	public int getAmt() {
