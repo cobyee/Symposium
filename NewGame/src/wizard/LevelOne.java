@@ -887,6 +887,7 @@ public class LevelOne extends BasicGameState {
    			 resetButtons();
    			 updateButtons();
    			 updateHealth();
+   			 usedItem = false;
    		 }
    	 }
    	 else if (cursormode == true && skillmodedamage == false && skillmodeheal == false){
