@@ -54,6 +54,35 @@ public class MyTimerTask extends TimerTask {
     			e.printStackTrace();
     		}
     	}
+    	if (n==5) {
+    		try {
+    			Thread.sleep(3200);
+    		} catch(InterruptedException e) {
+    			e.printStackTrace();
+    		}
+    	}
+    	if (n==6) {
+    		try {
+    			Thread.sleep(2500);
+    		} catch(InterruptedException e) {
+    			e.printStackTrace();
+    		}
+    	}
+    	if (n==7) {
+    		try {
+    			Thread.sleep(3700);
+    		} catch(InterruptedException e) {
+    			e.printStackTrace();
+    		}
+    	}
+    	if (n==8) {
+    		try {
+    			Thread.sleep(2300);
+    		} catch(InterruptedException e) {
+    			e.printStackTrace();
+    		}
+    	}
+    
     }
     
     public static void main(String args[]){

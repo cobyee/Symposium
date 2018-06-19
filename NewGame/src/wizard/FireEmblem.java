@@ -50,6 +50,7 @@ public class FireEmblem extends BasicGameState {
 	private static boolean isWaterblast = false;
 	private static boolean isFinalspark = false;
 	private static boolean isThunder = false;
+	private static boolean isHealskill = false;
 	private int tileAmt = 0;
 	private Animation sprite, up, down, left, right, allyTest,Csprite;
 	//private Animation h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12,h13,h14,h15,h16,h17;
@@ -59,6 +60,8 @@ public class FireEmblem extends BasicGameState {
 	private Animation waterblastani;
 	private Animation finalsparkani;
 	private Animation thunderani;
+	private Animation healSkillani;
+	private Animation manapothealani;
 	
 	private Animation enemys, eDown;
 	private static Image button;
@@ -104,6 +107,7 @@ public class FireEmblem extends BasicGameState {
 	TrueTypeFont smallPotion;
 	private String skillname;
 
+
 	public static int OptionPos = 0;
 	public static int SkillPos = 0;
 	public static int ItemPos = 0;
@@ -120,9 +124,10 @@ public class FireEmblem extends BasicGameState {
     	Thread thread = new Thread(){
 		    public void run(){
 		    	 MyTimerTask timer = new MyTimerTask();
-                 timer.completeTask(3);
+                 timer.completeTask(5);
                  isHealing = false;
                  System.out.println("sdfdfsd");
+                 
 		    }
 	  };
 	  thread.start();
@@ -134,6 +139,9 @@ public class FireEmblem extends BasicGameState {
 		    	 MyTimerTask timer = new MyTimerTask();
                  timer.completeTask(3);
                  isFireball = false;
+                 grid[targetplaceX][targetplaceY].getCharacter().setHp(grid[targetplaceX][targetplaceY].getCharacter().getHp()-damageskill);
+               	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
+               	updateMap();
 		    }
 	  };
 	  thread.start();
@@ -143,8 +151,11 @@ public class FireEmblem extends BasicGameState {
     	Thread thread = new Thread(){
 		    public void run(){
 		    	 MyTimerTask timer = new MyTimerTask();
-                 timer.completeTask(3);
+                 timer.completeTask(6);
                  isThunder = false;
+                 grid[targetplaceX][targetplaceY].getCharacter().setHp(grid[targetplaceX][targetplaceY].getCharacter().getHp()-damageskill);
+               	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
+               	updateMap();
 		    }
 	  };
 	  thread.start();
@@ -154,8 +165,11 @@ public class FireEmblem extends BasicGameState {
     	Thread thread = new Thread(){
 		    public void run(){
 		    	 MyTimerTask timer = new MyTimerTask();
-                 timer.completeTask(3);
+                 timer.completeTask(6);
                  isFinalspark = false;
+                 grid[targetplaceX][targetplaceY].getCharacter().setHp(grid[targetplaceX][targetplaceY].getCharacter().getHp()-damageskill);
+               	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
+               	updateMap();
 		    }
 	  };
 	  thread.start();
@@ -165,8 +179,11 @@ public class FireEmblem extends BasicGameState {
     	Thread thread = new Thread(){
 		    public void run(){
 		    	 MyTimerTask timer = new MyTimerTask();
-                 timer.completeTask(3);
+                 timer.completeTask(8);
                  isWaterblast = false;
+                 grid[targetplaceX][targetplaceY].getCharacter().setHp(grid[targetplaceX][targetplaceY].getCharacter().getHp()-damageskill);
+               	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
+               	updateMap();
 		    }
 	  };
 	  thread.start();
@@ -176,11 +193,33 @@ public class FireEmblem extends BasicGameState {
     	Thread thread = new Thread(){
 		    public void run(){
 		    	 MyTimerTask timer = new MyTimerTask();
-                 timer.completeTask(3);
+                 timer.completeTask(5);
                  isExplosion = false;
+                 grid[targetplaceX][targetplaceY].getCharacter().setHp(grid[targetplaceX][targetplaceY].getCharacter().getHp()-damageskill);
+               	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
+               	MyTimerTask timerx = new MyTimerTask();
+                timerx.completeTask(0);
+               	updateMap();
 		    }
 	  };
 	  thread.start();
+    }
+    private void healSkillMethod() {
+    	isHealskill = true;
+    	Thread thread = new Thread(){
+		    public void run(){
+		    	 MyTimerTask timer = new MyTimerTask();
+                 timer.completeTask(5);
+                 isHealskill = false;
+                 grid[targetplaceX][targetplaceY].getCharacter().setHp(grid[targetplaceX][targetplaceY].getCharacter().getHp()+healskill);
+               	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
+               	MyTimerTask timerx = new MyTimerTask();
+                timerx.completeTask(0);
+               	updateMap();
+		    }
+	  };
+	  thread.start();
+    	
     }
 
 	public void cursorHelper(int delta) {
@@ -357,27 +396,20 @@ public class FireEmblem extends BasicGameState {
 		cursor.setY(20);
 	}
 	public void updateHealth() {
+		if(turns.size() >0) {
+			checkDead();
+		}
 		for (int i = 0;i< turns.size();i++) {
 			if (turns.get(i).getHp() > turns.get(i).getMaxHp()) {
 				turns.get(i).setHp(turns.get(i).getMaxHp());
 			}
 		}
 		
-		currentPer=currentTurn.getHp()/currentTurn.getMaxHp();
-		if(turns.size() >0) {
-			checkDead();
-		}
 	}
 	public void checkDead() {
-		if (currentPer <= 0) {
-			turns.remove(turnLoc);
-			currentTurn = turns.get(turnLoc);
-			updateHealth();
-		}
 		for (int q = 0; q < turns.size(); q++) {
-			if (specificPerc(turns.get(q))<=0) {
+			if (turns.get(q).getHp()<=0) {
 				turns.remove(q);
-				updateHealth();
 			}
 		}
 	}
@@ -546,7 +578,7 @@ public class FireEmblem extends BasicGameState {
     	enemy1 = new Characters("Enemy", 10, 5, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 0, 1, 2, false,"fireball", "heal", "thunder", "finalspark");
     	grid[1][2].placeCharacter(enemy1);
     	grid[1][2].setBlocked();
-    	main = new Characters("Joe", 10, 6, 10, 10, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,1,1, false,"fireball", "explosion", "thunder", "finalspark");
+    	main = new Characters("Joe", 10, 6, 10, 10, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,1,1, false,"waterblast", "explosion", "thunder", "finalspark");
     	turns.add(main);
     	grid[1][1].placeCharacter(main);
     	grid[1][1].setBlocked();
@@ -586,6 +618,8 @@ public class FireEmblem extends BasicGameState {
     	SpriteSheet ws = new SpriteSheet("resources/waterblastanimate.png",64,64);
     	SpriteSheet ts = new SpriteSheet("resources/thunderanimate.png",64,64);
     	SpriteSheet fss = new SpriteSheet("resources/finalsparkanimate.png",64,64);
+    	SpriteSheet hs = new SpriteSheet("resources/healskill.png",64,64);
+    	SpriteSheet manas = new SpriteSheet("resources/manapotheal.png",64,64);
     	eDown = new Animation(enemyDown, duration, false);
     	
     	up = new Animation(movementUp, duration, false);
@@ -596,9 +630,11 @@ public class FireEmblem extends BasicGameState {
     	healing = new Animation(healingPics,healingDuration,true);
     	fireballani = new Animation(fbs, 100);
     	explosionani = new Animation(es,100);
-    	waterblastani = new Animation(ws,100);
+    	waterblastani = new Animation(ws,200);
     	thunderani = new Animation(ts,100);
     	finalsparkani = new Animation(fss,100);
+    	healSkillani = new Animation(hs,100);
+    	manapothealani = new Animation(manas, 100);
     	
     	sprite = down; 
     	Csprite = new Animation(cursord, duration, false);
@@ -647,6 +683,7 @@ public class FireEmblem extends BasicGameState {
     	
     	
     	if(turns.size()>0) {
+    		updateHealth();
     		for (Characters d: turns) {
     			Image[] asdf = {new Image(d.getPicU()), new Image(d.getPicU())};
     			if (d.getFace() == 0) {
@@ -703,7 +740,6 @@ public class FireEmblem extends BasicGameState {
     		shownImage.draw(420,120);
 	        TrueTypeFont description = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 16),true);
 	        description.drawString(415.0f, 300.0f, items.get(ItemPos).getDescription(), Color.black);
-	        System.out.println("dsfasdf");
     	}
     	if (isHealing) {
     	healing.draw(currentTurn.getX()*64,currentTurn.getY()*64+10);
@@ -722,6 +758,9 @@ public class FireEmblem extends BasicGameState {
     	}
     	if (isFinalspark) {
     	finalsparkani.draw(targetplaceX*64,targetplaceY*64);
+    	}
+    	if (isHealskill) {
+    		healSkillani.draw(targetplaceX*64,targetplaceY*64);
     	}
     	
    // 		if(healingStarted) {
@@ -926,18 +965,16 @@ public class FireEmblem extends BasicGameState {
              if (skillname.equals("finalspark")) {
             	 FinalsparkMethod();
              }
-           	 grid[cursor.getX()][cursor.getY()].getCharacter().setHp(grid[cursor.getX()][cursor.getY()].getCharacter().getHp()-damageskill);
-           	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
            	 cursormode = false;
            	 skillmodedamage = false;
            	 updateMenu();
            	 updateButtons();
-           	 updateHealth();
+         
+          
            	 cursor.setX(20);
    			 cursor.setY(20);
            	 MyTimerTask timer = new MyTimerTask();
                 timer.completeTask(0);
-                updateMap();
             }
             if (input.isKeyDown(Input.KEY_ESCAPE)) {
            	 cursormode = false;
@@ -966,8 +1003,11 @@ public class FireEmblem extends BasicGameState {
                 cursorHelper(delta);
             }
             if (input.isKeyDown(Input.KEY_ENTER) && checkTargettable() && grid[cursor.getX()][cursor.getY()].getCharacter().isAlly() == true) {
-           	 grid[cursor.getX()][cursor.getY()].getCharacter().setHp(grid[cursor.getX()][cursor.getY()].getCharacter().getHp()+healskill);
-           	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
+            	targetplaceX = cursor.getX(); 
+                targetplaceY = cursor.getY();
+            	if (skillname.equals("heal")) {
+               	 healSkillMethod();
+                }
            	 cursormode = false;
            	 skillmodeheal = false;
            	 updateMenu();
