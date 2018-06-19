@@ -119,7 +119,6 @@ public class FireEmblem extends BasicGameState {
     	isHealing = true;
     	Thread thread = new Thread(){
 		    public void run(){
-		    	System.out.println("fdzcxv");
 		    	 MyTimerTask timer = new MyTimerTask();
                  timer.completeTask(3);
                  isHealing = false;
@@ -486,11 +485,11 @@ public class FireEmblem extends BasicGameState {
 	}
 	public boolean checkTargettable() {
 		if (Math.abs(cursor.getX()-currentTurn.getX()) < 3) {
-		if (Math.abs(cursor.getY()-currentTurn.getY()) < 3) {
-		if (grid[cursor.getX()][cursor.getY()].getCharacter() != null) {
-			return true;
-		}
-		}
+			if (Math.abs(cursor.getY()-currentTurn.getY()) < 3) {
+				if (grid[cursor.getX()][cursor.getY()].getCharacter() != null) {
+					return true;
+				}
+			}
 		}
 		return false;
 	}
@@ -628,20 +627,16 @@ public class FireEmblem extends BasicGameState {
         
         updateButtons();
         
-     // initialise the font
         font = new Font("Verdana", Font.BOLD, 8);
         trueTypeFont = new TrueTypeFont(font, true);
         currentMoves = new TrueTypeFont(font,true);
 
-        
-        // render some text to the screen
         updateHealth();
 	}
 
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 		map.draw(0,0);
-    	//grassMap.render(0,0);
     	button.draw((int)20, (int)640);
     	button2.draw((int)84, (int)640);
     	button3.draw(148, (int)640);
@@ -710,9 +705,6 @@ public class FireEmblem extends BasicGameState {
 	        description.drawString(415.0f, 300.0f, items.get(ItemPos).getDescription(), Color.black);
 	        System.out.println("dsfasdf");
     	}
-   // 	if(isHealing) {
-   //		doneHealing = false;
-   // 		pickingItem = false;
     	if (isHealing) {
     	healing.draw(currentTurn.getX()*64,currentTurn.getY()*64+10);
     	}
@@ -1025,13 +1017,13 @@ public class FireEmblem extends BasicGameState {
            	 }
            	 System.out.println("I healed");
             }
-            }
+   	 }
 	}
 
 	@Override
 	public int getID() {
 		// TODO Auto-generated method stub
-		return 1;
+		return 3;
 	}
 }
 //asd
