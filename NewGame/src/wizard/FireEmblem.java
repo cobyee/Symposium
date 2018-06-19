@@ -20,7 +20,6 @@ import org.newdawn.slick.tiled.TiledMap;
 
 import sun.java2d.loops.DrawRect;
  /**
- * @author panos
  */
 //https://www.imagefu.com/create/button
 
@@ -120,11 +119,15 @@ public class FireEmblem extends BasicGame {
     	enemy1 = new Characters("Enemy", 10, 5, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 0, 1, 2, false,"fireball", "heal", "mysticshot", "finalspark");
     	grid[1][2].placeCharacter(enemy1);
     	grid[1][2].setBlocked();
-    	main = new Characters("Joe", 10, 6, 10, 10, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, false, false,5,1,1, false,"fireball", "explosion", "mysticshot", "finalspark");
+    	main = new Characters("Joe", 10, 6, 10, 10, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,1,1, false,"fireball", "explosion", "mysticshot", "finalspark");
     	turns.add(main);
-    	test1 = new Characters("Ally", 10, 6, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false,1,4,4,false, "fireball", "heal", "mysticshot", "finalspark");
+    	grid[1][1].placeCharacter(main);
+    	grid[1][1].setBlocked();
+    	test1 = new Characters("Ally", 10, 6, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, true, false,1,4,4,false, "fireball", "heal", "mysticshot", "finalspark");
     	turns.add(enemy1);
     	turns.add(test1);
+    	grid[4][4].placeCharacter(test1);
+    	grid[4][4].setBlocked();
     	
         try
         {
@@ -255,6 +258,7 @@ public class FireEmblem extends BasicGame {
     			 // The lower the delta the slowest the sprite will animate.
     			 currentTurn.setY(currentTurn.getY()-1);
     			 moveHelper();
+    			 updateMap();
     		 }
     		 if(input.isKeyDown(Input.KEY_S) && movable(4) && currentTurn.getY() != 9 && tileAmt != 0) {
     			 if(currentTurn == turns.get(0)) {
@@ -263,6 +267,7 @@ public class FireEmblem extends BasicGame {
     			 }
     			 currentTurn.setY(currentTurn.getY()+1);
     			 moveHelper();
+    			 updateMap();
     		 }
     		 if (input.isKeyDown(Input.KEY_A)&& movable(3) && currentTurn.getX() != 0 && tileAmt != 0) { 
     			 if(currentTurn == turns.get(0)) {
@@ -271,6 +276,7 @@ public class FireEmblem extends BasicGame {
     			 }
     			 currentTurn.setX(currentTurn.getX()-1);
              	moveHelper();
+             	updateMap();
     		 }
     		 if (input.isKeyDown(Input.KEY_D)&& movable(1) && currentTurn.getX() != 9 && tileAmt != 0) {
     			 if(currentTurn == turns.get(0)) {
@@ -279,6 +285,7 @@ public class FireEmblem extends BasicGame {
     			 }
     			 currentTurn.setX(currentTurn.getX()+1);
     			 moveHelper();
+    			 updateMap();
     		 }
     		 if (input.isKeyDown(Input.KEY_A) && chooseOption) {
     			 OptionLeft();
@@ -377,7 +384,7 @@ public class FireEmblem extends BasicGame {
                  cursor.setX(cursor.getX()+1);
                  cursorHelper(delta);
              }
-             if (input.isKeyDown(Input.KEY_ENTER) && checkTargettable()) {
+             if (input.isKeyDown(Input.KEY_ENTER) && checkTargettable() && grid[cursor.getX()][cursor.getY()].getCharacter().isAlly() == false) {
             	 grid[cursor.getX()][cursor.getY()].getCharacter().setHp(grid[cursor.getX()][cursor.getY()].getCharacter().getHp()-damageskill);
             	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
             	 cursormode = false;
@@ -389,6 +396,7 @@ public class FireEmblem extends BasicGame {
     			 cursor.setY(20);
             	 MyTimerTask timer = new MyTimerTask();
                  timer.completeTask(0);
+                 updateMap();
              }
              if (input.isKeyDown(Input.KEY_ESCAPE)) {
             	 cursormode = false;
@@ -416,7 +424,27 @@ public class FireEmblem extends BasicGame {
                  cursor.setX(cursor.getX()+1);
                  cursorHelper(delta);
              }
-             
+             if (input.isKeyDown(Input.KEY_ENTER) && checkTargettable() && grid[cursor.getX()][cursor.getY()].getCharacter().isAlly() == true) {
+            	 grid[cursor.getX()][cursor.getY()].getCharacter().setHp(grid[cursor.getX()][cursor.getY()].getCharacter().getHp()+healskill);
+            	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
+            	 cursormode = false;
+            	 skillmodeheal = false;
+            	 updateMenu();
+            	 updateButtons();
+            	 updateHealth();
+            	 cursor.setX(20);
+    			 cursor.setY(20);
+            	 MyTimerTask timer = new MyTimerTask();
+                 timer.completeTask(0);
+                 updateMap();
+             }
+             if (input.isKeyDown(Input.KEY_ESCAPE)) {
+            	 cursormode = false;
+            	 skillmodeheal = false;
+            	 skillmenu = true;
+            	 cursor.setX(20);
+            	 cursor.setY(20);
+             }
     	 }
     	 else if(pickingItem) {
     		 if (input.isKeyDown(Input.KEY_W)) { 
@@ -711,6 +739,12 @@ public class FireEmblem extends BasicGame {
 		cursor.setY(20);
 	}
 	public void updateHealth() {
+		for (int i = 0;i< turns.size();i++) {
+			if (turns.get(i).getHp() > turns.get(i).getMaxHp()) {
+				turns.get(i).setHp(turns.get(i).getMaxHp());
+			}
+		}
+		
 		currentPer=currentTurn.getHp()/currentTurn.getMaxHp();
 		if(turns.size() >0) {
 			checkDead();
@@ -843,5 +877,30 @@ public class FireEmblem extends BasicGame {
 	public static void stopHealingAnimation() {
 		isHealing = false;
 	}
+	public void updateMap() {
+		populateGrid();
+    	for(int i = 0; i < 10; i++) {
+    		grid[i][0].setBlocked();
+    	}
+    	for(int i = 3; i < 10; i++) {
+    	    for(int j = 7; j < 10; j++) {
+    			grid[j][i].setBlocked();
+    		}
+    	}
+    	for(int i = 3; i < 5; i++) {
+    		for(int j = 0; j < 5; j++) {
+    			grid[j][i].setBlocked();
+    		}
+    	}
+    	for(int i = 5; i < 10; i++) {
+    		for(int j = 0; j < 2; j++) {
+    			grid[j][i].setBlocked();
+    		}
+    	}
+    	for(int i = 0; i<turns.size(); i++) {
+    		grid[turns.get(i).getX()][turns.get(i).getY()].setBlocked();
+    		grid[turns.get(i).getX()][turns.get(i).getY()].placeCharacter(turns.get(i));
+    	}
+	}
 }
-
+//asd
