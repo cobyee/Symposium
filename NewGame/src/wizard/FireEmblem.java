@@ -16,6 +16,8 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
 
 import sun.java2d.loops.DrawRect;
@@ -28,7 +30,7 @@ import sun.java2d.loops.DrawRect;
 //-Djava.library.path=C:\Users\BT_1N3_27\git\Symposium\NewGame\lib\slick
 
 //https://mrbubblewand.wordpress.com/page/8/?archives-list=1
-public class FireEmblem extends BasicGame {
+public class FireEmblem extends BasicGameState {
 	
 	private Inventory inventory = new Inventory();
 	private ArrayList<Item> items = new ArrayList<Item>();
@@ -36,7 +38,7 @@ public class FireEmblem extends BasicGame {
 	private static Characters test1;
 	private static ArrayList<Characters> turns = new ArrayList<Characters>();
 	private int turnLoc = 0;
-	private Characters currentTurn = turns.get(turnLoc);
+	private Characters currentTurn;
 	private static Characters cursor;
 	
 	private static int setted;
@@ -95,493 +97,8 @@ public class FireEmblem extends BasicGame {
 	
 	
     public FireEmblem() {
-    	super("Fire Emblem game");
+    	super();
     } 
-
-    public static void main(String[] arguments) {	
-    	  Thread thread = new Thread(){
-    		    public void run(){
-    		      System.out.println("Thread Running");
-    		    }
-    	  };
-
-    	  thread.start();
-    	  thread.run();
-    	
-    	populateGrid();
-    	for(int i = 0; i < 10; i++) {
-    		grid[i][0].setBlocked();
-    	}
-    	for(int i = 3; i < 10; i++) {
-    	    for(int j = 7; j < 10; j++) {
-    			grid[j][i].setBlocked();
-    		}
-    	}
-    	for(int i = 3; i < 5; i++) {
-    		for(int j = 0; j < 5; j++) {
-    			grid[j][i].setBlocked();
-    		}
-    	}
-    	for(int i = 5; i < 10; i++) {
-    		for(int j = 0; j < 2; j++) {
-    			grid[j][i].setBlocked();
-    		}
-    	}
-    	enemy1 = new Characters("Enemy", 10, 5, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 0, 1, 2, false,"fireball", "heal", "mysticshot", "finalspark");
-    	grid[1][2].placeCharacter(enemy1);
-    	grid[1][2].setBlocked();
-    	main = new Characters("Joe", 10, 6, 10, 10, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,1,1, false,"fireball", "explosion", "mysticshot", "finalspark");
-    	turns.add(main);
-    	grid[1][1].placeCharacter(main);
-    	grid[1][1].setBlocked();
-    	test1 = new Characters("Ally", 10, 6, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, true, false,1,4,4,false, "fireball", "heal", "mysticshot", "finalspark");
-    	turns.add(enemy1);
-    	turns.add(test1);
-    	grid[4][4].placeCharacter(test1);
-    	grid[4][4].setBlocked();
-    	keyDown = false;
-    	
-        try
-        {
-            AppGameContainer app = new AppGameContainer(new FireEmblem());
-            app.setDisplayMode(640, 704, false);
-            app.start();
-        }
-        catch (SlickException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void init(GameContainer container) throws SlickException {
-    	//grassMap = new TiledMap("resources/map1.tmx");
-    	map = new Image("resources/FE Map.png");
-    	for(Item i : Inventory.getInventory()) {
-    		items.add(i);
-    	}
-    	
-    	itemScreen = new Image("resources/scroll.png");
-    	Image [] movementUp = {new Image("resources/spriteUp.png"), new Image("resources/spriteUp.png")};
-    	Image [] movementDown = {new Image("resources/spriteFront.png"), new Image("resources/spriteFront.png")};
-    	Image [] movementLeft = {new Image("resources/spriteLeft.png"), new Image("resources/spriteLeft.png")};
-    	Image [] movementRight = {new Image("resources/spriteRight.png"), new Image("resources/spriteRight.png")};
-    	Image [] cursord = {new Image("resources/cursor.png"), new Image("resources/cursor.png")};
-    	Image [] healingPics = {new Image("resources/heal1.png"),new Image("resources/heal2.png"),new Image("resources/heal3.png"),
-    			new Image("resources/heal4.png"),new Image("resources/heal5.png"),new Image("resources/heal6.png"),
-    			new Image("resources/heal7.png"),new Image("resources/heal8.png"),new Image("resources/heal9.png"),
-    			new Image("resources/heal10.png"),new Image("resources/heal11.png"),new Image("resources/heal12.png"),
-    			new Image("resources/heal13.png"),new Image("resources/heal14.png"),new Image("resources/heal15.png"),
-    			new Image("resources/heal16.png"),new Image("resources/heal17.png")};
-    	Image [] test = {new Image("resources/asdf.png"), new Image("resources/asdf.png")};
-    	int [] duration = {300,300};
-    	int [] healingDuration = {100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100};
-    	
-    	Image [] enemyDown = {new Image(enemy1.getPicU()), new Image(enemy1.getPicU())};
-    	
-    	eDown = new Animation(enemyDown, duration, false);
-    	
-    	up = new Animation(movementUp, duration, false);
-    	down = new Animation(movementDown, duration, false);
-    	left = new Animation(movementLeft, duration, false);
-    	right = new Animation(movementRight, duration, false); 
-    	allyTest = new Animation(test, duration, false);
-    	healing = new Animation(healingPics,healingDuration,true);
-    	
-    	sprite = down; 
-    	Csprite = new Animation(cursord, duration, false);
-    	enemys = eDown;
-    	cursormode = false;
-    	skillmenu = false;
-    	
-    	menuOptions[0] = new Image("resources/attack.png");
-        menuOptions[1] = new Image("resources/items.png");
-        menuOptions[2] = new Image("resources/magic.png");
-        menuOptions[3] = new Image("resources/move.png");
-        menuOptions[4] = new Image("resources/end.png");
-        menuOptions2[0] = new Image("resources/attackselected.png");
-        menuOptions2[1] = new Image("resources/itemsselected.png");
-        menuOptions2[2] = new Image("resources/magicselected.png");
-        menuOptions2[3] = new Image("resources/moveselected.png");
-        menuOptions2[4] = new Image("resources/endselected.png");
-        
-        shownOptions[0] = new Image("resources/attackselected.png");
-        shownOptions[1] = new Image("resources/items.png");
-        shownOptions[2] = new Image("resources/magic.png");
-        shownOptions[3] = new Image("resources/move.png");
-        shownOptions[4] = new Image("resources/end.png");
-        
-        cursor = new Characters("cursor", 20, 20, 0, 0, "resources/cursor.png","resources/cursor.png","resources/cursor.png","resources/cursor.png", 3, false, true, 9999, 20, 20, true, null, null, null, null);
-        
-        updateButtons();
-        
-     // initialise the font
-        font = new Font("Verdana", Font.BOLD, 8);
-        trueTypeFont = new TrueTypeFont(font, true);
-        currentMoves = new TrueTypeFont(font,true);
-
-        
-        // render some text to the screen
-        updateHealth();
-    }
-
-    @Override
-    public void update(GameContainer container, int delta) throws SlickException {
-    	 if(tileAmt > 0) {
-    		 chooseOption = false;
-    	 }else {
-    		 chooseOption = true;
-    	 }
-    	 Input input = container.getInput();
-    	 if(skillmenu) {
-    		 if (input.isKeyDown(Input.KEY_A) && chooseOption) {
-    			 SkillLeft();
-    			 updateSkill();
-    			 optionHelper();
-    		 }
-    		 if (input.isKeyDown(Input.KEY_D) && chooseOption) {
-    			 SkillRight();
-    			 updateSkill();
-    			 optionHelper();
-    		 }
-    		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 4) {
-    			 updateMenu();
-    			 optionHelper();
-    			 skillmenu = false;
-    		 }
-    		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 0) {
-    			 useSkill(currentTurn.getSkill()[0]);
-    		 }
-    		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 1) {
-    			 useSkill(currentTurn.getSkill()[1]);
-    		 }
-    		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 2) {
-    			 useSkill(currentTurn.getSkill()[2]);
-    		 }
-    		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 3) {
-    			 useSkill(currentTurn.getSkill()[3]);
-    		 }
-    	 }
-    	 else if(!cursormode && !pickingItem) {
-    		 if(input.isKeyDown(Input.KEY_W) && movable(2) && currentTurn.getY() != 0 && tileAmt != 0) { 
-    			 if(currentTurn == turns.get(0)) {
-    				 currentTurn.setFace(0);
-    				 sprite.update(delta);
-    			 }
-    			 // The lower the delta the slowest the sprite will animate.
-    			 currentTurn.setY(currentTurn.getY()-1);
-    			 moveHelper();
-    			 updateMap();
-    		 }
-    		 if(input.isKeyDown(Input.KEY_S) && movable(4) && currentTurn.getY() != 9 && tileAmt != 0) {
-    			 if(currentTurn == turns.get(0)) {
-    				 currentTurn.setFace(3);
-    				 sprite.update(delta);
-    			 }
-    			 currentTurn.setY(currentTurn.getY()+1);
-    			 moveHelper();
-    			 updateMap();
-    		 }
-    		 if (input.isKeyDown(Input.KEY_A)&& movable(3) && currentTurn.getX() != 0 && tileAmt != 0) { 
-    			 if(currentTurn == turns.get(0)) {
-    				 currentTurn.setFace(1);
-    				 sprite.update(delta);
-    			 }
-    			 currentTurn.setX(currentTurn.getX()-1);
-             	moveHelper();
-             	updateMap();
-    		 }
-    		 if (input.isKeyDown(Input.KEY_D)&& movable(1) && currentTurn.getX() != 9 && tileAmt != 0) {
-    			 if(currentTurn == turns.get(0)) {
-    				 currentTurn.setFace(2);
-    				 sprite.update(delta);
-    			 }
-    			 currentTurn.setX(currentTurn.getX()+1);
-    			 moveHelper();
-    			 updateMap();
-    		 }
-    		 if (input.isKeyDown(Input.KEY_A) && chooseOption) {
-    			 OptionLeft();
-    			 optionHelper();
-    		 }
-    		 if (input.isKeyDown(Input.KEY_D) && chooseOption) {
-    			 OptionRight();
-    			 optionHelper();
-    		 }
-    		 if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 0 && currentTurn.getDidAttack()==false && canAttack()) {
-    			 System.out.println("i attacked");
-    			 AttackSelection(currentTurn);
-    			 MyTimerTask timer = new MyTimerTask();
-    			 timer.completeTask(0);
-    			 currentTurn.setDidAttack(true);
-    			 updateHealth();
-    		 }
-    		 if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 1) {
-    			 pickingItem = true;
-    			 MyTimerTask timer = new MyTimerTask();
-    			 timer.completeTask(1);
-    			 System.out.println("Opened");
-    		 }
-    		 if(input.isKeyDown(Input.KEY_ENTER)&& OptionPos == 2) {
-    			 SkillPos=0;
-    			 changeOptionSkills();
-    			 updateButtons();
-    			 MyTimerTask timer = new MyTimerTask();
-    			 timer.completeTask(0);
-    		 }
-    		 if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 3 ){
-    			 tileAmt = currentTurn.getDistance();
-    			 canMove = true;
-    			 chooseOption = false;
-    			 if(tileAmt == 0) {
-    				 chooseOption = true;
-    			 }
-    			 MyTimerTask timer = new MyTimerTask();
-    			 timer.completeTask(0);
-    		 }
-    		 if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 4 && chooseOption) {
-    			 currentTurn.setDidAttack(false);
-    			 turnLoc++;
-    			 if(turnLoc > turns.size()-1) {
-    				 turnLoc = 0;
-    			 }
-    			 currentTurn = turns.get(turnLoc);
-    			 MyTimerTask timer = new MyTimerTask();
-    			 timer.completeTask(0);
-    			 OptionPos = 0;
-    			 resetButtons();
-    			 updateButtons();
-    			 updateHealth();
-    		 }
-    	 }
-    	 else if (cursormode == true && skillmodedamage == false && skillmodeheal == false){
-    		 if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
-                 // The lower the delta the slowest the sprite will animate.
-                 cursor.setY(cursor.getY()-1);
-                 cursorHelper(delta);
-             }
-             if (input.isKeyDown(Input.KEY_S) && cursor.getY() != 9) {
-                 cursor.setY(cursor.getY()+1);
-                 cursorHelper(delta);
-             }
-             if (input.isKeyDown(Input.KEY_A) && cursor.getX() != 0) { 
-                 cursor.setX(cursor.getX()-1);
-                 cursorHelper(delta);
-             }
-             if (input.isKeyDown(Input.KEY_D) && cursor.getX() != 9)  {
-                 cursor.setX(cursor.getX()+1);
-                 cursorHelper(delta);
-             }
-             if(input.isKeyDown(Input.KEY_ENTER) && Attackable(currentTurn)) {
-            	 Fighting(currentTurn, grid[cursor.getX()][cursor.getY()].getCharacter());
-            	 MyTimerTask timer = new MyTimerTask();
-                 timer.completeTask(0);
-                 updateHealth();
-             }
-    	 }
-    	 else if (cursormode == true && skillmodedamage == true) {
-    		 if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
-                 // The lower the delta the slowest the sprite will animate.
-                 cursor.setY(cursor.getY()-1);
-                 cursorHelper(delta);
-             }
-             if (input.isKeyDown(Input.KEY_S) && cursor.getY() != 9) {
-                 cursor.setY(cursor.getY()+1);
-                 cursorHelper(delta);
-             }
-             if (input.isKeyDown(Input.KEY_A) && cursor.getX() != 0) { 
-                 cursor.setX(cursor.getX()-1);
-                 cursorHelper(delta);
-             }
-             if (input.isKeyDown(Input.KEY_D) && cursor.getX() != 9)  {
-                 cursor.setX(cursor.getX()+1);
-                 cursorHelper(delta);
-             }
-             if (input.isKeyDown(Input.KEY_ENTER) && checkTargettable() && grid[cursor.getX()][cursor.getY()].getCharacter().isAlly() == false) {
-            	 grid[cursor.getX()][cursor.getY()].getCharacter().setHp(grid[cursor.getX()][cursor.getY()].getCharacter().getHp()-damageskill);
-            	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
-            	 cursormode = false;
-            	 skillmodedamage = false;
-            	 updateMenu();
-            	 updateButtons();
-            	 updateHealth();
-            	 cursor.setX(20);
-    			 cursor.setY(20);
-            	 MyTimerTask timer = new MyTimerTask();
-                 timer.completeTask(0);
-                 updateMap();
-             }
-             if (input.isKeyDown(Input.KEY_ESCAPE)) {
-            	 cursormode = false;
-            	 skillmodedamage = false;
-            	 skillmenu = true;
-            	 cursor.setX(20);
-            	 cursor.setY(20);
-             }
-    	 }
-    	 else if (cursormode == true && skillmodeheal == true) {
-    		 if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
-                 // The lower the delta the slowest the sprite will animate.
-                 cursor.setY(cursor.getY()-1);
-                 cursorHelper(delta);
-             }
-             if (input.isKeyDown(Input.KEY_S) && cursor.getY() != 9) {
-                 cursor.setY(cursor.getY()+1);
-                 cursorHelper(delta);
-             }
-             if (input.isKeyDown(Input.KEY_A) && cursor.getX() != 0) { 
-                 cursor.setX(cursor.getX()-1);
-                 cursorHelper(delta);
-             }
-             if (input.isKeyDown(Input.KEY_D) && cursor.getX() != 9)  {
-                 cursor.setX(cursor.getX()+1);
-                 cursorHelper(delta);
-             }
-             if (input.isKeyDown(Input.KEY_ENTER) && checkTargettable() && grid[cursor.getX()][cursor.getY()].getCharacter().isAlly() == true) {
-            	 grid[cursor.getX()][cursor.getY()].getCharacter().setHp(grid[cursor.getX()][cursor.getY()].getCharacter().getHp()+healskill);
-            	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
-            	 cursormode = false;
-            	 skillmodeheal = false;
-            	 updateMenu();
-            	 updateButtons();
-            	 updateHealth();
-            	 cursor.setX(20);
-    			 cursor.setY(20);
-            	 MyTimerTask timer = new MyTimerTask();
-                 timer.completeTask(0);
-                 updateMap();
-             }
-             if (input.isKeyDown(Input.KEY_ESCAPE)) {
-            	 cursormode = false;
-            	 skillmodeheal = false;
-            	 skillmenu = true;
-            	 cursor.setX(20);
-            	 cursor.setY(20);
-             }
-    	 }
-    	 else if(pickingItem) {
-    		 if (input.isKeyDown(Input.KEY_W)) { 
-    			 if(ItemPos > 0) {
-                	 MyTimerTask timer = new MyTimerTask();
-                     timer.completeTask(2);
-    				 ItemPos --;
-    			 }
-             }
-             if (input.isKeyDown(Input.KEY_S)) {
-            	 if(ItemPos < items.size()-1) {
-                	 MyTimerTask timer = new MyTimerTask();
-                     timer.completeTask(2);
-                     ItemPos ++;
-            	 }
-             }
-             if(input.isKeyDown(Input.KEY_ESCAPE)) {
-            	 pickingItem = false;
-             }
-             if(input.isKeyDown(Input.KEY_ENTER)) {
-            	 if(items.get(ItemPos) instanceof HpItem) {
-            		 //currentTurn.setHp(currentTurn.getHp() +  items.get(ItemPos).getRestoration());
-            		 MyTimerTask timer = new MyTimerTask();
-                     timer.completeTask(2);
-            		 pickingItem = false;
-            		 healingMethod();
-
-            		 
-            	 }
-            	 System.out.println("I healed");
-             }
-             }
-    	 }
-    
-
-    public void render(GameContainer container, Graphics g) throws SlickException {
-    	map.draw(0,0);
-    	//grassMap.render(0,0);
-    	button.draw((int)20, (int)640);
-    	button2.draw((int)84, (int)640);
-    	button3.draw(148, (int)640);
-    	button4.draw(212, (int)640);
-    	button5.draw(276, (int)640);
-    	trueTypeFont.drawString(600.0f, 10.0f, Double.toString(currentTurn.getHp()), Color.black);
-    	currentMoves.drawString(600.0f, 30.0f, Integer.toString(tileAmt), Color.black);
-    	
-    	
-    	if(turns.size()>0) {
-    		for (Characters d: turns) {
-    			Image[] asdf = {new Image(d.getPicU()), new Image(d.getPicU())};
-    			if (d.getFace() == 0) {
-    				Image[] u = {new Image(d.getPicU()), new Image(d.getPicU())};
-    				asdf = u;
-    			}
-    			if (d.getFace() == 1) {
-    				Image[] r = {new Image(d.getPicR()), new Image(d.getPicR())};	
-    				asdf = r;
-    			}
-    			if(d.getFace()==2) {
-    				Image[] l = {new Image(d.getPicL()), new Image(d.getPicL())};
-    				asdf = l;
-    			}
-    			if(d.getFace()==3) {
-    				Image[] fda = {new Image(d.getPicD()), new Image(d.getPicD())};
-    				asdf = fda;
-    			}
-    			int [] duration = {300, 300}; 
-    			Animation df = new Animation(asdf,duration, false);
-    			df.draw(d.getX()*64, d.getY()*64);
-    		}
-    	} else {
-    		System.out.println("game over");
-    	}
-    	for(int i = 0; i < turns.size(); i++) {
-    		if(specificPerc(turns.get(i)) > 0) {
-    			g.setColor(Color.red);
-    			g.drawRect(turns.get(i).getX() * 64 + 10, (turns.get(i).getY() * 64)-2, 44, 2);
-        		g.fillRect(turns.get(i).getX() * 64 + 10, (turns.get(i).getY() * 64)-2, (int)(specificPerc(turns.get(i))*44), 2);
-    		}
-    	}
-    	for (int l = 0; l<turns.size(); l++) {
-    		if(specificPercMana(turns.get(l)) > 0) {
-    			g.setColor(Color.blue);
-    			g.drawRect(turns.get(l).getX() * 64 + 10, turns.get(l).getY() * 64, 44, 2);
-    			g.fillRect(turns.get(l).getX() * 64 + 10, turns.get(l).getY() * 64, (int)(specificPercMana(turns.get(l))*44), 2);
-    		}
-    	}
-    	Csprite.draw(cursor.getX()*64, cursor.getY()*64);
-    	if(pickingItem) {
-    		itemScreen.draw(45,50);
-    		int y = 70;
-    		for(int i = 0; i < items.size(); i++) {
-    	        TrueTypeFont words = new TrueTypeFont(new Font("Verdana", Font.BOLD, 8),true);
-    	        if(i == ItemPos) {
-    	        	words.drawString(70.0f,y, items.get(i).getName(), Color.blue);
-    	        } else {
-    	        	words.drawString(70.0f,y, items.get(i).getName(), Color.black);
-    	        }
-    	        y+=30;
-    		}
-        	shownImage = new Image(items.get(ItemPos).getSource());
-    		shownImage.draw(420,120);
-	        TrueTypeFont description = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 16),true);
-	        description.drawString(415.0f, 300.0f, items.get(ItemPos).getDescription(), Color.black);
-	        System.out.println("dsfasdf");
-    	}
-   // 	if(isHealing) {
-   //		doneHealing = false;
-   // 		pickingItem = false;
-    	if (isHealing) {
-    	healing.draw(currentTurn.getX()*64,currentTurn.getY()*64+10);
-    	}
-   // 		if(healingStarted) {
-   // 			healingStarted = false;
-   // 			healingMethod();
-   // 		}
-   // 		healing.
-   // 		if(doneHealing) {
-   // 			System.out.println("sdf");
-
-   // 		}
-    //	}
-    }
-    
     
     private void healingMethod() {
     	isHealing = true;
@@ -933,6 +450,475 @@ public class FireEmblem extends BasicGame {
     		grid[turns.get(i).getX()][turns.get(i).getY()].setBlocked();
     		grid[turns.get(i).getX()][turns.get(i).getY()].placeCharacter(turns.get(i));
     	}
+	}
+
+	@Override
+	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
+		populateGrid();
+    	for(int i = 0; i < 10; i++) {
+    		grid[i][0].setBlocked();
+    	}
+    	for(int i = 3; i < 10; i++) {
+    	    for(int j = 7; j < 10; j++) {
+    			grid[j][i].setBlocked();
+    		}
+    	}
+    	for(int i = 3; i < 5; i++) {
+    		for(int j = 0; j < 5; j++) {
+    			grid[j][i].setBlocked();
+    		}
+    	}
+    	for(int i = 5; i < 10; i++) {
+    		for(int j = 0; j < 2; j++) {
+    			grid[j][i].setBlocked();
+    		}
+    	}
+    	enemy1 = new Characters("Enemy", 10, 5, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 0, 1, 2, false,"fireball", "heal", "mysticshot", "finalspark");
+    	grid[1][2].placeCharacter(enemy1);
+    	grid[1][2].setBlocked();
+    	main = new Characters("Joe", 10, 6, 10, 10, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,1,1, false,"fireball", "explosion", "mysticshot", "finalspark");
+    	turns.add(main);
+    	grid[1][1].placeCharacter(main);
+    	grid[1][1].setBlocked();
+    	test1 = new Characters("Ally", 10, 6, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, true, false,1,4,4,false, "fireball", "heal", "mysticshot", "finalspark");
+    	turns.add(enemy1);
+    	turns.add(test1);
+    	grid[4][4].placeCharacter(test1);
+    	grid[4][4].setBlocked();
+    	keyDown = false;
+    	currentTurn = turns.get(turnLoc);
+    	
+    	//grassMap = new TiledMap("resources/map1.tmx");
+    	map = new Image("resources/FE Map.png");
+    	for(Item i : Inventory.getInventory()) {
+    		items.add(i);
+    	}
+    	
+    	itemScreen = new Image("resources/scroll.png");
+    	Image [] movementUp = {new Image("resources/spriteUp.png"), new Image("resources/spriteUp.png")};
+    	Image [] movementDown = {new Image("resources/spriteFront.png"), new Image("resources/spriteFront.png")};
+    	Image [] movementLeft = {new Image("resources/spriteLeft.png"), new Image("resources/spriteLeft.png")};
+    	Image [] movementRight = {new Image("resources/spriteRight.png"), new Image("resources/spriteRight.png")};
+    	Image [] cursord = {new Image("resources/cursor.png"), new Image("resources/cursor.png")};
+    	Image [] healingPics = {new Image("resources/heal1.png"),new Image("resources/heal2.png"),new Image("resources/heal3.png"),
+    			new Image("resources/heal4.png"),new Image("resources/heal5.png"),new Image("resources/heal6.png"),
+    			new Image("resources/heal7.png"),new Image("resources/heal8.png"),new Image("resources/heal9.png"),
+    			new Image("resources/heal10.png"),new Image("resources/heal11.png"),new Image("resources/heal12.png"),
+    			new Image("resources/heal13.png"),new Image("resources/heal14.png"),new Image("resources/heal15.png"),
+    			new Image("resources/heal16.png"),new Image("resources/heal17.png")};
+    	Image [] test = {new Image("resources/asdf.png"), new Image("resources/asdf.png")};
+    	int [] duration = {300,300};
+    	int [] healingDuration = {100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100};
+    	
+    	Image [] enemyDown = {new Image(enemy1.getPicU()), new Image(enemy1.getPicU())};
+    	
+    	eDown = new Animation(enemyDown, duration, false);
+    	
+    	up = new Animation(movementUp, duration, false);
+    	down = new Animation(movementDown, duration, false);
+    	left = new Animation(movementLeft, duration, false);
+    	right = new Animation(movementRight, duration, false); 
+    	allyTest = new Animation(test, duration, false);
+    	healing = new Animation(healingPics,healingDuration,true);
+    	
+    	sprite = down; 
+    	Csprite = new Animation(cursord, duration, false);
+    	enemys = eDown;
+    	cursormode = false;
+    	skillmenu = false;
+    	
+    	menuOptions[0] = new Image("resources/attack.png");
+        menuOptions[1] = new Image("resources/items.png");
+        menuOptions[2] = new Image("resources/magic.png");
+        menuOptions[3] = new Image("resources/move.png");
+        menuOptions[4] = new Image("resources/end.png");
+        menuOptions2[0] = new Image("resources/attackselected.png");
+        menuOptions2[1] = new Image("resources/itemsselected.png");
+        menuOptions2[2] = new Image("resources/magicselected.png");
+        menuOptions2[3] = new Image("resources/moveselected.png");
+        menuOptions2[4] = new Image("resources/endselected.png");
+        
+        shownOptions[0] = new Image("resources/attackselected.png");
+        shownOptions[1] = new Image("resources/items.png");
+        shownOptions[2] = new Image("resources/magic.png");
+        shownOptions[3] = new Image("resources/move.png");
+        shownOptions[4] = new Image("resources/end.png");
+        
+        cursor = new Characters("cursor", 20, 20, 0, 0, "resources/cursor.png","resources/cursor.png","resources/cursor.png","resources/cursor.png", 3, false, true, 9999, 20, 20, true, null, null, null, null);
+        
+        updateButtons();
+        
+     // initialise the font
+        font = new Font("Verdana", Font.BOLD, 8);
+        trueTypeFont = new TrueTypeFont(font, true);
+        currentMoves = new TrueTypeFont(font,true);
+
+        
+        // render some text to the screen
+        updateHealth();
+	}
+
+	@Override
+	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
+		map.draw(0,0);
+    	//grassMap.render(0,0);
+    	button.draw((int)20, (int)640);
+    	button2.draw((int)84, (int)640);
+    	button3.draw(148, (int)640);
+    	button4.draw(212, (int)640);
+    	button5.draw(276, (int)640);
+    	trueTypeFont.drawString(600.0f, 10.0f, Double.toString(currentTurn.getHp()), Color.black);
+    	currentMoves.drawString(600.0f, 30.0f, Integer.toString(tileAmt), Color.black);
+    	
+    	
+    	if(turns.size()>0) {
+    		for (Characters d: turns) {
+    			Image[] asdf = {new Image(d.getPicU()), new Image(d.getPicU())};
+    			if (d.getFace() == 0) {
+    				Image[] u = {new Image(d.getPicU()), new Image(d.getPicU())};
+    				asdf = u;
+    			}
+    			if (d.getFace() == 1) {
+    				Image[] r = {new Image(d.getPicR()), new Image(d.getPicR())};	
+    				asdf = r;
+    			}
+    			if(d.getFace()==2) {
+    				Image[] l = {new Image(d.getPicL()), new Image(d.getPicL())};
+    				asdf = l;
+    			}
+    			if(d.getFace()==3) {
+    				Image[] fda = {new Image(d.getPicD()), new Image(d.getPicD())};
+    				asdf = fda;
+    			}
+    			int [] duration = {300, 300}; 
+    			Animation df = new Animation(asdf,duration, false);
+    			df.draw(d.getX()*64, d.getY()*64);
+    		}
+    	} else {
+    		System.out.println("game over");
+    	}
+    	for(int i = 0; i < turns.size(); i++) {
+    		if(specificPerc(turns.get(i)) > 0) {
+    			g.setColor(Color.red);
+    			g.drawRect(turns.get(i).getX() * 64 + 10, (turns.get(i).getY() * 64)-2, 44, 2);
+        		g.fillRect(turns.get(i).getX() * 64 + 10, (turns.get(i).getY() * 64)-2, (int)(specificPerc(turns.get(i))*44), 2);
+    		}
+    	}
+    	for (int l = 0; l<turns.size(); l++) {
+    		if(specificPercMana(turns.get(l)) > 0) {
+    			g.setColor(Color.blue);
+    			g.drawRect(turns.get(l).getX() * 64 + 10, turns.get(l).getY() * 64, 44, 2);
+    			g.fillRect(turns.get(l).getX() * 64 + 10, turns.get(l).getY() * 64, (int)(specificPercMana(turns.get(l))*44), 2);
+    		}
+    	}
+    	Csprite.draw(cursor.getX()*64, cursor.getY()*64);
+    	if(pickingItem) {
+    		itemScreen.draw(45,50);
+    		int y = 70;
+    		for(int i = 0; i < items.size(); i++) {
+    	        TrueTypeFont words = new TrueTypeFont(new Font("Verdana", Font.BOLD, 8),true);
+    	        if(i == ItemPos) {
+    	        	words.drawString(70.0f,y, items.get(i).getName(), Color.blue);
+    	        } else {
+    	        	words.drawString(70.0f,y, items.get(i).getName(), Color.black);
+    	        }
+    	        y+=30;
+    		}
+        	shownImage = new Image(items.get(ItemPos).getSource());
+    		shownImage.draw(420,120);
+	        TrueTypeFont description = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 16),true);
+	        description.drawString(415.0f, 300.0f, items.get(ItemPos).getDescription(), Color.black);
+	        System.out.println("dsfasdf");
+    	}
+   // 	if(isHealing) {
+   //		doneHealing = false;
+   // 		pickingItem = false;
+    	if (isHealing) {
+    	healing.draw(currentTurn.getX()*64,currentTurn.getY()*64+10);
+    	}
+   // 		if(healingStarted) {
+   // 			healingStarted = false;
+   // 			healingMethod();
+   // 		}
+   // 		healing.
+   // 		if(doneHealing) {
+   // 			System.out.println("sdf");
+
+   // 		}
+    //	}
+	}
+
+	@Override
+	public void update(GameContainer container, StateBasedGame arg1, int delta) throws SlickException {
+		if(tileAmt > 0) {
+   		 chooseOption = false;
+   	 }else {
+   		 chooseOption = true;
+   	 }
+   	 Input input = container.getInput();
+   	 if(skillmenu) {
+   		 if (input.isKeyDown(Input.KEY_A) && chooseOption) {
+   			 SkillLeft();
+   			 updateSkill();
+   			 optionHelper();
+   		 }
+   		 if (input.isKeyDown(Input.KEY_D) && chooseOption) {
+   			 SkillRight();
+   			 updateSkill();
+   			 optionHelper();
+   		 }
+   		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 4) {
+   			 updateMenu();
+   			 optionHelper();
+   			 skillmenu = false;
+   		 }
+   		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 0) {
+   			 useSkill(currentTurn.getSkill()[0]);
+   		 }
+   		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 1) {
+   			 useSkill(currentTurn.getSkill()[1]);
+   		 }
+   		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 2) {
+   			 useSkill(currentTurn.getSkill()[2]);
+   		 }
+   		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 3) {
+   			 useSkill(currentTurn.getSkill()[3]);
+   		 }
+   	 }
+   	 else if(!cursormode && !pickingItem) {
+   		 if(input.isKeyDown(Input.KEY_W) && movable(2) && currentTurn.getY() != 0 && tileAmt != 0) { 
+   			 if(currentTurn == turns.get(0)) {
+   				 currentTurn.setFace(0);
+   				 sprite.update(delta);
+   			 }
+   			 // The lower the delta the slowest the sprite will animate.
+   			 currentTurn.setY(currentTurn.getY()-1);
+   			 moveHelper();
+   			 updateMap();
+   		 }
+   		 if(input.isKeyDown(Input.KEY_S) && movable(4) && currentTurn.getY() != 9 && tileAmt != 0) {
+   			 if(currentTurn == turns.get(0)) {
+   				 currentTurn.setFace(3);
+   				 sprite.update(delta);
+   			 }
+   			 currentTurn.setY(currentTurn.getY()+1);
+   			 moveHelper();
+   			 updateMap();
+   		 }
+   		 if (input.isKeyDown(Input.KEY_A)&& movable(3) && currentTurn.getX() != 0 && tileAmt != 0) { 
+   			 if(currentTurn == turns.get(0)) {
+   				 currentTurn.setFace(1);
+   				 sprite.update(delta);
+   			 }
+   			 currentTurn.setX(currentTurn.getX()-1);
+            	moveHelper();
+            	updateMap();
+   		 }
+   		 if (input.isKeyDown(Input.KEY_D)&& movable(1) && currentTurn.getX() != 9 && tileAmt != 0) {
+   			 if(currentTurn == turns.get(0)) {
+   				 currentTurn.setFace(2);
+   				 sprite.update(delta);
+   			 }
+   			 currentTurn.setX(currentTurn.getX()+1);
+   			 moveHelper();
+   			 updateMap();
+   		 }
+   		 if (input.isKeyDown(Input.KEY_A) && chooseOption) {
+   			 OptionLeft();
+   			 optionHelper();
+   		 }
+   		 if (input.isKeyDown(Input.KEY_D) && chooseOption) {
+   			 OptionRight();
+   			 optionHelper();
+   		 }
+   		 if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 0 && currentTurn.getDidAttack()==false && canAttack()) {
+   			 System.out.println("i attacked");
+   			 AttackSelection(currentTurn);
+   			 MyTimerTask timer = new MyTimerTask();
+   			 timer.completeTask(0);
+   			 currentTurn.setDidAttack(true);
+   			 updateHealth();
+   		 }
+   		 if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 1) {
+   			 pickingItem = true;
+   			 MyTimerTask timer = new MyTimerTask();
+   			 timer.completeTask(1);
+   			 System.out.println("Opened");
+   		 }
+   		 if(input.isKeyDown(Input.KEY_ENTER)&& OptionPos == 2) {
+   			 SkillPos=0;
+   			 changeOptionSkills();
+   			 updateButtons();
+   			 MyTimerTask timer = new MyTimerTask();
+   			 timer.completeTask(0);
+   		 }
+   		 if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 3 ){
+   			 tileAmt = currentTurn.getDistance();
+   			 canMove = true;
+   			 chooseOption = false;
+   			 if(tileAmt == 0) {
+   				 chooseOption = true;
+   			 }
+   			 MyTimerTask timer = new MyTimerTask();
+   			 timer.completeTask(0);
+   		 }
+   		 if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 4 && chooseOption) {
+   			 currentTurn.setDidAttack(false);
+   			 turnLoc++;
+   			 if(turnLoc > turns.size()-1) {
+   				 turnLoc = 0;
+   			 }
+   			 currentTurn = turns.get(turnLoc);
+   			 MyTimerTask timer = new MyTimerTask();
+   			 timer.completeTask(0);
+   			 OptionPos = 0;
+   			 resetButtons();
+   			 updateButtons();
+   			 updateHealth();
+   		 }
+   	 }
+   	 else if (cursormode == true && skillmodedamage == false && skillmodeheal == false){
+   		 if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
+                // The lower the delta the slowest the sprite will animate.
+                cursor.setY(cursor.getY()-1);
+                cursorHelper(delta);
+            }
+            if (input.isKeyDown(Input.KEY_S) && cursor.getY() != 9) {
+                cursor.setY(cursor.getY()+1);
+                cursorHelper(delta);
+            }
+            if (input.isKeyDown(Input.KEY_A) && cursor.getX() != 0) { 
+                cursor.setX(cursor.getX()-1);
+                cursorHelper(delta);
+            }
+            if (input.isKeyDown(Input.KEY_D) && cursor.getX() != 9)  {
+                cursor.setX(cursor.getX()+1);
+                cursorHelper(delta);
+            }
+            if(input.isKeyDown(Input.KEY_ENTER) && Attackable(currentTurn)) {
+           	 Fighting(currentTurn, grid[cursor.getX()][cursor.getY()].getCharacter());
+           	 MyTimerTask timer = new MyTimerTask();
+                timer.completeTask(0);
+                updateHealth();
+            }
+   	 }
+   	 else if (cursormode == true && skillmodedamage == true) {
+   		 if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
+                // The lower the delta the slowest the sprite will animate.
+                cursor.setY(cursor.getY()-1);
+                cursorHelper(delta);
+            }
+            if (input.isKeyDown(Input.KEY_S) && cursor.getY() != 9) {
+                cursor.setY(cursor.getY()+1);
+                cursorHelper(delta);
+            }
+            if (input.isKeyDown(Input.KEY_A) && cursor.getX() != 0) { 
+                cursor.setX(cursor.getX()-1);
+                cursorHelper(delta);
+            }
+            if (input.isKeyDown(Input.KEY_D) && cursor.getX() != 9)  {
+                cursor.setX(cursor.getX()+1);
+                cursorHelper(delta);
+            }
+            if (input.isKeyDown(Input.KEY_ENTER) && checkTargettable() && grid[cursor.getX()][cursor.getY()].getCharacter().isAlly() == false) {
+           	 grid[cursor.getX()][cursor.getY()].getCharacter().setHp(grid[cursor.getX()][cursor.getY()].getCharacter().getHp()-damageskill);
+           	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
+           	 cursormode = false;
+           	 skillmodedamage = false;
+           	 updateMenu();
+           	 updateButtons();
+           	 updateHealth();
+           	 cursor.setX(20);
+   			 cursor.setY(20);
+           	 MyTimerTask timer = new MyTimerTask();
+                timer.completeTask(0);
+                updateMap();
+            }
+            if (input.isKeyDown(Input.KEY_ESCAPE)) {
+           	 cursormode = false;
+           	 skillmodedamage = false;
+           	 skillmenu = true;
+           	 cursor.setX(20);
+           	 cursor.setY(20);
+            }
+   	 }
+   	 else if (cursormode == true && skillmodeheal == true) {
+   		 if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
+                // The lower the delta the slowest the sprite will animate.
+                cursor.setY(cursor.getY()-1);
+                cursorHelper(delta);
+            }
+            if (input.isKeyDown(Input.KEY_S) && cursor.getY() != 9) {
+                cursor.setY(cursor.getY()+1);
+                cursorHelper(delta);
+            }
+            if (input.isKeyDown(Input.KEY_A) && cursor.getX() != 0) { 
+                cursor.setX(cursor.getX()-1);
+                cursorHelper(delta);
+            }
+            if (input.isKeyDown(Input.KEY_D) && cursor.getX() != 9)  {
+                cursor.setX(cursor.getX()+1);
+                cursorHelper(delta);
+            }
+            if (input.isKeyDown(Input.KEY_ENTER) && checkTargettable() && grid[cursor.getX()][cursor.getY()].getCharacter().isAlly() == true) {
+           	 grid[cursor.getX()][cursor.getY()].getCharacter().setHp(grid[cursor.getX()][cursor.getY()].getCharacter().getHp()+healskill);
+           	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
+           	 cursormode = false;
+           	 skillmodeheal = false;
+           	 updateMenu();
+           	 updateButtons();
+           	 updateHealth();
+           	 cursor.setX(20);
+   			 cursor.setY(20);
+           	 MyTimerTask timer = new MyTimerTask();
+                timer.completeTask(0);
+                updateMap();
+            }
+            if (input.isKeyDown(Input.KEY_ESCAPE)) {
+           	 cursormode = false;
+           	 skillmodeheal = false;
+           	 skillmenu = true;
+           	 cursor.setX(20);
+           	 cursor.setY(20);
+            }
+   	 }
+   	 else if(pickingItem) {
+   		 if (input.isKeyDown(Input.KEY_W)) { 
+   			 if(ItemPos > 0) {
+               	 MyTimerTask timer = new MyTimerTask();
+                    timer.completeTask(2);
+   				 ItemPos --;
+   			 }
+            }
+            if (input.isKeyDown(Input.KEY_S)) {
+           	 if(ItemPos < items.size()-1) {
+               	 MyTimerTask timer = new MyTimerTask();
+                    timer.completeTask(2);
+                    ItemPos ++;
+           	 }
+            }
+            if(input.isKeyDown(Input.KEY_ESCAPE)) {
+           	 pickingItem = false;
+            }
+            if(input.isKeyDown(Input.KEY_ENTER)) {
+           	 if(items.get(ItemPos) instanceof HpItem) {
+           		 //currentTurn.setHp(currentTurn.getHp() +  items.get(ItemPos).getRestoration());
+           		 MyTimerTask timer = new MyTimerTask();
+                    timer.completeTask(2);
+           		 pickingItem = false;
+           		 healingMethod();
+
+           		 
+           	 }
+           	 System.out.println("I healed");
+            }
+            }
+	}
+
+	@Override
+	public int getID() {
+		// TODO Auto-generated method stub
+		return 1;
 	}
 }
 //asd
