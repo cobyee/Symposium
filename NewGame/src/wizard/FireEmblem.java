@@ -39,6 +39,7 @@ public class FireEmblem extends BasicGame {
 	private Characters currentTurn = turns.get(turnLoc);
 	private static Characters cursor;
 	
+	private static int setted;
 	private static boolean pickingItem = false;
 	private static boolean isHealing = false;
 	private int tileAmt = 0;
@@ -66,6 +67,7 @@ public class FireEmblem extends BasicGame {
 	private static int damageskill;
 	private static int healskill;
 	private static int skillmanaused;
+	private static boolean keyDown;
 	
 	private static Tile[][] grid = new Tile[10][10];
 	
@@ -97,6 +99,15 @@ public class FireEmblem extends BasicGame {
     } 
 
     public static void main(String[] arguments) {	
+    	  Thread thread = new Thread(){
+    		    public void run(){
+    		      System.out.println("Thread Running");
+    		    }
+    	  };
+
+    	  thread.start();
+    	  thread.run();
+    	
     	populateGrid();
     	for(int i = 0; i < 10; i++) {
     		grid[i][0].setBlocked();
@@ -128,6 +139,7 @@ public class FireEmblem extends BasicGame {
     	turns.add(test1);
     	grid[4][4].placeCharacter(test1);
     	grid[4][4].setBlocked();
+    	keyDown = false;
     	
         try
         {
@@ -148,6 +160,7 @@ public class FireEmblem extends BasicGame {
     	for(Item i : Inventory.getInventory()) {
     		items.add(i);
     	}
+    	
     	itemScreen = new Image("resources/scroll.png");
     	Image [] movementUp = {new Image("resources/spriteUp.png"), new Image("resources/spriteUp.png")};
     	Image [] movementDown = {new Image("resources/spriteFront.png"), new Image("resources/spriteFront.png")};
@@ -306,7 +319,7 @@ public class FireEmblem extends BasicGame {
     		 if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 1) {
     			 pickingItem = true;
     			 MyTimerTask timer = new MyTimerTask();
-    			 timer.completeTask(0);
+    			 timer.completeTask(1);
     			 System.out.println("Opened");
     		 }
     		 if(input.isKeyDown(Input.KEY_ENTER)&& OptionPos == 2) {
@@ -467,13 +480,18 @@ public class FireEmblem extends BasicGame {
              if(input.isKeyDown(Input.KEY_ENTER)) {
             	 if(items.get(ItemPos) instanceof HpItem) {
             		 //currentTurn.setHp(currentTurn.getHp() +  items.get(ItemPos).getRestoration());
-            		 isHealing = true;
-            		 healingStarted = true;
+            		 MyTimerTask timer = new MyTimerTask();
+                     timer.completeTask(2);
+            		 pickingItem = false;
+            		 healingMethod();
+
+            		 
             	 }
             	 System.out.println("I healed");
              }
+             }
     	 }
-    }
+    
 
     public void render(GameContainer container, Graphics g) throws SlickException {
     	map.draw(0,0);
@@ -544,25 +562,39 @@ public class FireEmblem extends BasicGame {
     		shownImage.draw(420,120);
 	        TrueTypeFont description = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 16),true);
 	        description.drawString(415.0f, 300.0f, items.get(ItemPos).getDescription(), Color.black);
+	        System.out.println("dsfasdf");
     	}
-    	if(isHealing) {
-    		doneHealing = false;
-    		pickingItem = false;
-    		healing.draw(currentTurn.getX()*64,currentTurn.getY()*64+10);
-    		if(healingStarted) {
-    			healingStarted = false;
-    			healingMethod();
-    		}
-    		if(doneHealing) {
-    			System.out.println("sdf");
+   // 	if(isHealing) {
+   //		doneHealing = false;
+   // 		pickingItem = false;
+    	if (isHealing) {
+    	healing.draw(currentTurn.getX()*64,currentTurn.getY()*64+10);
+    	}
+   // 		if(healingStarted) {
+   // 			healingStarted = false;
+   // 			healingMethod();
+   // 		}
+   // 		healing.
+   // 		if(doneHealing) {
+   // 			System.out.println("sdf");
 
-    		}
-    	}
+   // 		}
+    //	}
     }
     
+    
     private void healingMethod() {
-		MyTimerTask timer = new MyTimerTask();
-   	 	timer.completeTask(3);
+    	isHealing = true;
+    	Thread thread = new Thread(){
+		    public void run(){
+		    	System.out.println("fdzcxv");
+		    	 MyTimerTask timer = new MyTimerTask();
+                 timer.completeTask(3);
+                 isHealing = false;
+                 System.out.println("sdfdfsd");
+		    }
+	  };
+	  thread.start();
 	}
 
 	public void cursorHelper(int delta) {
