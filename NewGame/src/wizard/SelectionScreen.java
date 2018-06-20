@@ -15,12 +15,15 @@ public class SelectionScreen extends BasicGameState {
 
 	private Inventory inventory = new Inventory();
 	private static ArrayList<Item> items = new ArrayList<Item>();
+	private IntroSound intros;
 	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 		for(Item i: Inventory.getInventory()) {
 			items.add(i);
 		}
+		intros= new IntroSound();
+		intros.playSound();
 	}
 
 	@Override
@@ -37,7 +40,8 @@ public class SelectionScreen extends BasicGameState {
 		Input input = container.getInput();
 		if (input.isKeyDown(Input.KEY_ENTER) && !Application.justSwapped()) {
 			sbg.enterState(3);
-  		 }
+			intros.stopSound(); 
+		}
 	}
 
 	@Override

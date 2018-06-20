@@ -33,8 +33,9 @@ public class Application extends StateBasedGame {
     	this.addState(new SelectionScreen());
     	this.addState(new LevelOne());
     }
+    
 	
-    public static void main(String[] arguments) {	
+    public static void main(String[] arguments) {
         try
         {
             AppGameContainer app = new AppGameContainer(new Application("Fire Emblem"+VERSION));

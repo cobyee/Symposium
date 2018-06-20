@@ -18,6 +18,9 @@ public class Tile {
 		isBlocked = true;
 	}
 	public boolean getBlocked() {
+		if (character != null) {
+		return true;
+		}
 		return isBlocked;
 	}
 	

@@ -99,6 +99,9 @@ public class LevelOne extends BasicGameState {
 	
 	private static boolean healingStarted;
 	
+	private boolean startsong;
+	private MapOneSound mapsound;
+	
 	Font font = new Font("Verdana", Font.BOLD, 8);
 	TrueTypeFont trueTypeFont;
 	TrueTypeFont currentMoves;
@@ -551,6 +554,8 @@ public class LevelOne extends BasicGameState {
 
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
+		startsong = false;
+		mapsound = new MapOneSound();
 		populateGrid();
 		clearRedArea();
     	for(int i = 0; i < 10; i++) {
@@ -774,6 +779,11 @@ public class LevelOne extends BasicGameState {
 
 	@Override
 	public void update(GameContainer container, StateBasedGame arg1, int delta) throws SlickException {
+		if (startsong == false) {			
+			mapsound.playSound();
+			startsong = true;
+			System.out.println("bcv");
+		}
 		if (currentTurn.isAlly() == false){
 			if(searchingTarget()[0] == -1 && searchingTarget()[1]==-1) {
 				turnLoc++;
@@ -1091,9 +1101,18 @@ public class LevelOne extends BasicGameState {
 		int[] hahaxd =	new int[2];
 		hahaxd[0] = -1;
 		hahaxd[1] = -1;
-		for (int j = 0; j<(currentTurn.getDistance()); j++) {
-			for (int i = 0; i< currentTurn.getDistance()+1; i++) {
-			if (currentTurn.getX()-i+j >= 0) {
+		for (int j = currentTurn.getX()-currentTurn.getDistance(); j<currentTurn.getX()+currentTurn.getDistance()+1; j++) {
+			for (int i = currentTurn.getY()-currentTurn.getDistance(); i< currentTurn.getDistance()+currentTurn.getDistance()+1; i++) {
+				if (j >= 0 && j < 10 && i >= 0 && i<10) {
+				if (grid[j][i].isOccupied()) {
+					if (grid[j][i].getCharacter().isAlly()) {
+						hahaxd[0] = j;
+						hahaxd[1] = i;
+						return hahaxd;
+					}
+				}
+				}
+		/**	if (currentTurn.getX()-i+j >= 0) {
 				if (grid[currentTurn.getX()-i+j][currentTurn.getY()].isOccupied()) {
 					if (grid[currentTurn.getX()-i+j][currentTurn.getY()].getCharacter().isAlly()) {
 						hahaxd[0] = currentTurn.getX()-i+j;
@@ -1163,7 +1182,7 @@ public class LevelOne extends BasicGameState {
 						return hahaxd;
 					}
 				}
-			}
+		} **/
 		}}
 		System.out.println("no");
 		return hahaxd;
@@ -1213,22 +1232,22 @@ public class LevelOne extends BasicGameState {
 		System.out.println("attacked");
 	}
 	public void moveTowardsTarget(int[] target) {
-		if (target[0] < currentTurn.getX() && (grid[currentTurn.getX()-1][currentTurn.getY()].isOccupied() == false)) {
+		if (target[0] < currentTurn.getX() && (grid[currentTurn.getX()-1][currentTurn.getY()].getBlocked() == false)) {
 			currentTurn.setX(currentTurn.getX()-1);
 			checkClose(target);
 			return;
 		}
-		if (target[0] > currentTurn.getX() && (grid[currentTurn.getX()+1][currentTurn.getY()].isOccupied() == false)) {
+		if (target[0] > currentTurn.getX() && (grid[currentTurn.getX()+1][currentTurn.getY()].getBlocked() == false)) {
 			currentTurn.setX(currentTurn.getX()+1);
 			checkClose(target);
 			return;
 		}
-		if (target[1] < currentTurn.getY() && (grid[currentTurn.getX()][currentTurn.getY()-1].isOccupied() == false)) {
+		if (target[1] < currentTurn.getY() && (grid[currentTurn.getX()][currentTurn.getY()-1].getBlocked() == false)) {
 			currentTurn.setY(currentTurn.getY()-1);
 			checkClose(target);
 			return;
 		}
-		if (target[1] > currentTurn.getY() && (grid[currentTurn.getX()][currentTurn.getY()+1].isOccupied() == false)) {
+		if (target[1] > currentTurn.getY() && (grid[currentTurn.getX()][currentTurn.getY()+1].getBlocked() == false)) {
 			currentTurn.setY(currentTurn.getY()+1);
 			checkClose(target);
 			return;

@@ -1,5 +1,11 @@
 package wizard;
 
+import java.io.File;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -90,5 +96,5 @@ public class MainMenu extends BasicGameState {
 	public static void setMovable() {
 		canMove = true;
 	}
-
+	
 }
