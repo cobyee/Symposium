@@ -70,6 +70,7 @@ public class LevelOne extends BasicGameState {
 	private static Image map;
 	private static Image itemScreen;
 	private static Image shownImage;
+	private static Image cube;
 	private static boolean canMove = false;
 	private static boolean chooseOption = true;
 	private static boolean doneHealing = false;
@@ -81,17 +82,16 @@ public class LevelOne extends BasicGameState {
 	private static int damageskill;
 	private static int healskill;
 	private static int skillmanaused;
-	private static boolean keyDown;
 	
 	private static int targetplaceX;
 	private static int targetplaceY;
 	
 	private static Tile[][] grid = new Tile[10][10];
+	private static boolean[][] redArea = new boolean[10][10];
 	
 	private static Image[] shownOptions = new Image[5];
 	private static Image[] menuOptions = new Image[5];
 	private static Image[] menuOptions2 = new Image[5];
-	
 	private static Image[] skillOptions = new Image[5];
 	private static Image[] skillOptions2 = new Image[5];
 	
@@ -104,7 +104,6 @@ public class LevelOne extends BasicGameState {
 	TrueTypeFont currentMoves;
 	TrueTypeFont smallPotion;
 	private String skillname;
-
 
 	public static int OptionPos = 0;
 	public static int SkillPos = 0;
@@ -553,6 +552,7 @@ public class LevelOne extends BasicGameState {
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 		populateGrid();
+		clearRedArea();
     	for(int i = 0; i < 10; i++) {
     		grid[i][0].setBlocked();
     	}
@@ -585,7 +585,6 @@ public class LevelOne extends BasicGameState {
     	turns.add(test1);
     	grid[4][4].placeCharacter(test1);
     	grid[4][4].setBlocked();
-    	keyDown = false;
     	currentTurn = turns.get(turnLoc);
     	
     	//grassMap = new TiledMap("resources/map1.tmx");
@@ -761,6 +760,16 @@ public class LevelOne extends BasicGameState {
     	if (isHealskill) {
     		healSkillani.draw(targetplaceX*64,targetplaceY*64);
     	}
+    	if(skillmodeheal || skillmodedamage) {
+    		for(int i = 0; i < 10; i++) {
+    			for(int j = 0; j < 10; j++) {
+    				if(redArea[i][j]) {
+    					cube = new Image("resources/redcube.png");
+    					cube.draw(i*64,j*64);
+    				}
+    			}
+    		}
+    	}
 	}
 
 	@Override
@@ -843,73 +852,73 @@ public class LevelOne extends BasicGameState {
    			 currentTurn.setX(currentTurn.getX()-1);
             	moveHelper();
             	updateMap();
-   		 }
-   		 if (input.isKeyDown(Input.KEY_D)&& movable(1) && currentTurn.getX() != 9 && tileAmt != 0) {
-   			 if(currentTurn == turns.get(0)) {
-   				 currentTurn.setFace(2);
-   				 sprite.update(delta);
-   			 }
-   			 currentTurn.setX(currentTurn.getX()+1);
-   			 moveHelper();
-   			 updateMap();
-   		 }
-   		 if (input.isKeyDown(Input.KEY_A) && chooseOption) {
-   			 OptionLeft();
-   			 optionHelper();
-   		 }
-   		 if (input.isKeyDown(Input.KEY_D) && chooseOption) {
-   			 OptionRight();
-   			 optionHelper();
-   		 }
-   		 if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 0 && currentTurn.getDidAttack()==false && canAttack()) {
-   			 AttackSelection(currentTurn);
-   			 MyTimerTask timer = new MyTimerTask();
-   			 timer.completeTask(0);
-   			 currentTurn.setDidAttack(true);
-   			 updateHealth();
-   		 }
-   		 if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 1 && !usedItem) {
-   			 pickingItem = true;
-   			 MyTimerTask timer = new MyTimerTask();
-   			 timer.completeTask(1);
-   		 }
-   		 if(input.isKeyDown(Input.KEY_ENTER)&& OptionPos == 2) {
-   			 SkillPos=0;
-   			 changeOptionSkills();
-   			 updateButtons();
-   			 MyTimerTask timer = new MyTimerTask();
-   			 timer.completeTask(0);
-   		 }
-   		 if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 3 ){
-   			 tileAmt = currentTurn.getDistance();
-   			 canMove = true;
-   			 chooseOption = false;
-   			 if(tileAmt == 0) {
-   				 chooseOption = true;
-   			 }
-   			 MyTimerTask timer = new MyTimerTask();
-   			 timer.completeTask(0);
-   		 }
-   		 if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 4 && chooseOption) {
-   			 currentTurn.setDidAttack(false);
-   			 turnLoc++;
-   			 if(turnLoc > turns.size()-1) {
-   				 turnLoc = 0;
-   			 }
-   			 currentTurn = turns.get(turnLoc);
-   			 MyTimerTask timer = new MyTimerTask();
-   			 timer.completeTask(0);
-   			 OptionPos = 0;
-   			 resetButtons();
-   			 updateButtons();
-   			 updateHealth();
-   			 usedItem = false;
-   		 }
-   	 }
-   	 else if (cursormode == true && skillmodedamage == false && skillmodeheal == false){
-   		 if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
-                // The lower the delta the slowest the sprite will animate.
-                cursor.setY(cursor.getY()-1);
+   	 		}
+   	 		if (input.isKeyDown(Input.KEY_D)&& movable(1) && currentTurn.getX() != 9 && tileAmt != 0) {
+   	 			if(currentTurn == turns.get(0)) {
+   	 				currentTurn.setFace(2);
+   	 				sprite.update(delta);
+   	 			}
+   	 			currentTurn.setX(currentTurn.getX()+1);
+   	 			moveHelper();
+   	 			updateMap();
+   	 		}
+   	 		if (input.isKeyDown(Input.KEY_A) && chooseOption) {
+   	 			OptionLeft();
+   	 			optionHelper();
+   	 		}
+   	 		if (input.isKeyDown(Input.KEY_D) && chooseOption) {
+   	 			OptionRight();
+   	 			optionHelper();
+   	 		}
+   	 		if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 0 && currentTurn.getDidAttack()==false && canAttack()) {
+   	 			AttackSelection(currentTurn);
+   	 			MyTimerTask timer = new MyTimerTask();
+   	 			timer.completeTask(0);
+   	 			currentTurn.setDidAttack(true);
+   	 			updateHealth();
+   	 		}
+   	 		if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 1 && !usedItem) {
+   	 			pickingItem = true;
+   	 			MyTimerTask timer = new MyTimerTask();
+   	 			timer.completeTask(1);
+   	 		}
+   	 		if(input.isKeyDown(Input.KEY_ENTER)&& OptionPos == 2) {
+   	 			SkillPos=0;
+   	 			changeOptionSkills();
+   	 			updateButtons();
+   	 			MyTimerTask timer = new MyTimerTask();
+   	 			timer.completeTask(0);
+   	 		}
+   	 		if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 3 ){
+   	 			tileAmt = currentTurn.getDistance();
+   	 			canMove = true;
+   	 			chooseOption = false;
+   	 			if(tileAmt == 0) {
+   	 				chooseOption = true;
+   	 			}
+   	 			MyTimerTask timer = new MyTimerTask();
+   	 			timer.completeTask(0);
+   	 		}
+   	 		if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 4 && chooseOption) {
+   	 			currentTurn.setDidAttack(false);
+   	 			turnLoc++;
+   	 			if(turnLoc > turns.size()-1) {
+   	 				turnLoc = 0;
+   	 			}
+   	 			currentTurn = turns.get(turnLoc);
+   	 			MyTimerTask timer = new MyTimerTask();
+   	 			timer.completeTask(0);
+   	 			OptionPos = 0;
+   	 			resetButtons();
+   	 			updateButtons();
+   	 			updateHealth();
+   	 			usedItem = false;
+   	 		}
+   	 	}	
+   	 	else if (cursormode == true && skillmodedamage == false && skillmodeheal == false){
+   	 		if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
+   	 			// The lower the delta the slowest the sprite will animate.
+   	 			cursor.setY(cursor.getY()-1);
                 cursorHelper(delta);
             }
             if (input.isKeyDown(Input.KEY_S) && cursor.getY() != 9) {
@@ -930,11 +939,12 @@ public class LevelOne extends BasicGameState {
                 timer.completeTask(0);
                 updateHealth();
             }
-   	 }
-   	 else if (cursormode == true && skillmodedamage == true) {
-   		 if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
-                // The lower the delta the slowest the sprite will animate.
-                cursor.setY(cursor.getY()-1);
+   	 	}
+   	 	else if (cursormode == true && skillmodedamage == true) {
+   	 		settingRedArea();
+   	 		if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
+   	 			// The lower the delta the slowest the sprite will animate.
+   	 			cursor.setY(cursor.getY()-1);
                 cursorHelper(delta);
             }
             if (input.isKeyDown(Input.KEY_S) && cursor.getY() != 9) {
@@ -950,33 +960,33 @@ public class LevelOne extends BasicGameState {
                 cursorHelper(delta);
             }
             if (input.isKeyDown(Input.KEY_ENTER) && checkTargettable() && grid[cursor.getX()][cursor.getY()].getCharacter().isAlly() == false) {
-             targetplaceX = cursor.getX(); 
-             targetplaceY = cursor.getY();
-             if (skillname.equals("fireball")) {
-            	 FireballMethod();
-             }
-             if (skillname.equals("thunder")) {
-            	 ThunderMethod();
-             }
-             if (skillname.equals("explosion")){
-            	 ExplosionMethod();
-             }
-             if (skillname.equals("waterblast")) {
-            	 WaterblastMethod();
-             }
-             if (skillname.equals("finalspark")) {
-            	 FinalsparkMethod();
-             }
-           	 cursormode = false;
-           	 skillmodedamage = false;
-           	 updateMenu();
-           	 updateButtons();
+            	targetplaceX = cursor.getX(); 
+            	targetplaceY = cursor.getY();
+            	if (skillname.equals("fireball")) {
+            		FireballMethod();
+            	}
+            	if (skillname.equals("thunder")) {
+            		ThunderMethod();
+            	}
+            	if (skillname.equals("explosion")){
+            		ExplosionMethod();
+            	}
+            	if (skillname.equals("waterblast")) {
+            		WaterblastMethod();
+            	}
+            	if (skillname.equals("finalspark")) {
+            		FinalsparkMethod();
+            	}
+            	cursormode = false;
+            	skillmodedamage = false;
+            	updateMenu();
+            	updateButtons();
          
-          
-           	 cursor.setX(20);
-   			 cursor.setY(20);
-           	 MyTimerTask timer = new MyTimerTask();
-                timer.completeTask(0);
+            	cursor.setX(20);
+            	cursor.setY(20);
+            	MyTimerTask timer = new MyTimerTask();
+            	timer.completeTask(0);
+                clearRedArea();
             }
             if (input.isKeyDown(Input.KEY_ESCAPE)) {
             	cursormode = false;
@@ -987,6 +997,7 @@ public class LevelOne extends BasicGameState {
             }
    	 }
    	 else if (cursormode == true && skillmodeheal == true) {
+   		 settingRedArea();
    		 if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
                 // The lower the delta the slowest the sprite will animate.
                 cursor.setY(cursor.getY()-1);
@@ -1008,25 +1019,26 @@ public class LevelOne extends BasicGameState {
             	targetplaceX = cursor.getX(); 
                 targetplaceY = cursor.getY();
             	if (skillname.equals("heal")) {
-               	 healSkillMethod();
+            		healSkillMethod();
                 }
-           	 cursormode = false;
-           	 skillmodeheal = false;
-           	 updateMenu();
-           	 updateButtons();
-           	 updateHealth();
-           	 cursor.setX(20);
-   			 cursor.setY(20);
-           	 MyTimerTask timer = new MyTimerTask();
+            	cursormode = false;
+           	 	skillmodeheal = false;
+           	 	updateMenu();
+           	 	updateButtons();
+           	 	updateHealth();
+           	 	cursor.setX(20);
+           	 	cursor.setY(20);
+           	 	MyTimerTask timer = new MyTimerTask();
                 timer.completeTask(0);
+                clearRedArea();
                 updateMap();
             }
             if (input.isKeyDown(Input.KEY_ESCAPE)) {
-           	 cursormode = false;
-           	 skillmodeheal = false;
-           	 skillmenu = true;
-           	 cursor.setX(20);
-           	 cursor.setY(20);
+            	cursormode = false;
+            	skillmodeheal = false;
+            	skillmenu = true;
+            	cursor.setX(20);
+            	cursor.setY(20);
             }
    	 }
    	 else if(pickingItem) {
@@ -1073,7 +1085,7 @@ public class LevelOne extends BasicGameState {
         	 usedItem = true;
          }
    	 }
-		}
+   	 }
 	}
 	public int[] searchingTarget() {
 		int[] hahaxd =	new int[2];
@@ -1233,5 +1245,28 @@ public class LevelOne extends BasicGameState {
 		// TODO Auto-generated method stub
 		return 3;
 	}
+	
+	public void settingRedArea() {
+    	for(int i = currentTurn.getX()-2; i < currentTurn.getX()+3;i++) {
+    		for(int j = currentTurn.getY()-2;j<currentTurn.getY()+3;j++) {
+    			if(i > -1 && j > -1 && i < 10 && j < 10) {
+    				if(grid[i][j].isOccupied()) {
+        				redArea[i][j] = true;
+    				} else {
+    					if(!grid[i][j].getBlocked()) {
+    						redArea[i][j] = true;
+    					}
+    				}
+    			}
+    		}
+    	}
+	}
+	private void clearRedArea() {
+		for(int i = 0; i < 10; i++) {
+			for(int j = 0; j < 10; j++) {
+				redArea[i][j] = false;
+			}
+		}
+	}
+	
 }
-//asd
