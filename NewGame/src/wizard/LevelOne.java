@@ -70,6 +70,7 @@ public class LevelOne extends BasicGameState {
 	private static Image map;
 	private static Image itemScreen;
 	private static Image shownImage;
+	private static Image cube;
 	private static boolean canMove = false;
 	private static boolean chooseOption = true;
 	private static boolean doneHealing = false;
@@ -81,17 +82,16 @@ public class LevelOne extends BasicGameState {
 	private static int damageskill;
 	private static int healskill;
 	private static int skillmanaused;
-	private static boolean keyDown;
 	
 	private static int targetplaceX;
 	private static int targetplaceY;
 	
 	private static Tile[][] grid = new Tile[10][10];
+	private static boolean[][] redArea = new boolean[10][10];
 	
 	private static Image[] shownOptions = new Image[5];
 	private static Image[] menuOptions = new Image[5];
 	private static Image[] menuOptions2 = new Image[5];
-	
 	private static Image[] skillOptions = new Image[5];
 	private static Image[] skillOptions2 = new Image[5];
 	
@@ -104,7 +104,6 @@ public class LevelOne extends BasicGameState {
 	TrueTypeFont currentMoves;
 	TrueTypeFont smallPotion;
 	private String skillname;
-
 
 	public static int OptionPos = 0;
 	public static int SkillPos = 0;
@@ -553,6 +552,7 @@ public class LevelOne extends BasicGameState {
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 		populateGrid();
+		clearRedArea();
     	for(int i = 0; i < 10; i++) {
     		grid[i][0].setBlocked();
     	}
@@ -573,19 +573,18 @@ public class LevelOne extends BasicGameState {
     	}
     
     	
-    	enemy1 = new Characters("Enemy", 60, 5, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 0, 1, 2, false,"fireball", "heal", "thunder", "finalspark");
+    	enemy1 = new Characters("Enemy", 60, 5, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 0, 1, 2, false,"fireball", "heal", "thunder", "finalspark");
     	grid[1][2].placeCharacter(enemy1);
     	grid[1][2].setBlocked();
-    	main = new Characters("Joe", 60, 6, 10, 10, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,1,1, false,"fireball", "explosion", "thunder", "finalspark");
+    	main = new Characters("Joe", 60, 6, 100, 100, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,1,1, false,"fireball", "explosion", "thunder", "finalspark");
     	turns.add(main);
     	grid[1][1].placeCharacter(main);
     	grid[1][1].setBlocked();
-    	test1 = new Characters("Ally", 60, 6, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, true, false,1,4,4,false, "waterblast", "heal", "thunder", "finalspark");
+    	test1 = new Characters("Ally", 60, 6, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, true, false,1,4,4,false, "waterblast", "heal", "thunder", "finalspark");
     	turns.add(enemy1);
     	turns.add(test1);
     	grid[4][4].placeCharacter(test1);
     	grid[4][4].setBlocked();
-    	keyDown = false;
     	currentTurn = turns.get(turnLoc);
     	
     	//grassMap = new TiledMap("resources/map1.tmx");
@@ -761,6 +760,16 @@ public class LevelOne extends BasicGameState {
     	if (isHealskill) {
     		healSkillani.draw(targetplaceX*64,targetplaceY*64);
     	}
+    	if(skillmodeheal || skillmodedamage) {
+    		for(int i = 0; i < 10; i++) {
+    			for(int j = 0; j < 10; j++) {
+    				if(redArea[i][j]) {
+    					cube = new Image("resources/redcube.png");
+    					cube.draw(i*64,j*64);
+    				}
+    			}
+    		}
+    	}
 	}
 
 	@Override
@@ -917,6 +926,7 @@ public class LevelOne extends BasicGameState {
             }
    	 }
    	 else if (cursormode == true && skillmodedamage == true) {
+   		 settingRedArea();
    		 if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
                 // The lower the delta the slowest the sprite will animate.
                 cursor.setY(cursor.getY()-1);
@@ -935,33 +945,32 @@ public class LevelOne extends BasicGameState {
                 cursorHelper(delta);
             }
             if (input.isKeyDown(Input.KEY_ENTER) && checkTargettable() && grid[cursor.getX()][cursor.getY()].getCharacter().isAlly() == false) {
-             targetplaceX = cursor.getX(); 
-             targetplaceY = cursor.getY();
-             if (skillname.equals("fireball")) {
-            	 FireballMethod();
-             }
-             if (skillname.equals("thunder")) {
-            	 ThunderMethod();
-             }
-             if (skillname.equals("explosion")){
-            	 ExplosionMethod();
-             }
-             if (skillname.equals("waterblast")) {
-            	 WaterblastMethod();
-             }
-             if (skillname.equals("finalspark")) {
-            	 FinalsparkMethod();
-             }
-           	 cursormode = false;
-           	 skillmodedamage = false;
-           	 updateMenu();
-           	 updateButtons();
+            	targetplaceX = cursor.getX(); 
+            	targetplaceY = cursor.getY();
+            	if (skillname.equals("fireball")) {
+            		FireballMethod();
+            	}
+            	if (skillname.equals("thunder")) {
+            		ThunderMethod();
+            	}
+            	if (skillname.equals("explosion")){
+            		ExplosionMethod();
+            	}
+            	if (skillname.equals("waterblast")) {
+            		WaterblastMethod();
+            	}
+            	if (skillname.equals("finalspark")) {
+            		FinalsparkMethod();
+            	}
+            	cursormode = false;
+            	skillmodedamage = false;
+            	updateMenu();
+            	updateButtons();
          
-          
-           	 cursor.setX(20);
-   			 cursor.setY(20);
-           	 MyTimerTask timer = new MyTimerTask();
-                timer.completeTask(0);
+            	cursor.setX(20);
+            	cursor.setY(20);
+            	MyTimerTask timer = new MyTimerTask();
+            	timer.completeTask(0);
             }
             if (input.isKeyDown(Input.KEY_ESCAPE)) {
             	cursormode = false;
@@ -970,8 +979,10 @@ public class LevelOne extends BasicGameState {
            	 	cursor.setX(20);
            	 	cursor.setY(20);
             }
+            clearRedArea();
    	 }
    	 else if (cursormode == true && skillmodeheal == true) {
+   		 settingRedArea();
    		 if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
                 // The lower the delta the slowest the sprite will animate.
                 cursor.setY(cursor.getY()-1);
@@ -1013,6 +1024,7 @@ public class LevelOne extends BasicGameState {
            	 cursor.setX(20);
            	 cursor.setY(20);
             }
+            clearRedArea();
    	 }
    	 else if(pickingItem) {
    		 if (input.isKeyDown(Input.KEY_W)) { 
@@ -1065,4 +1077,22 @@ public class LevelOne extends BasicGameState {
 		// TODO Auto-generated method stub
 		return 3;
 	}
+	
+	public void settingRedArea() {
+    	for(int i = currentTurn.getX()-2; i < currentTurn.getX()+3;i++) {
+    		for(int j = currentTurn.getY()-2;i<currentTurn.getY()+3;j++) {
+    			if(i >= 0 && j >= 0 && i < 10 && j < 10) {
+    				redArea[i][j] = true;
+    			}
+    		}
+    	}
+	}
+	private void clearRedArea() {
+		for(int i = 0; i < 10; i++) {
+			for(int j = 0; j < 10; j++) {
+				redArea[i][j] = false;
+			}
+		}
+	}
+	
 }
