@@ -1,5 +1,6 @@
 package wizard;
 
+import java.awt.Font;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
@@ -8,6 +9,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -36,6 +38,8 @@ public class SelectionScreen extends BasicGameState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		// TODO Auto-generated method stub
 		g.setColor(Color.white);
+        TrueTypeFont words = new TrueTypeFont(new Font("Verdana", Font.BOLD, 8),true);
+        words.drawString(70.0f,100.0f, "LLLLLL", Color.white);
 		for(int i = 0; i < levels.length; i++) {
 			g.drawString("Level " + (i+1), 50, 50 + (25 * i));
 			if(i+1 > highestLevelUnlocked) {
@@ -54,7 +58,7 @@ public class SelectionScreen extends BasicGameState {
 			sbg.enterState(3);
 			intros.stopSound(); 
   		}
-		if(input.isKeyDown(Input.KEY_W) && canMove && levelSelected > 1) {
+		if(input.isKeyDown(Input.KEY_W) && canMove && levelSelected > 1 && levelSelected < highestLevelUnlocked) {
 			canMove = false;
 			levelSelected--;
 	    	Thread thread = new Thread(){
@@ -70,7 +74,7 @@ public class SelectionScreen extends BasicGameState {
 	    	};
 	    	thread.start();
 		}
-		if(input.isKeyDown(Input.KEY_S) && canMove && levelSelected < levels.length) {
+		if(input.isKeyDown(Input.KEY_S) && canMove && levelSelected < levels.length && levelSelected < highestLevelUnlocked) {
 			canMove = false;
 			levelSelected++;
 	    	Thread thread = new Thread(){
