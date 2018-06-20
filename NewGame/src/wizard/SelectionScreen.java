@@ -20,7 +20,6 @@ public class SelectionScreen extends BasicGameState {
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 		for(Item i: Inventory.getInventory()) {
 			items.add(i);
-			System.out.println(i.getAmt());
 		}
 	}
 
