@@ -445,7 +445,7 @@ public class LevelOne extends BasicGameState {
 		shownOptions[OptionPos] = menuOptions2[OptionPos];
 	}
 	public void useSkill(String name) {
-		if (name.equals("explosion")) {
+		if (name.equals("explosion") && currentTurn.getMana() >= 40) {
 			damageskill = 30;
 			skillmodedamage = true;
 			cursormode = true;
@@ -454,7 +454,7 @@ public class LevelOne extends BasicGameState {
 			cursor.setX(currentTurn.getX());
 			cursor.setY(currentTurn.getY());
 		}
-		if(name.equals("finalspark")) {
+		if(name.equals("finalspark") && currentTurn.getMana() >=  70) {
 			damageskill = 50;
 			skillmodedamage = true;
 			cursormode = true;
@@ -465,7 +465,7 @@ public class LevelOne extends BasicGameState {
 			MyTimerTask timer = new MyTimerTask();
 	        timer.completeTask(0);
 		}
-		if(name.equals("fireball")) {
+		if(name.equals("fireball") && currentTurn.getMana() >= 30) {
 			damageskill = 20;
 			skillmodedamage = true;
 			cursormode = true;
@@ -476,7 +476,7 @@ public class LevelOne extends BasicGameState {
 			MyTimerTask timer = new MyTimerTask();
 	        timer.completeTask(0);
 		}
-		if(name.equals("heal")) {
+		if(name.equals("heal") && currentTurn.getMana() >= 50) {
 			healskill = 30;
 			skillmodeheal = true;
 			cursormode = true;
@@ -487,7 +487,7 @@ public class LevelOne extends BasicGameState {
 			MyTimerTask timer = new MyTimerTask();
 	        timer.completeTask(0);
 		}
-		if(name.equals("thunder")) {
+		if(name.equals("thunder") && currentTurn.getMana() >= 15) {
 			damageskill = 10;
 			skillmodedamage = true;
 			cursormode = true;
@@ -498,7 +498,7 @@ public class LevelOne extends BasicGameState {
 			MyTimerTask timer = new MyTimerTask();
 	        timer.completeTask(0);
 		}
-		if(name.equals("waterblast")) {
+		if(name.equals("waterblast") && currentTurn.getMana() >= 35 ) {
 			damageskill = 25;
 			skillmodedamage = true;
 			cursormode = true;
@@ -575,7 +575,6 @@ public class LevelOne extends BasicGameState {
     	grid[1][2].placeCharacter(enemy1);
     	grid[1][2].setBlocked();
     	main = new Characters("Joe", 60, 6, 10, 10, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,1,1, false,"fireball", "explosion", "thunder", "finalspark");
-    	main = new Characters("Joe", 10, 6, 10, 10, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,1,1, false,"waterblast", "explosion", "thunder", "finalspark");
     	turns.add(main);
     	grid[1][1].placeCharacter(main);
     	grid[1][1].setBlocked();
@@ -710,9 +709,9 @@ public class LevelOne extends BasicGameState {
     		}
     	}
     	for (int l = 0; l<turns.size(); l++) {
+    		g.setColor(Color.blue);
+    		g.drawRect(turns.get(l).getX() * 64 + 10, turns.get(l).getY() * 64, 44, 2);
     		if(specificPercMana(turns.get(l)) > 0) {
-    			g.setColor(Color.blue);
-    			g.drawRect(turns.get(l).getX() * 64 + 10, turns.get(l).getY() * 64, 44, 2);
     			g.fillRect(turns.get(l).getX() * 64 + 10, turns.get(l).getY() * 64, (int)(specificPercMana(turns.get(l))*44), 2);
     		}
     	}
@@ -739,7 +738,7 @@ public class LevelOne extends BasicGameState {
     			healing.draw(currentTurn.getX()*64,currentTurn.getY()*64+10);
     		}
     		if(items.get(ItemPos) instanceof ManaItem) {
-    			manapothealani.draw(currentTurn.getX()*64,currentTurn.getY()*64+10);
+    			manapothealani.draw(currentTurn.getX()*64,currentTurn.getY()*64);
     		}
     	}
     	if (isFireball) {
