@@ -571,6 +571,8 @@ public class LevelOne extends BasicGameState {
     			grid[j][i].setBlocked();
     		}
     	}
+    
+    	
     	enemy1 = new Characters("Enemy", 60, 5, 10, 10, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 0, 1, 2, false,"fireball", "heal", "thunder", "finalspark");
     	grid[1][2].placeCharacter(enemy1);
     	grid[1][2].setBlocked();
