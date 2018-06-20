@@ -3,6 +3,7 @@ package wizard;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
@@ -16,29 +17,32 @@ public class MainMenu extends BasicGameState {
 	private Color color1 = new Color(184,219,252);
 	private Color color2 = new Color(249,246,250);
 	private int optionPos = 0;
+	private Image background;
 	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
-		
+		background = new Image("resources/Oof The Game.png");
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		// TODO Auto-generated method stub
+		background.draw(0,0);
 		if(selectingOption) {
 			g.setColor(Color.white);
-			g.drawRect(99, 99, 101, 61);
+			//99,99,101,61
+			g.drawRect(269, 479, 101, 61);
 			g.setColor(color1);
-			g.fillRect(100, 100, 100, 60);
+			g.fillRect(270, 480, 100, 60);
 			g.setColor(color2);
-			g.fillRect(105, 102+(optionPos*20), 90, 18);
+			g.fillRect(275, 482+(optionPos*20), 90, 18);
 			g.setColor(Color.black);
-			g.drawString("New Game",106,104);
-			g.drawString("Load Game",106,124);
-			g.drawString("Quit",106,144);
+			g.drawString("New Game",276,484);
+			g.drawString("Load Game",276,504);
+			g.drawString("Quit",276,524);
 		} else {
 			g.setColor(Color.white);
-			g.drawString("Press Enter", 50, 50);
+			g.drawString("Press Enter", 280, 480);
 		}
 	}
 
