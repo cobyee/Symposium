@@ -56,7 +56,7 @@ public class MyTimerTask extends TimerTask {
     	}
     	if (n==5) {
     		try {
-    			Thread.sleep(3200);
+    			Thread.sleep(1700);
     		} catch(InterruptedException e) {
     			e.printStackTrace();
     		}
