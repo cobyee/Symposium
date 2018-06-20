@@ -17,6 +17,7 @@ public class MainMenu extends BasicGameState {
 	private Color color1 = new Color(184,219,252);
 	private Color color2 = new Color(249,246,250);
 	private int optionPos = 0;
+	private boolean stringWritten = true;
 	private Image background;
 	
 	@Override
@@ -39,7 +40,7 @@ public class MainMenu extends BasicGameState {
 			g.setColor(Color.black);
 			g.drawString("New Game",276,484);
 			g.drawString("Load Game",276,504);
-			g.drawString("Quit",276,524);
+			g.drawString("Back",276,524);
 		} else {
 			g.setColor(Color.white);
 			g.drawString("Press Enter", 280, 480);
@@ -50,14 +51,20 @@ public class MainMenu extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame sbg, int arg2) throws SlickException {
 		Input input = container.getInput();
 		if(selectingOption) {
-			if (input.isKeyDown(Input.KEY_ENTER)) {
+			if (input.isKeyDown(Input.KEY_ENTER)&& canMove) {
 				if(optionPos == 0) {
 					Application.switchScreen();
 					sbg.enterState(2);
 				}
+				if(optionPos == 2) {
+					selectingOption = false;
+					MyTimerTask timer = new MyTimerTask();
+			        timer.completeTask(4);
+			        optionPos = 0;
+				}
 			}
 			if(input.isKeyDown(Input.KEY_W) && canMove) {
-				if(optionPos >= 0) {
+				if(optionPos >= 1) {
 					canMove = false;
 					optionPos--;
 					MyTimerTask timer = new MyTimerTask();
@@ -65,7 +72,7 @@ public class MainMenu extends BasicGameState {
 				}
 			}
 			if(input.isKeyDown(input.KEY_S) && canMove) {
-				if(optionPos <= 2) {
+				if(optionPos <= 1) {
 					canMove = false;
 					optionPos++;
 					MyTimerTask timer = new MyTimerTask();
@@ -73,7 +80,7 @@ public class MainMenu extends BasicGameState {
 				}
 			}
 		} else {
-			if (input.isKeyDown(Input.KEY_ENTER)) {
+			if (input.isKeyDown(Input.KEY_ENTER) && canMove) {
 				selectingOption = true;
 				MyTimerTask timer = new MyTimerTask();
 		        timer.completeTask(4);

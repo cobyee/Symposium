@@ -56,7 +56,7 @@ public class Application extends StateBasedGame {
     	Thread thread = new Thread(){
     		public void run(){
     			try {
-					Thread.sleep(2000);
+					Thread.sleep(300);
 					justSwapped = false;
 				} catch (InterruptedException e) {
 					e.printStackTrace();

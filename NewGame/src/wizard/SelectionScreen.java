@@ -21,6 +21,7 @@ public class SelectionScreen extends BasicGameState {
 		for(Item i: Inventory.getInventory()) {
 			items.add(i);
 		}
+		
 	}
 
 	@Override
@@ -36,6 +37,7 @@ public class SelectionScreen extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame sbg, int arg2) throws SlickException {
 		Input input = container.getInput();
 		if (input.isKeyDown(Input.KEY_ENTER) && !Application.justSwapped()) {
+			Application.switchScreen();
 			sbg.enterState(3);
   		 }
 	}

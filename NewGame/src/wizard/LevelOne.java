@@ -774,319 +774,318 @@ public class LevelOne extends BasicGameState {
 
 	@Override
 	public void update(GameContainer container, StateBasedGame arg1, int delta) throws SlickException {
-		if (currentTurn.isAlly() == false){
-			if(searchingTarget()[0] == -1 && searchingTarget()[1]==-1) {
-				turnLoc++;
-				if(turnLoc > turns.size()-1) {
-	   				 turnLoc = 0;
-	   			 }
-	   			 currentTurn = turns.get(turnLoc);
-			}
-			else {
-				System.out.println(currentTurn.getX() + " bnvz " + currentTurn.getY());
-				System.out.println(searchingTarget()[0] +" czx "+ searchingTarget()[1]);
-				checkClose(searchingTarget());
+		if(!Application.justSwapped()) {
+			if(currentTurn.isAlly() == false){
+				if(searchingTarget()[0] == -1 && searchingTarget()[1]==-1) {
+					turnLoc++;
+					if(turnLoc > turns.size()-1) {
+						turnLoc = 0;
+					}
+	   			 	currentTurn = turns.get(turnLoc);
+				} else {
+					System.out.println(currentTurn.getX() + " bnvz " + currentTurn.getY());
+					System.out.println(searchingTarget()[0] +" czx "+ searchingTarget()[1]);
+					checkClose(searchingTarget());
+				}
+			} else {
+				if(tileAmt > 0) {
+					chooseOption = false;
+				}else {
+					chooseOption = true;
+				}
+				Input input = container.getInput();
+				if(skillmenu) {
+					if (input.isKeyDown(Input.KEY_A) && chooseOption) {
+						SkillLeft();
+						updateSkill();
+						optionHelper();
+					}
+					if (input.isKeyDown(Input.KEY_D) && chooseOption) {
+						SkillRight();
+						updateSkill();
+						optionHelper();
+					}
+					if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 4) {
+						updateMenu();
+						optionHelper();
+						skillmenu = false;
+					}
+					if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 0) {
+						useSkill(currentTurn.getSkill()[0]);
+					}
+					if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 1) {
+						useSkill(currentTurn.getSkill()[1]);
+					}
+					if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 2) {
+						useSkill(currentTurn.getSkill()[2]);
+					}
+					if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 3) {
+						useSkill(currentTurn.getSkill()[3]);
+					}
+				}
+				else if(!cursormode && !pickingItem) {
+					if(input.isKeyDown(Input.KEY_W) && movable(2) && currentTurn.getY() != 0 && tileAmt != 0) { 
+						if(currentTurn == turns.get(0)) {
+							currentTurn.setFace(0);
+							sprite.update(delta);
+						}
+						currentTurn.setY(currentTurn.getY()-1);
+						moveHelper();
+						updateMap();
+					}
+					if(input.isKeyDown(Input.KEY_S) && movable(4) && currentTurn.getY() != 9 && tileAmt != 0) {
+						if(currentTurn == turns.get(0)) {
+							currentTurn.setFace(3);
+							sprite.update(delta);
+						}
+						currentTurn.setY(currentTurn.getY()+1);
+						moveHelper();
+						updateMap();
+					}
+					if (input.isKeyDown(Input.KEY_A)&& movable(3) && currentTurn.getX() != 0 && tileAmt != 0) { 
+						if(currentTurn == turns.get(0)) {
+							currentTurn.setFace(1);
+							sprite.update(delta);
+						}
+						currentTurn.setX(currentTurn.getX()-1);
+						moveHelper();
+						updateMap();
+					}
+					if (input.isKeyDown(Input.KEY_D)&& movable(1) && currentTurn.getX() != 9 && tileAmt != 0) {
+						if(currentTurn == turns.get(0)) {
+							currentTurn.setFace(2);
+							sprite.update(delta);
+						}
+						currentTurn.setX(currentTurn.getX()+1);
+						moveHelper();
+						updateMap();
+					}
+					if (input.isKeyDown(Input.KEY_A) && chooseOption) {
+						OptionLeft();
+						optionHelper();
+					}
+					if (input.isKeyDown(Input.KEY_D) && chooseOption) {
+						OptionRight();
+						optionHelper();
+					}
+					if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 0 && currentTurn.getDidAttack()==false && canAttack()) {
+						AttackSelection(currentTurn);
+						MyTimerTask timer = new MyTimerTask();
+						timer.completeTask(0);
+						currentTurn.setDidAttack(true);
+						updateHealth();
+					}
+					if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 1 && !usedItem) {
+						pickingItem = true;
+						MyTimerTask timer = new MyTimerTask();
+						timer.completeTask(1);
+					}
+					if(input.isKeyDown(Input.KEY_ENTER)&& OptionPos == 2) {
+						SkillPos=0;
+						changeOptionSkills();
+						updateButtons();
+						MyTimerTask timer = new MyTimerTask();
+						timer.completeTask(0);
+					}
+					if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 3 ){
+						tileAmt = currentTurn.getDistance();
+						canMove = true;
+						chooseOption = false;
+						if(tileAmt == 0) {
+							chooseOption = true;
+						}
+						MyTimerTask timer = new MyTimerTask();
+						timer.completeTask(0);
+					}
+					if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 4 && chooseOption) {
+						currentTurn.setDidAttack(false);
+						turnLoc++;
+						if(turnLoc > turns.size()-1) {
+							turnLoc = 0;
+						}
+						currentTurn = turns.get(turnLoc);
+						MyTimerTask timer = new MyTimerTask();
+						timer.completeTask(0);
+						OptionPos = 0;
+						resetButtons();
+						updateButtons();
+						updateHealth();
+						usedItem = false;
+					}
+				}	
+				else if (cursormode == true && skillmodedamage == false && skillmodeheal == false){
+					if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
+						// The lower the delta the slowest the sprite will animate.
+						cursor.setY(cursor.getY()-1);
+						cursorHelper(delta);
+					}
+					if (input.isKeyDown(Input.KEY_S) && cursor.getY() != 9) {
+						cursor.setY(cursor.getY()+1);
+						cursorHelper(delta);
+					}
+					if (input.isKeyDown(Input.KEY_A) && cursor.getX() != 0) { 
+						cursor.setX(cursor.getX()-1);
+						cursorHelper(delta);
+					}
+					if (input.isKeyDown(Input.KEY_D) && cursor.getX() != 9)  {
+						cursor.setX(cursor.getX()+1);
+						cursorHelper(delta);
+					}
+					if(input.isKeyDown(Input.KEY_ENTER) && Attackable(currentTurn)) {
+						Fighting(currentTurn, grid[cursor.getX()][cursor.getY()].getCharacter());
+						MyTimerTask timer = new MyTimerTask();
+						timer.completeTask(0);
+						updateHealth();
+					}
+				}
+				else if (cursormode == true && skillmodedamage == true) {
+					settingRedArea();
+					if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
+						// The lower the delta the slowest the sprite will animate.
+						cursor.setY(cursor.getY()-1);
+						cursorHelper(delta);
+					}
+					if (input.isKeyDown(Input.KEY_S) && cursor.getY() != 9) {
+						cursor.setY(cursor.getY()+1);
+						cursorHelper(delta);
+					}
+					if (input.isKeyDown(Input.KEY_A) && cursor.getX() != 0) { 
+						cursor.setX(cursor.getX()-1);
+						cursorHelper(delta);
+					}
+					if (input.isKeyDown(Input.KEY_D) && cursor.getX() != 9)  {
+						cursor.setX(cursor.getX()+1);
+						cursorHelper(delta);
+					}
+					if (input.isKeyDown(Input.KEY_ENTER) && checkTargettable() && grid[cursor.getX()][cursor.getY()].getCharacter().isAlly() == false) {
+						targetplaceX = cursor.getX(); 
+						targetplaceY = cursor.getY();
+						if (skillname.equals("fireball")) {
+							FireballMethod();
+						}
+						if (skillname.equals("thunder")) {
+							ThunderMethod();
+						}
+						if (skillname.equals("explosion")){
+							ExplosionMethod();
+						}
+						if (skillname.equals("waterblast")) {
+							WaterblastMethod();
+						}
+						if (skillname.equals("finalspark")) {
+							FinalsparkMethod();
+						}
+						cursormode = false;
+						skillmodedamage = false;
+						updateMenu();
+						updateButtons();
+						cursor.setX(20);
+						cursor.setY(20);
+						MyTimerTask timer = new MyTimerTask();
+						timer.completeTask(0);
+						clearRedArea();
+					}
+					if (input.isKeyDown(Input.KEY_ESCAPE)) {
+						cursormode = false;
+						skillmodedamage = false;
+						skillmenu = true;
+						cursor.setX(20);
+						cursor.setY(20);
+					}
+				}
+				else if (cursormode == true && skillmodeheal == true) {
+					settingRedArea();
+					if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
+						// The lower the delta the slowest the sprite will animate.
+						cursor.setY(cursor.getY()-1);
+                	cursorHelper(delta);
+					}
+					if (input.isKeyDown(Input.KEY_S) && cursor.getY() != 9) {
+						cursor.setY(cursor.getY()+1);
+						cursorHelper(delta);
+					}
+					if (input.isKeyDown(Input.KEY_A) && cursor.getX() != 0) { 
+						cursor.setX(cursor.getX()-1);
+						cursorHelper(delta);
+					}
+					if (input.isKeyDown(Input.KEY_D) && cursor.getX() != 9)  {
+						cursor.setX(cursor.getX()+1);
+						cursorHelper(delta);
+					}
+					if (input.isKeyDown(Input.KEY_ENTER) && checkTargettable() && grid[cursor.getX()][cursor.getY()].getCharacter().isAlly() == true) {
+						targetplaceX = cursor.getX(); 
+						targetplaceY = cursor.getY();
+						if (skillname.equals("heal")) {
+							healSkillMethod();
+						}
+						cursormode = false;
+						skillmodeheal = false;
+						updateMenu();
+						updateButtons();
+						updateHealth();
+						cursor.setX(20);
+						cursor.setY(20);
+						MyTimerTask timer = new MyTimerTask();
+						timer.completeTask(0);
+						clearRedArea();
+						updateMap();
+					}
+					if (input.isKeyDown(Input.KEY_ESCAPE)) {
+						cursormode = false;
+						skillmodeheal = false;
+						skillmenu = true;
+						cursor.setX(20);
+						cursor.setY(20);
+					}
+				}
+				else if(pickingItem) {
+					if (input.isKeyDown(Input.KEY_W)) { 
+						if(ItemPos > 0) {
+							MyTimerTask timer = new MyTimerTask();
+							timer.completeTask(2);
+							ItemPos --;
+						}
+					}
+					if (input.isKeyDown(Input.KEY_S)) {
+						if(ItemPos < items.size()-1) {
+							MyTimerTask timer = new MyTimerTask();
+							timer.completeTask(2);
+							ItemPos ++;
+						}
+					}
+					if(input.isKeyDown(Input.KEY_ESCAPE)) {
+						pickingItem = false;
+					}
+					if(input.isKeyDown(Input.KEY_ENTER) && items.get(ItemPos).getAmt() != 0) {
+						if(items.get(ItemPos) instanceof HpItem) {
+							currentTurn.setHp(currentTurn.getHp() + ((HpItem) items.get(ItemPos)).getRestoration());
+							if(currentTurn.getMaxHp() < currentTurn.getHp()) {
+								currentTurn.setHp(currentTurn.getMaxHp());
+							}
+							items.get(ItemPos).setAmt(items.get(ItemPos).getAmt()-1);
+							MyTimerTask timer = new MyTimerTask();
+							timer.completeTask(2);
+							pickingItem = false;
+							healingMethod();
+						}
+						if(items.get(ItemPos) instanceof ManaItem) {
+							currentTurn.setMana(currentTurn.getMana() + ((ManaItem) items.get(ItemPos)).getRestoration());
+							if(currentTurn.getMaxMana() < currentTurn.getMana()) {
+								currentTurn.setMana(currentTurn.getMaxMana());
+							}
+							items.get(ItemPos).setAmt(items.get(ItemPos).getAmt()-1);
+							MyTimerTask timer = new MyTimerTask();
+							timer.completeTask(2);
+							pickingItem = false;
+							healingMethod();
+						}
+						usedItem = true;
+					}
+				}
 			}
 		}
-		else {
-		if(tileAmt > 0) {
-   		chooseOption = false;
-   	 }else {
-   		 chooseOption = true;
-   	 }
-   	 Input input = container.getInput();
-   	 if(skillmenu) {
-   		 if (input.isKeyDown(Input.KEY_A) && chooseOption) {
-   			 SkillLeft();
-   			 updateSkill();
-   			 optionHelper();
-   		 }
-   		 if (input.isKeyDown(Input.KEY_D) && chooseOption) {
-   			 SkillRight();
-   			 updateSkill();
-   			 optionHelper();
-   		 }
-   		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 4) {
-   			 updateMenu();
-   			 optionHelper();
-   			 skillmenu = false;
-   		 }
-   		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 0) {
-   			 useSkill(currentTurn.getSkill()[0]);
-   		 }
-   		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 1) {
-   			 useSkill(currentTurn.getSkill()[1]);
-   		 }
-   		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 2) {
-   			 useSkill(currentTurn.getSkill()[2]);
-   		 }
-   		 if (input.isKeyDown(Input.KEY_ENTER) && SkillPos == 3) {
-   			 useSkill(currentTurn.getSkill()[3]);
-   		 }
-   	 }
-   	 else if(!cursormode && !pickingItem) {
-   		 if(input.isKeyDown(Input.KEY_W) && movable(2) && currentTurn.getY() != 0 && tileAmt != 0) { 
-   			 if(currentTurn == turns.get(0)) {
-   				 currentTurn.setFace(0);
-   				 sprite.update(delta);
-   			 }
-   			 // The lower the delta the slowest the sprite will animate.
-   			 currentTurn.setY(currentTurn.getY()-1);
-   			 moveHelper();
-   			 updateMap();
-   		 }
-   		 if(input.isKeyDown(Input.KEY_S) && movable(4) && currentTurn.getY() != 9 && tileAmt != 0) {
-   			 if(currentTurn == turns.get(0)) {
-   				 currentTurn.setFace(3);
-   				 sprite.update(delta);
-   			 }
-   			 currentTurn.setY(currentTurn.getY()+1);
-   			 moveHelper();
-   			 updateMap();
-   		 }
-   		 if (input.isKeyDown(Input.KEY_A)&& movable(3) && currentTurn.getX() != 0 && tileAmt != 0) { 
-   			 if(currentTurn == turns.get(0)) {
-   				 currentTurn.setFace(1);
-   				 sprite.update(delta);
-   			 }
-   			 currentTurn.setX(currentTurn.getX()-1);
-            	moveHelper();
-            	updateMap();
-   	 		}
-   	 		if (input.isKeyDown(Input.KEY_D)&& movable(1) && currentTurn.getX() != 9 && tileAmt != 0) {
-   	 			if(currentTurn == turns.get(0)) {
-   	 				currentTurn.setFace(2);
-   	 				sprite.update(delta);
-   	 			}
-   	 			currentTurn.setX(currentTurn.getX()+1);
-   	 			moveHelper();
-   	 			updateMap();
-   	 		}
-   	 		if (input.isKeyDown(Input.KEY_A) && chooseOption) {
-   	 			OptionLeft();
-   	 			optionHelper();
-   	 		}
-   	 		if (input.isKeyDown(Input.KEY_D) && chooseOption) {
-   	 			OptionRight();
-   	 			optionHelper();
-   	 		}
-   	 		if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 0 && currentTurn.getDidAttack()==false && canAttack()) {
-   	 			AttackSelection(currentTurn);
-   	 			MyTimerTask timer = new MyTimerTask();
-   	 			timer.completeTask(0);
-   	 			currentTurn.setDidAttack(true);
-   	 			updateHealth();
-   	 		}
-   	 		if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 1 && !usedItem) {
-   	 			pickingItem = true;
-   	 			MyTimerTask timer = new MyTimerTask();
-   	 			timer.completeTask(1);
-   	 		}
-   	 		if(input.isKeyDown(Input.KEY_ENTER)&& OptionPos == 2) {
-   	 			SkillPos=0;
-   	 			changeOptionSkills();
-   	 			updateButtons();
-   	 			MyTimerTask timer = new MyTimerTask();
-   	 			timer.completeTask(0);
-   	 		}
-   	 		if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 3 ){
-   	 			tileAmt = currentTurn.getDistance();
-   	 			canMove = true;
-   	 			chooseOption = false;
-   	 			if(tileAmt == 0) {
-   	 				chooseOption = true;
-   	 			}
-   	 			MyTimerTask timer = new MyTimerTask();
-   	 			timer.completeTask(0);
-   	 		}
-   	 		if(input.isKeyDown(Input.KEY_ENTER) && OptionPos == 4 && chooseOption) {
-   	 			currentTurn.setDidAttack(false);
-   	 			turnLoc++;
-   	 			if(turnLoc > turns.size()-1) {
-   	 				turnLoc = 0;
-   	 			}
-   	 			currentTurn = turns.get(turnLoc);
-   	 			MyTimerTask timer = new MyTimerTask();
-   	 			timer.completeTask(0);
-   	 			OptionPos = 0;
-   	 			resetButtons();
-   	 			updateButtons();
-   	 			updateHealth();
-   	 			usedItem = false;
-   	 		}
-   	 	}	
-   	 	else if (cursormode == true && skillmodedamage == false && skillmodeheal == false){
-   	 		if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
-   	 			// The lower the delta the slowest the sprite will animate.
-   	 			cursor.setY(cursor.getY()-1);
-                cursorHelper(delta);
-            }
-            if (input.isKeyDown(Input.KEY_S) && cursor.getY() != 9) {
-                cursor.setY(cursor.getY()+1);
-                cursorHelper(delta);
-            }
-            if (input.isKeyDown(Input.KEY_A) && cursor.getX() != 0) { 
-                cursor.setX(cursor.getX()-1);
-                cursorHelper(delta);
-            }
-            if (input.isKeyDown(Input.KEY_D) && cursor.getX() != 9)  {
-                cursor.setX(cursor.getX()+1);
-                cursorHelper(delta);
-            }
-            if(input.isKeyDown(Input.KEY_ENTER) && Attackable(currentTurn)) {
-           	 Fighting(currentTurn, grid[cursor.getX()][cursor.getY()].getCharacter());
-           	 MyTimerTask timer = new MyTimerTask();
-                timer.completeTask(0);
-                updateHealth();
-            }
-   	 	}
-   	 	else if (cursormode == true && skillmodedamage == true) {
-   	 		settingRedArea();
-   	 		if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
-   	 			// The lower the delta the slowest the sprite will animate.
-   	 			cursor.setY(cursor.getY()-1);
-                cursorHelper(delta);
-            }
-            if (input.isKeyDown(Input.KEY_S) && cursor.getY() != 9) {
-                cursor.setY(cursor.getY()+1);
-                cursorHelper(delta);
-            }
-            if (input.isKeyDown(Input.KEY_A) && cursor.getX() != 0) { 
-                cursor.setX(cursor.getX()-1);
-                cursorHelper(delta);
-            }
-            if (input.isKeyDown(Input.KEY_D) && cursor.getX() != 9)  {
-                cursor.setX(cursor.getX()+1);
-                cursorHelper(delta);
-            }
-            if (input.isKeyDown(Input.KEY_ENTER) && checkTargettable() && grid[cursor.getX()][cursor.getY()].getCharacter().isAlly() == false) {
-            	targetplaceX = cursor.getX(); 
-            	targetplaceY = cursor.getY();
-            	if (skillname.equals("fireball")) {
-            		FireballMethod();
-            	}
-            	if (skillname.equals("thunder")) {
-            		ThunderMethod();
-            	}
-            	if (skillname.equals("explosion")){
-            		ExplosionMethod();
-            	}
-            	if (skillname.equals("waterblast")) {
-            		WaterblastMethod();
-            	}
-            	if (skillname.equals("finalspark")) {
-            		FinalsparkMethod();
-            	}
-            	cursormode = false;
-            	skillmodedamage = false;
-            	updateMenu();
-            	updateButtons();
-         
-            	cursor.setX(20);
-            	cursor.setY(20);
-            	MyTimerTask timer = new MyTimerTask();
-            	timer.completeTask(0);
-                clearRedArea();
-            }
-            if (input.isKeyDown(Input.KEY_ESCAPE)) {
-            	cursormode = false;
-            	skillmodedamage = false;
-           	 	skillmenu = true;
-           	 	cursor.setX(20);
-           	 	cursor.setY(20);
-            }
-   	 }
-   	 else if (cursormode == true && skillmodeheal == true) {
-   		 settingRedArea();
-   		 if (input.isKeyDown(Input.KEY_W) && cursor.getY() != 0) {
-                // The lower the delta the slowest the sprite will animate.
-                cursor.setY(cursor.getY()-1);
-                cursorHelper(delta);
-            }
-            if (input.isKeyDown(Input.KEY_S) && cursor.getY() != 9) {
-                cursor.setY(cursor.getY()+1);
-                cursorHelper(delta);
-            }
-            if (input.isKeyDown(Input.KEY_A) && cursor.getX() != 0) { 
-                cursor.setX(cursor.getX()-1);
-                cursorHelper(delta);
-            }
-            if (input.isKeyDown(Input.KEY_D) && cursor.getX() != 9)  {
-                cursor.setX(cursor.getX()+1);
-                cursorHelper(delta);
-            }
-            if (input.isKeyDown(Input.KEY_ENTER) && checkTargettable() && grid[cursor.getX()][cursor.getY()].getCharacter().isAlly() == true) {
-            	targetplaceX = cursor.getX(); 
-                targetplaceY = cursor.getY();
-            	if (skillname.equals("heal")) {
-            		healSkillMethod();
-                }
-            	cursormode = false;
-           	 	skillmodeheal = false;
-           	 	updateMenu();
-           	 	updateButtons();
-           	 	updateHealth();
-           	 	cursor.setX(20);
-           	 	cursor.setY(20);
-           	 	MyTimerTask timer = new MyTimerTask();
-                timer.completeTask(0);
-                clearRedArea();
-                updateMap();
-            }
-            if (input.isKeyDown(Input.KEY_ESCAPE)) {
-            	cursormode = false;
-            	skillmodeheal = false;
-            	skillmenu = true;
-            	cursor.setX(20);
-            	cursor.setY(20);
-            }
-   	 }
-   	 else if(pickingItem) {
-   		 if (input.isKeyDown(Input.KEY_W)) { 
-   			 if(ItemPos > 0) {
-               	 MyTimerTask timer = new MyTimerTask();
-                    timer.completeTask(2);
-   				 ItemPos --;
-   			 }
-            }
-            if (input.isKeyDown(Input.KEY_S)) {
-           	 if(ItemPos < items.size()-1) {
-               	 MyTimerTask timer = new MyTimerTask();
-                    timer.completeTask(2);
-                    ItemPos ++;
-           	 }
-         }
-         if(input.isKeyDown(Input.KEY_ESCAPE)) {
-        	 pickingItem = false;
-         }
-         if(input.isKeyDown(Input.KEY_ENTER) && items.get(ItemPos).getAmt() != 0) {
-        	 if(items.get(ItemPos) instanceof HpItem) {
-           		 currentTurn.setHp(currentTurn.getHp() + ((HpItem) items.get(ItemPos)).getRestoration());
-           		 if(currentTurn.getMaxHp() < currentTurn.getHp()) {
-           			 currentTurn.setHp(currentTurn.getMaxHp());
-           		 }
-           		 items.get(ItemPos).setAmt(items.get(ItemPos).getAmt()-1);
-           		 MyTimerTask timer = new MyTimerTask();
-                 timer.completeTask(2);
-           		 pickingItem = false;
-           		 healingMethod();
-            }
-        	 if(items.get(ItemPos) instanceof ManaItem) {
-           		 currentTurn.setMana(currentTurn.getMana() + ((ManaItem) items.get(ItemPos)).getRestoration());
-           		 if(currentTurn.getMaxMana() < currentTurn.getMana()) {
-           			 currentTurn.setMana(currentTurn.getMaxMana());
-           		 }
-           		 items.get(ItemPos).setAmt(items.get(ItemPos).getAmt()-1);
-           		 MyTimerTask timer = new MyTimerTask();
-                 timer.completeTask(2);
-           		 pickingItem = false;
-           		 healingMethod();
-        	 }
-        	 usedItem = true;
-         }
-   	 }
-   	 }
 	}
+	
 	public int[] searchingTarget() {
 		int[] hahaxd =	new int[2];
 		hahaxd[0] = -1;
