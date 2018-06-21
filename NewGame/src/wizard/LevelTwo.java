@@ -40,7 +40,7 @@ public class LevelTwo extends BasicGameState {
 	
 	private ArrayList<Item> items = SelectionScreen.getInventory();
 	
-	private static Characters side;
+	private static Characters side, enemy2,enemy3;
 	private static ArrayList<Characters> turns = new ArrayList<Characters>();
 	private int turnLoc = 0;
 	private Characters currentTurn;
@@ -79,6 +79,8 @@ public class LevelTwo extends BasicGameState {
 	private static boolean canMove = false;
 	private static boolean chooseOption = true;
 	private static boolean doneHealing = false;
+	private static boolean usedSkill = false;
+	private static boolean moved = false;
 	private static Characters enemy1;
 	private static boolean cursormode;
 	private static boolean skillmenu;
@@ -137,6 +139,7 @@ public class LevelTwo extends BasicGameState {
     
     private void healingMethod() {
     	isHealing = true;
+    	usedSkill = true;
     	try {
  	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resources/pot1.wav"));
  	        clip = AudioSystem.getClip();
@@ -158,6 +161,7 @@ public class LevelTwo extends BasicGameState {
 	}
     private void FireballMethod() {
     	isFireball = true;
+    	usedSkill = true;
     	try {
  	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resources/explosions.wav"));
  	        clip = AudioSystem.getClip();
@@ -182,6 +186,7 @@ public class LevelTwo extends BasicGameState {
     }
     private void ThunderMethod() {
     	isThunder = true;
+    	usedSkill = true;
     	try {
  	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resources/thunders.wav"));
  	        clip = AudioSystem.getClip();
@@ -206,6 +211,7 @@ public class LevelTwo extends BasicGameState {
     }
     private void WindMethod() {
     	isWind = true;
+    	usedSkill = true;
     	try {
  	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resources/winds.wav"));
  	        clip = AudioSystem.getClip();
@@ -230,6 +236,7 @@ public class LevelTwo extends BasicGameState {
     }
     private void WaterblastMethod() {
     	isWaterblast = true;
+    	usedSkill = true;
     	try {
  	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resources/waterblasts.wav"));
  	        clip = AudioSystem.getClip();
@@ -254,6 +261,7 @@ public class LevelTwo extends BasicGameState {
     }
     private void ExplosionMethod() {
     	isExplosion = true;
+    	usedSkill = true;
     	try {
  	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resources/explosions.wav"));
  	        clip = AudioSystem.getClip();
@@ -280,6 +288,7 @@ public class LevelTwo extends BasicGameState {
     }
     private void healSkillMethod() {
     	isHealskill = true;
+    	usedSkill = true;
     	Thread thread = new Thread(){
 		    public void run(){
 		    	 MyTimerTask timer = new MyTimerTask();
@@ -605,17 +614,29 @@ public class LevelTwo extends BasicGameState {
 	}
 	public void updateMap() {
 		populateGrid();
-    	for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < 10; i++) {
     		grid[i][0].setBlocked();
     	}
-    		for(int j = 0; j < 8; j++) {
-    			grid[j][9].setBlocked();
-    		}
-    	for(int i = 5; i < 10; i++) {
-    		for(int j = 0; j < 2; j++) {
-    			grid[j][i].setBlocked();
-    		}
+		for(int i = 1; i < 8; i++) {
+    		grid[9][i].setBlocked();
     	}
+		for(int i = 1; i < 6; i++) {
+			for(int j = 2; j < 10; j++) {
+				grid[i][j].setBlocked();
+			}
+		}
+		for(int i = 3; i < 9; i++) {
+			grid[0][i].setBlocked();
+		}
+		for(int i = 3; i < 8; i++) {
+			grid[8][i].setBlocked();
+		}
+		for(int i = 6; i < 8; i++) {
+			grid[7][i].setBlocked();
+		}
+		for(int i = 6; i < 8; i++) {
+			grid[i][9].setBlocked();
+		}
     	for(int i = 0; i<turns.size(); i++) {
     		grid[turns.get(i).getX()][turns.get(i).getY()].setBlocked();
     		grid[turns.get(i).getX()][turns.get(i).getY()].placeCharacter(turns.get(i));
@@ -631,36 +652,24 @@ public class LevelTwo extends BasicGameState {
 		mapsound = new MapTwoSound();
 		populateGrid();
 		clearRedArea();
-		for(int i = 0; i < 10; i++) {
-    		grid[i][0].setBlocked();
-    	}
-    		for(int j = 0; j < 8; j++) {
-    			grid[j][9].setBlocked();
-    		}
-    	for(int i = 3; i < 5; i++) {
-    		for(int j = 0; j < 5; j++) {
-    			grid[j][i].setBlocked();
-    		}
-    	}
-    	for(int i = 5; i < 10; i++) {
-    		for(int j = 0; j < 2; j++) {
-    			grid[j][i].setBlocked();
-    		}
-    	}
-    
-    	
-    	enemy1 = new Characters("Enemy", 60, 5, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 2, 1, 2, false,"fireball", "heal", "thunder", "wind");
-    	grid[1][2].placeCharacter(enemy1);
-    	grid[1][2].setBlocked();
-    	main = new Characters("Joe", 60, 6, 100, 100, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,0,1, false,"fireball", "explosion", "thunder", "wind");
+    	enemy1 = new Characters("Enemy", 60, 5, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 2, 8, 1, false,"fireball", "heal", "thunder", "wind");
+    	grid[8][1].placeCharacter(enemy1);
+    	grid[8][1].setBlocked();
+    	main = new Characters("Joe", 60, 6, 100, 100, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,3,1,1, false,"fireball", "explosion", "thunder", "wind");
     	turns.add(main);
-    	grid[0][1].placeCharacter(main);
-    	grid[0][1].setBlocked();
-    	side = new Characters("Jessica", 60, 6, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, true, false,1,2,1,false, "waterblast", "heal", "thunder", "wind");
-    	turns.add(enemy1);
+    	grid[1][1].placeCharacter(main);
+    	grid[1][1].setBlocked();
+    	enemy2 = new Characters("Enemy2", 60, 6, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false,2,8,5,false, "waterblast", "heal", "thunder", "wind");
+    	turns.add(enemy2);
     	turns.add(side);
-    	grid[2][1].placeCharacter(side);
-    	grid[2][1].setBlocked();
+    	grid[8][5].placeCharacter(side);
+    	grid[8][5].setBlocked();
+    	enemy3 = new Characters("Enemy3", 60,6,100,100,"resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3,false,false,2,9,9,false,"fireball", "explosion", "thunder", "wind");
+    	turns.add(enemy3);
+    	grid[9][9].placeCharacter(enemy3);
+    	grid[9][9].setBlocked();
+    	side = new Characters("Jessica", 60,6,100,100,"resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3,true,false,2,9,9,false,"fireball", "explosion", "thunder", "wind");
+    	turns.add(side);
     	currentTurn = turns.get(turnLoc);
     	
     	//grassMap = new TiledMap("resources/map1.tmx");
@@ -1108,15 +1117,16 @@ public class LevelTwo extends BasicGameState {
 						MyTimerTask timer = new MyTimerTask();
 						timer.completeTask(1);
 					}
-					if(input.isKeyDown(Input.KEY_ENTER)&& OptionPos == 2) {
+					if(input.isKeyDown(Input.KEY_ENTER)&& OptionPos == 2 && !usedSkill) {
 						SkillPos=0;
 						changeOptionSkills();
 						updateButtons();
 						MyTimerTask timer = new MyTimerTask();
 						timer.completeTask(0);
 					}
-					if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 3 ){
+					if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 3 && !moved){
 						tileAmt = currentTurn.getDistance();
+						moved = true;
 						canMove = true;
 						chooseOption = false;
 						if(tileAmt == 0) {
@@ -1139,6 +1149,8 @@ public class LevelTwo extends BasicGameState {
 						updateButtons();
 						updateHealth();
 						usedItem = false;
+						usedSkill = false;
+						moved = false;
 					}
 				}	
 				else if (cursormode == true && skillmodedamage == false && skillmodeheal == false){
@@ -1330,77 +1342,6 @@ public class LevelTwo extends BasicGameState {
 					}
 				}
 			}
-		/**	if (currentTurn.getX()-i+j >= 0) {
-				if (grid[currentTurn.getX()-i+j][currentTurn.getY()].isOccupied()) {
-					if (grid[currentTurn.getX()-i+j][currentTurn.getY()].getCharacter().isAlly()) {
-						hahaxd[0] = currentTurn.getX()-i+j;
-						hahaxd[1] = currentTurn.getY();
-						return hahaxd;
-					}
-				}
-				if (currentTurn.getY()-i+j >= 0) {
-					if (grid[currentTurn.getX()-i+j][currentTurn.getY()-i+j].isOccupied()) {
-				if (grid[currentTurn.getX()-i+j][currentTurn.getY()-i+j].getCharacter().isAlly()) {
-					hahaxd[0] = currentTurn.getX()-i+j;
-					hahaxd[1] = currentTurn.getY()-i+j;
-					return hahaxd;
-				}
-			}}
-				if (currentTurn.getY()+i-j <10) {
-					if (grid[currentTurn.getX()-i+j][currentTurn.getY()+i-j].isOccupied()) {
-					if (grid[currentTurn.getX()-i+j][currentTurn.getY()+i-j].getCharacter().isAlly()) {
-						hahaxd[0] = currentTurn.getX()-i+j;
-						hahaxd[1] = currentTurn.getY()+i-j;
-						return hahaxd;
-					}
-				}
-				}
-			}
-			if (currentTurn.getX()+i-j < 10) {
-				if (grid[currentTurn.getX()+i-j][currentTurn.getY()].isOccupied()) {
-					if (grid[currentTurn.getX()+i-j][currentTurn.getY()].getCharacter().isAlly()) {
-						hahaxd[0] = currentTurn.getX()+i-j;
-						hahaxd[1] = currentTurn.getY();
-						return hahaxd;
-					}
-				}
-				if (currentTurn.getY()-i+j >= 0) {
-				if (grid[currentTurn.getX()+i-j][currentTurn.getY()-i+j].isOccupied()) {
-				if (grid[currentTurn.getX()+i-j][currentTurn.getY()-i+j].getCharacter().isAlly()){
-					hahaxd[0] = currentTurn.getX()+i-j;
-					hahaxd[1] = currentTurn.getY()-i+j;
-					return hahaxd;
-				}
-				}
-				}
-				if (currentTurn.getY()+i-j < 10) {
-					if (grid[currentTurn.getX()+i-j][currentTurn.getY()+i-j].isOccupied()) {
-					if (grid[currentTurn.getX()+i-j][currentTurn.getY()+i-j].getCharacter().isAlly()) {
-						hahaxd[0] = currentTurn.getX()+i-j;
-						hahaxd[1] = currentTurn.getY()+i-j;
-						return hahaxd;
-					}
-				}
-				}
-			}
-			if (currentTurn.getY()+i-j < 10) {
-				if (grid[currentTurn.getX()][currentTurn.getY()+i-j].isOccupied()) {
-					if (grid[currentTurn.getX()][currentTurn.getY()+i-j].getCharacter().isAlly()) {
-						hahaxd[0] = currentTurn.getX();
-						hahaxd[1] = currentTurn.getY()+i-j;
-						return hahaxd;
-					}
-				}
-			}
-			if (currentTurn.getY()-i+j >=0) {
-				if (grid[currentTurn.getX()][currentTurn.getY()-i+j].isOccupied()) {
-					if (grid[currentTurn.getX()][currentTurn.getY()-i+j].getCharacter().isAlly()) {
-						hahaxd[0] = currentTurn.getX();
-						hahaxd[1] = currentTurn.getY()-i+j;
-						return hahaxd;
-					}
-				}
-		} **/
 		}}
 		System.out.println("no");
 		return hahaxd;

@@ -40,7 +40,7 @@ public class LevelOne extends BasicGameState {
 	
 	private ArrayList<Item> items = SelectionScreen.getInventory();
 	
-	private static Characters test1;
+	private static Characters enemy2;
 	private static ArrayList<Characters> turns = new ArrayList<Characters>();
 	private int turnLoc = 0;
 	private Characters currentTurn;
@@ -55,6 +55,8 @@ public class LevelOne extends BasicGameState {
 	private static boolean isThunder = false;
 	private static boolean usedItem = false;
 	private static boolean isHealskill = false;
+	private static boolean moved = false;
+	private static boolean usedSkill = false;
 	private int tileAmt = 0;
 	private Animation sprite, up, down, left, right, allyTest,Csprite;
 	private Animation healing;
@@ -157,6 +159,7 @@ public class LevelOne extends BasicGameState {
 	  thread.start();
 	}
     private void FireballMethod() {
+    	usedSkill = true;
     	isFireball = true;
     	try {
  	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resources/explosions.wav"));
@@ -181,6 +184,7 @@ public class LevelOne extends BasicGameState {
 	  thread.start();
     }
     private void ThunderMethod() {
+    	usedSkill = true;
     	isThunder = true;
     	try {
  	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resources/thunders.wav"));
@@ -205,6 +209,7 @@ public class LevelOne extends BasicGameState {
 	  thread.start();
     }
     private void WindMethod() {
+    	usedSkill = true;
     	isWind = true;
     	try {
  	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resources/winds.wav"));
@@ -229,6 +234,7 @@ public class LevelOne extends BasicGameState {
 	  thread.start();
     }
     private void WaterblastMethod() {
+    	usedSkill = true;
     	isWaterblast = true;
     	try {
  	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resources/waterblasts.wav"));
@@ -253,6 +259,7 @@ public class LevelOne extends BasicGameState {
 	  thread.start();
     }
     private void ExplosionMethod() {
+    	usedSkill = true;
     	isExplosion = true;
     	try {
  	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resources/explosions.wav"));
@@ -279,6 +286,7 @@ public class LevelOne extends BasicGameState {
 	  thread.start();
     }
     private void healSkillMethod() {
+    	usedSkill = true;
     	isHealskill = true;
     	Thread thread = new Thread(){
 		    public void run(){
@@ -658,18 +666,18 @@ public class LevelOne extends BasicGameState {
     	}
     
     	
-    	enemy1 = new Characters("Enemy", 60, 5, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 2, 1, 2, false,"fireball", "heal", "thunder", "wind");
-    	grid[1][2].placeCharacter(enemy1);
-    	grid[1][2].setBlocked();
+    	enemy1 = new Characters("Enemy", 60, 5, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 2, 8, 1, false,"fireball", "heal", "thunder", "wind");
+    	grid[8][1].placeCharacter(enemy1);
+    	grid[8][1].setBlocked();
     	main = new Characters("Joe", 60, 6, 100, 100, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,1,1, false,"fireball", "explosion", "thunder", "wind");
     	turns.add(main);
     	grid[1][1].placeCharacter(main);
     	grid[1][1].setBlocked();
-    	test1 = new Characters("Ally", 60, 6, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, true, false,1,4,4,false, "waterblast", "heal", "thunder", "wind");
+    	enemy2 = new Characters("Ally", 60, 6, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false,1,5,8,false, "waterblast", "heal", "thunder", "wind");
     	turns.add(enemy1);
-    	turns.add(test1);
-    	grid[4][4].placeCharacter(test1);
-    	grid[4][4].setBlocked();
+    	grid[5][8].placeCharacter(enemy2);
+    	grid[5][8].setBlocked();
+    	turns.add(enemy2);
     	currentTurn = turns.get(turnLoc);
     	
     	//grassMap = new TiledMap("resources/map1.tmx");
@@ -1069,14 +1077,15 @@ public class LevelOne extends BasicGameState {
 						MyTimerTask timer = new MyTimerTask();
 						timer.completeTask(1);
 					}
-					if(input.isKeyDown(Input.KEY_ENTER)&& OptionPos == 2) {
+					if(input.isKeyDown(Input.KEY_ENTER)&& OptionPos == 2 && !usedSkill) {
 						SkillPos=0;
 						changeOptionSkills();
 						updateButtons();
 						MyTimerTask timer = new MyTimerTask();
 						timer.completeTask(0);
 					}
-					if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 3 ){
+					if (input.isKeyDown(Input.KEY_ENTER) && OptionPos == 3 && !moved){
+						moved = true;
 						tileAmt = currentTurn.getDistance();
 						canMove = true;
 						chooseOption = false;
@@ -1100,6 +1109,8 @@ public class LevelOne extends BasicGameState {
 						updateButtons();
 						updateHealth();
 						usedItem = false;
+						usedSkill = false;
+						moved = false;
 					}
 				}	
 				else if (cursormode == true && skillmodedamage == false && skillmodeheal == false){
@@ -1407,6 +1418,7 @@ public class LevelOne extends BasicGameState {
 		}
 	}
 	public void Victory() {
+		SelectionScreen.setGold(SelectionScreen.getGold()+200);
 		dialoguemode = true;
 		dial = 4;
 	}
