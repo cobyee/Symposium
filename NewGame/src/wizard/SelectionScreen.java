@@ -25,7 +25,7 @@ public class SelectionScreen extends BasicGameState {
 	private static String[] levels = {"One","Two","Three"};
 	private static boolean canMove = true;
 	private Image background;
-	private static int highestLevelUnlocked = 2;
+	private static int highestLevelUnlocked = 1;
 	private Image lock;
 	private Image shownImage;
 	

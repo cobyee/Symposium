@@ -47,7 +47,7 @@ public class LevelTwo extends BasicGameState {
 	private static Characters cursor;
 	
 	private Animation a0,a1,a2,a3,a4;
-	private Animation[] anis;
+	private ArrayList<Animation> anis;
 	
 	private static boolean pickingItem = false;
 	private static boolean isHealing = false;
@@ -132,6 +132,8 @@ public class LevelTwo extends BasicGameState {
 	private boolean alrdywon;
 
 	private Animation df;
+
+	private boolean alrdyLost;
 
 	public static int OptionPos = 0;
 	public static int SkillPos = 0;
@@ -567,6 +569,7 @@ public class LevelTwo extends BasicGameState {
 		for (int q = 0; q < turns.size(); q++) {
 			if (turns.get(q).getHp()<=0) {
 				turns.remove(q);
+				anis.remove(q);
 			}
 		}
 	}
@@ -718,13 +721,14 @@ public class LevelTwo extends BasicGameState {
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 		cantPress=false;
-		anis=new Animation[5];
-		anis[0]=a0;
-		anis[1]=a1;
-		anis[2]=a2;
-		anis[3]=a3;
-		anis[4]=a4;
+		anis=new ArrayList<Animation>(5);
+		anis.add(a0);
+		anis.add(a1);
+		anis.add(a2);
+		anis.add(a3);
+		anis.add(a4);
 		
+		alrdyLost = false;
 		alrdywon = false;
 		dial = 1;
 		dialoguemode = true;
@@ -773,7 +777,7 @@ public class LevelTwo extends BasicGameState {
 				asdf = fda;
 			}
 			int[] duration=new int[]{100,100,100};
-			anis[i]= new Animation(asdf,duration,true);
+			anis.set(i,new Animation(asdf,duration,true));
 		}
     	
     	//grassMap = new TiledMap("resources/map1.tmx");
@@ -883,10 +887,10 @@ public class LevelTwo extends BasicGameState {
     		updateHealth();
     		for (int j=0; j<turns.size();j++) {
     			if (j==turnLoc) {
-    			anis[j].draw((turns.get(j).getX()*64)+XMoves, (turns.get(j).getY()*64)+YMoves);
+    			anis.get(j).draw((turns.get(j).getX()*64)+XMoves, (turns.get(j).getY()*64)+YMoves);
     			}
     			else {
-    				anis[j].draw((turns.get(j).getX()*64), (turns.get(j).getY()*64));
+    				anis.get(j).draw((turns.get(j).getX()*64), (turns.get(j).getY()*64));
     			}
     		}
     	} else {
@@ -1038,6 +1042,16 @@ public class LevelTwo extends BasicGameState {
         		dialogueFont.drawString(30.0f, 640.0f,  "Joe : Sure, but you'd better prepare yourself for battles.", Color.white);
         		dialogueFont.drawString(67.0f, 660.0f,  "This place is infested with low lifes.", Color.white);
     		}
+    		if (dial == 20) {
+    			g.drawRect(0, 600, 640, 104);
+        		g.fillRect(0, 600, 640, 104);
+        		dialogueFont.drawString(30.0f, 640.0f,  "Joe : Noooooo!!! My revenge..", Color.white);
+    		}
+    		if (dial == 21) {
+    			g.drawRect(0, 600, 640, 104);
+        		g.fillRect(0, 600, 640, 104);
+        		dialogueFont.drawString(30.0f, 640.0f,  "(Game Over)", Color.white);
+    		}
     	}
 	}
 
@@ -1051,6 +1065,16 @@ public class LevelTwo extends BasicGameState {
 		}
 		if (dialoguemode == true) {
 			Input inputx = container.getInput();
+			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 21) {
+				MyTimerTask timer = new MyTimerTask();
+				timer.completeTask(0);
+				container.exit();
+			}
+			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 20) {
+				MyTimerTask timer = new MyTimerTask();
+				timer.completeTask(0);
+				dial++;
+			}
 			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 12) {
 				MyTimerTask timer = new MyTimerTask();
 				timer.completeTask(0);
@@ -1213,7 +1237,7 @@ public class LevelTwo extends BasicGameState {
 			    				asdf = fda;
 			    			}
 			    			int[] duration=new int[]{100,100,100};
-			    			anis[i]= new Animation(asdf,duration,true);
+			    			anis.set(i, new Animation(asdf,duration,true));
 						}
 						updateMap();
 						
@@ -1251,7 +1275,7 @@ public class LevelTwo extends BasicGameState {
 			    				asdf = fda;
 			    			}
 			    			int[] duration=new int[]{100,100,100};
-			    			anis[i]= new Animation(asdf,duration,true);
+			    			anis.set(i, new Animation(asdf,duration,true));
 						}
 						updateMap();
 					}
@@ -1288,7 +1312,7 @@ public class LevelTwo extends BasicGameState {
 			    				asdf = fda;
 			    			}
 			    			int[] duration=new int[]{100,100,100};
-			    			anis[i]= new Animation(asdf,duration,true);
+			    			anis.set(i, new Animation(asdf,duration,true));
 						}
 						updateMap();
 					}
@@ -1325,7 +1349,7 @@ public class LevelTwo extends BasicGameState {
 			    				asdf = fda;
 			    			}
 			    			int[] duration=new int[]{100,100,100};
-			    			anis[i]= new Animation(asdf,duration,true);
+			    			anis.set(i, new Animation(asdf,duration,true));
 						}
 						updateMap();
 					}
@@ -1696,6 +1720,21 @@ public class LevelTwo extends BasicGameState {
 	public void Victory() {
 		dialoguemode = true;
 		dial = 9;
+	}
+	public void loseCond() {
+		for (int i=0;i<turns.size();i++) {
+			if (turns.get(i).isAlly() == true) {
+				return;
+			}
+		}
+		if (alrdyLost == false) {
+			Lost();
+			alrdyLost = true;
+		}
+	}
+	public void Lost() {
+		dialoguemode = true;
+		dial = 20;
 	}
 	
 }

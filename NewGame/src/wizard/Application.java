@@ -43,6 +43,7 @@ public class Application extends StateBasedGame {
         {
             AppGameContainer app = new AppGameContainer(new Application("Fire Emblem"+VERSION));
             app.setDisplayMode(640, 704, false);
+            app.setShowFPS(false);
             app.start();
         }
         catch (SlickException e)
