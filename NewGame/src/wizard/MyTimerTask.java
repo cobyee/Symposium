@@ -86,7 +86,110 @@ public class MyTimerTask extends TimerTask {
     			e.printStackTrace();
     		}
     	}
-    
+    	if (n==9) {
+    		while(LevelOne.XMoves < 64) {
+				LevelOne.XMoves++;
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+    		LevelOne.XMoves = 0;
+    	}
+    	if (n==10) {
+    		
+    		while(LevelOne.YMoves < 64) {
+    			LevelOne.YMoves++;
+    			try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}
+    		LevelOne.YMoves = 0;
+    	}
+    	if (n==11) {
+    		while(LevelOne.XMoves > -64) {
+    			LevelOne.XMoves--;
+    			try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}
+    		LevelOne.XMoves = 0;
+    	}
+    	if(n==12) {
+    		LevelOne.YMoves = 0;
+    		while(LevelOne.YMoves > -64) {
+    			LevelOne.YMoves--;
+    			try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}
+    		LevelOne.YMoves = 0;
+    	}
+    	if (n==13) {
+    		while(LevelTwo.XMoves < 64) {
+				LevelTwo.XMoves++;
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+    		LevelTwo.XMoves = 0;
+    		
+    	}
+    	if (n==14) {
+    		while(LevelTwo.YMoves < 64) {
+    			LevelTwo.YMoves++;
+    			try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}
+    		LevelTwo.YMoves = 0;
+    		
+    	}
+    	if(n==15) {
+    		while(LevelTwo.XMoves > -64) {
+    			LevelTwo.XMoves--;
+    			try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}
+    		LevelTwo.XMoves = 0;
+    		
+    	}
+    	if(n==16) {
+    		LevelTwo.YMoves = 0;
+    		while(LevelTwo.YMoves > -64) {
+    			LevelTwo.YMoves--;
+    			try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}
+    		LevelTwo.YMoves = 0;
+    	}
     }
     
     public static void main(String args[]){
