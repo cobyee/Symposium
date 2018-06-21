@@ -727,14 +727,14 @@ public class LevelOne extends BasicGameState {
     	}
     
     	
-    	enemy1 = new Characters("Enemy", 60, 5, 100, 100, new String[] {"resources/asdf.png"},new String[] {"resources/asdf.png"}, new String[] {"resources/asdf.png"}, new String[] {"resources/asdf.png"},3, false, false, 2, 8, 1, false,"fireball", "heal", "thunder", "wind");
+    	enemy1 = new Characters("Enemy", 60, 5, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 2, 8, 1, false,"fireball", "heal", "thunder", "wind");
     	grid[8][1].placeCharacter(enemy1);
     	grid[8][1].setBlocked();
-    	main = new Characters("Joe", 60, 6, 100, 100, new String[] {"resources/mainfront1.png","resources/mainfront2.png","resources/mainfront3.png"},new String[] {"resources/mainleft1.png","resources/mainleft2.png","resources/mainleft3.png"}, new String[] {"resources/mainright1.png","resources/mainright2.png","resources/mainright3.png"}, new String[] {"resources/mainback1.png","resources/mainback2.png","resources/mainback3.png"},3, true, false,5,1,1, false,"fireball", "explosion", "thunder", "wind");
+    	main = new Characters("Joe", 60, 6, 100, 100, "resources/mainfront1.png","resources/mainleft1.png", "resources/mainright1.png", "resources/mainback1.png",3, true, false,5,1,1, false,"fireball", "explosion", "thunder", "wind");
     	turns.add(main);
     	grid[1][1].placeCharacter(main);
     	grid[1][1].setBlocked();
-    	enemy2 = new Characters("Ally", 60, 6, 100, 100, new String[] {"resources/asdf.png"},new String[] {"resources/asdf.png"}, new String[] {"resources/asdf.png"}, new String[] {"resources/asdf.png"},3, false, false,1,5,8,false, "waterblast", "heal", "thunder", "wind");
+    	enemy2 = new Characters("Ally", 60, 6, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false,1,5,8,false, "waterblast", "heal", "thunder", "wind");
     	turns.add(enemy1);
     	grid[5][8].placeCharacter(enemy2);
     	grid[5][8].setBlocked();
@@ -745,19 +745,19 @@ public class LevelOne extends BasicGameState {
     	map = new Image("resources/FE Map.png");
     	
     	itemScreen = new Image("resources/scroll.png");
-    	Image [] movementUp = {new Image("resources/spriteUp.png"), new Image("resources/spriteUp.png")};
-    	Image [] movementDown = {new Image("resources/spriteFront.png"), new Image("resources/spriteFront.png")};
-    	Image [] movementLeft = {new Image("resources/spriteLeft.png"), new Image("resources/spriteLeft.png")};
-    	Image [] movementRight = {new Image("resources/spriteRight.png"), new Image("resources/spriteRight.png")};
-    	Image [] cursord = {new Image("resources/cursor.png"), new Image("resources/cursor.png")};
+    	Image [] movementUp = {new Image("resources/mainback1.png"), new Image("resources/mainback2.png"), new Image("resources/mainback3.png")};
+    	Image [] movementDown = {new Image("resources/mainfront1.png"), new Image("resources/mainfront2.png"),new Image("resources/mainfront3.png")};
+    	Image [] movementLeft = {new Image("resources/spriteLeft.png"), new Image("resources/spriteLeft.png"), new Image("resources/spriteLeft.png")};
+    	Image [] movementRight = {new Image("resources/spriteRight.png"), new Image("resources/spriteRight.png"),new Image("resources/spriteRight.png")};
+    	Image [] cursord = {new Image("resources/cursor.png"), new Image("resources/cursor.png"), new Image("resources/cursor.png")};
     	Image [] healingPics = {new Image("resources/heal1.png"),new Image("resources/heal2.png"),new Image("resources/heal3.png"),
     			new Image("resources/heal4.png"),new Image("resources/heal5.png"),new Image("resources/heal6.png"),
     			new Image("resources/heal7.png"),new Image("resources/heal8.png"),new Image("resources/heal9.png"),
     			new Image("resources/heal10.png"),new Image("resources/heal11.png"),new Image("resources/heal12.png"),
     			new Image("resources/heal13.png"),new Image("resources/heal14.png"),new Image("resources/heal15.png"),
     			new Image("resources/heal16.png"),new Image("resources/heal17.png")};
-    	Image [] test = {new Image("resources/asdf.png"), new Image("resources/asdf.png")};
-    	int [] duration = {300,300};
+    	Image [] test = {new Image("resources/asdf.png"), new Image("resources/asdf.png"), new Image("resources/asdf.png")};
+    	int [] duration = {300,300,300};
     	int [] healingDuration = {100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100};
     	
     	Image [] enemyDown = {new Image(enemy1.getPicU()), new Image(enemy1.getPicU())};
@@ -769,10 +769,10 @@ public class LevelOne extends BasicGameState {
     	SpriteSheet hs = new SpriteSheet("resources/healskill.png",64,64);
     	SpriteSheet manas = new SpriteSheet("resources/manapotheal.png",64,64);
     	
-    	eDown = new Animation(enemyDown, duration, false);
+    	//eDown = new Animation(enemyDown, duration, false);
     	
-    	up = new Animation(movementUp, duration, false);
-    	down = new Animation(movementDown, duration, false);
+    	up = new Animation(movementUp, duration, true);
+    	down = new Animation(movementDown, duration, true);
     	left = new Animation(movementLeft, duration, false);
     	right = new Animation(movementRight, duration, false); 
     	allyTest = new Animation(test, duration, false);
@@ -824,6 +824,7 @@ public class LevelOne extends BasicGameState {
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g) throws SlickException {
 		map.draw(0,0);
+		sprite.draw(64,64);
     	button.draw((int)20, (int)640);
     	button2.draw((int)84, (int)640);
     	button3.draw(148, (int)640);
