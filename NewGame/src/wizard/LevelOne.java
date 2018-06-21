@@ -747,14 +747,14 @@ public class LevelOne extends BasicGameState {
     	}
     
     	
-    	enemy1 = new Characters("Enemy", 60, 5, 100, 100, new String[]{"resources/enemyback1.png","resources/enemyback2.png","resources/enemyback3.png"}, new String[]{"resources/enemyleft1.png","resources/enemyleft2.png","resources/enemyleft3.png"},new String[]{"resources/enemyright1.png","resources/enemyright2.png","resources/enemyright3.png"}, new String[]{"resources/enemyfront1.png","resources/enemyfront2.png","resources/enemyfront3.png"},3, false, false, 2, 8, 1, false,"fireball", "heal", "thunder", "wind");
+    	enemy1 = new Characters("Enemy", 50, 5, 100, 100, new String[]{"resources/enemyback1.png","resources/enemyback2.png","resources/enemyback3.png"}, new String[]{"resources/enemyleft1.png","resources/enemyleft2.png","resources/enemyleft3.png"},new String[]{"resources/enemyright1.png","resources/enemyright2.png","resources/enemyright3.png"}, new String[]{"resources/enemyfront1.png","resources/enemyfront2.png","resources/enemyfront3.png"},3, false, false, 2, 8, 1, false,"fireball", "heal", "thunder", "wind");
     	grid[8][1].placeCharacter(enemy1);
     	grid[8][1].setBlocked();
-    	main = new Characters("Joe", 60, 6, 100, 100, new String[] {"resources/mainback1.png","resources/mainback2.png","resources/mainback3.png"},new String[] {"resources/mainleft1.png","resources/mainleft2.png","resources/mainleft3.png"}, new String[] {"resources/mainright1.png","resources/mainright2.png","resources/mainright3.png"}, new String[] {"resources/mainfront1.png","resources/mainfront2.png","resources/mainfront3.png"} ,3, true, false,3,1,1, false,"fireball", "explosion", "thunder", "wind");
+    	main = new Characters("Joe", 60, 8, 100, 100, new String[] {"resources/mainback1.png","resources/mainback2.png","resources/mainback3.png"},new String[] {"resources/mainleft1.png","resources/mainleft2.png","resources/mainleft3.png"}, new String[] {"resources/mainright1.png","resources/mainright2.png","resources/mainright3.png"}, new String[] {"resources/mainfront1.png","resources/mainfront2.png","resources/mainfront3.png"} ,3, true, false,3,1,1, false,"fireball", "explosion", "thunder", "wind");
     	turns.add(main);
     	grid[1][1].placeCharacter(main);
     	grid[1][1].setBlocked();
-    	enemy2 = new Characters("Ally", 60, 6, 100, 100, new String[]{"resources/enemyback1.png","resources/enemyback2.png","resources/enemyback3.png"}, new String[]{"resources/enemyleft1.png","resources/enemyleft2.png","resources/enemyleft3.png"},new String[]{"resources/enemyright1.png","resources/enemyright2.png","resources/enemyright3.png"}, new String[]{"resources/enemyfront1.png","resources/enemyfront2.png","resources/enemyfront3.png"},3, false, false,2,5,8,false, "waterblast", "heal", "thunder", "wind");
+    	enemy2 = new Characters("Enemy2", 50, 6, 100, 100, new String[]{"resources/enemyback1.png","resources/enemyback2.png","resources/enemyback3.png"}, new String[]{"resources/enemyleft1.png","resources/enemyleft2.png","resources/enemyleft3.png"},new String[]{"resources/enemyright1.png","resources/enemyright2.png","resources/enemyright3.png"}, new String[]{"resources/enemyfront1.png","resources/enemyfront2.png","resources/enemyfront3.png"},3, false, false,2,5,8,false, "waterblast", "heal", "thunder", "wind");
     	turns.add(enemy1);
     	grid[5][8].placeCharacter(enemy2);
     	grid[5][8].setBlocked();
@@ -1171,8 +1171,8 @@ public class LevelOne extends BasicGameState {
 						updateMap();
 					}
 					if (input.isKeyDown(Input.KEY_A)&& movable(3) && currentTurn.getX() != 0 && tileAmt != 0) { 
-							currentTurn.setFace(1);
-							sprite.update(delta);
+						currentTurn.setFace(1);
+						sprite.update(delta);
 						currentTurn.setX(currentTurn.getX()-1);
 						moveHelper();
 						for (int i=0;i<turns.size();i++) {
@@ -1477,7 +1477,6 @@ public class LevelOne extends BasicGameState {
 		return hahaxd;
 	}
 	public void checkClose(int[] target) {
-		System.out.println("zxcv");
 		System.out.println(target[0]+ " and " + target[1]);
 		if (target[0] == currentTurn.getX()-1 && target[1] == currentTurn.getY()) {
 			Attackuh(target);
@@ -1524,21 +1523,25 @@ public class LevelOne extends BasicGameState {
 		if (target[0] < currentTurn.getX() && (grid[currentTurn.getX()-1][currentTurn.getY()].getBlocked() == false)) {
 			currentTurn.setX(currentTurn.getX()-1);
 			checkClose(target);
+			currentTurn.setFace(2);
 			return;
 		}
 		if (target[0] > currentTurn.getX() && (grid[currentTurn.getX()+1][currentTurn.getY()].getBlocked() == false)) {
 			currentTurn.setX(currentTurn.getX()+1);
 			checkClose(target);
+			currentTurn.setFace(1);
 			return;
 		}
 		if (target[1] < currentTurn.getY() && (grid[currentTurn.getX()][currentTurn.getY()-1].getBlocked() == false)) {
 			currentTurn.setY(currentTurn.getY()-1);
 			checkClose(target);
+			currentTurn.setFace(0);
 			return;
 		}
 		if (target[1] > currentTurn.getY() && (grid[currentTurn.getX()][currentTurn.getY()+1].getBlocked() == false)) {
 			currentTurn.setY(currentTurn.getY()+1);
 			checkClose(target);
+			currentTurn.setFace(3);
 			return;
 		}
 		turnLoc++;
