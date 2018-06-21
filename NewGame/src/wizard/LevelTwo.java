@@ -110,7 +110,7 @@ public class LevelTwo extends BasicGameState {
 	private Clip clip;
 	
 	private boolean startsong;
-	private MapOneSound mapsound;
+	private MapTwoSound mapsound;
 	
 	Font font = new Font("Verdana", Font.BOLD, 8);
 	TrueTypeFont trueTypeFont;
@@ -628,7 +628,7 @@ public class LevelTwo extends BasicGameState {
 		dial = 1;
 		dialoguemode = true;
 		startsong = false;
-		mapsound = new MapOneSound();
+		mapsound = new MapTwoSound();
 		populateGrid();
 		clearRedArea();
 		for(int i = 0; i < 10; i++) {
@@ -656,7 +656,7 @@ public class LevelTwo extends BasicGameState {
     	turns.add(main);
     	grid[0][1].placeCharacter(main);
     	grid[0][1].setBlocked();
-    	side = new Characters("Kobe", 60, 6, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, true, false,1,2,1,false, "waterblast", "heal", "thunder", "wind");
+    	side = new Characters("Jessica", 60, 6, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, true, false,1,2,1,false, "waterblast", "heal", "thunder", "wind");
     	turns.add(enemy1);
     	turns.add(side);
     	grid[2][1].placeCharacter(side);
@@ -853,38 +853,63 @@ public class LevelTwo extends BasicGameState {
     		if (dial == 1) {
     		g.drawRect(0, 600, 640, 104);
     		g.fillRect(0, 600, 640, 104);
-    		dialogueFont.drawString(30.0f, 640.0f,  "Joe : I have arrived!", Color.white);
+    		dialogueFont.drawString(30.0f, 640.0f,  "Jessica : Agh!!", Color.white);
     		}
     		if (dial == 2) {
     			g.drawRect(0, 600, 640, 104);
         		g.fillRect(0, 600, 640, 104);
-        		dialogueFont.drawString(30.0f, 640.0f,  "Joe : That bastard better not think he can get away from me for long.", Color.white);
+        		dialogueFont.drawString(30.0f, 640.0f,  "Bandit 1 : Hahaha! Its three on one, just give it up!", Color.white);
     		}
     		if (dial == 3) {
     			g.drawRect(0, 600, 640, 104);
         		g.fillRect(0, 600, 640, 104);
-        		dialogueFont.drawString(30.0f, 640.0f,  "Joe : But before chasing him down, let me test my skills on these shady thugs.", Color.white);
+        		dialogueFont.drawString(30.0f, 640.0f,  "Bandit 2 : Hehe its a good thing were so far away from the nearest town!", Color.white);
     		}
     		if (dial == 4) {
     			g.drawRect(0, 600, 640, 104);
         		g.fillRect(0, 600, 640, 104);
-        		dialogueFont.drawString(30.0f, 640.0f,  "Joe : Whew that was quite the work out.", Color.white);
+        		dialogueFont.drawString(30.0f, 640.0f,  "Joe : Stop right there, bandits.", Color.white);
     		}
     		if (dial == 5) {
     			g.drawRect(0, 600, 640, 104);
         		g.fillRect(0, 600, 640, 104);
-        		dialogueFont.drawString(30.0f, 640.0f,  "Joe : It seems I've lost quite a lot of my old prowess.", Color.white);
+        		dialogueFont.drawString(30.0f, 640.0f,  "Joe : Put all your money down and leave right now, and I may spare your lives.", Color.white);
     		}
     		if (dial == 6) {
     			g.drawRect(0, 600, 640, 104);
         		g.fillRect(0, 600, 640, 104);
-        		dialogueFont.drawString(30.0f, 640.0f,  "Joe : It would've taken me 11 seconds to wipe the floor with these", Color.white);
-        		dialogueFont.drawString(67.0f, 660.0f,  "low level thugs before.", Color.white);
+        		dialogueFont.drawString(30.0f, 640.0f,  "Bandit 1 : Pfft, you delusional, kid? It's still 3 on 2.", Color.white);
     		}
     		if (dial == 7) {
     			g.drawRect(0, 600, 640, 104);
         		g.fillRect(0, 600, 640, 104);
-        		dialogueFont.drawString(30.0f, 640.0f,  "Joe : That bastard will pay for reducing me to this level.", Color.white);
+        		dialogueFont.drawString(30.0f, 640.0f,  "Joe : *sigh* Don't say I didn't warn you.", Color.white);
+    		}
+    		if (dial == 8) {
+    			g.drawRect(0, 600, 640, 104);
+        		g.fillRect(0, 600, 640, 104);
+        		dialogueFont.drawString(30.0f, 640.0f,  "(Jessica has joined your party)", Color.white);
+    		}
+    		if (dial == 9) {
+    			g.drawRect(0, 600, 640, 104);
+        		g.fillRect(0, 600, 640, 104);
+        		dialogueFont.drawString(30.0f, 640.0f,  "Jessica : Whew, thank you very much for your help!", Color.white);
+    		}
+    		if (dial == 10) {
+    			g.drawRect(0, 600, 640, 104);
+        		g.fillRect(0, 600, 640, 104);
+        		dialogueFont.drawString(30.0f, 640.0f,  "Joe : No need for thanks, I just wanted their money.", Color.white);
+    		}
+    		if (dial == 11) {
+    			g.drawRect(0, 600, 640, 104);
+        		g.fillRect(0, 600, 640, 104);
+        		dialogueFont.drawString(30.0f, 640.0f,  "Jessica : Say, I've no clue where this is. Can I follow you out of here?", Color.white);
+    		}
+    		if (dial == 12) {
+    			g.drawRect(0, 600, 640, 104);
+        		g.fillRect(0, 600, 640, 104);
+        		dialogueFont.drawString(30.0f, 640.0f,  "Joe : Sure, but you'd better prepare yourself for battles.", Color.white);
+        		dialogueFont.drawString(67.0f, 660.0f,  "This place is infested with low lifes.", Color.white);
     		}
     	}
 	}
@@ -898,10 +923,38 @@ public class LevelTwo extends BasicGameState {
 		}
 		if (dialoguemode == true) {
 			Input inputx = container.getInput();
+			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 12) {
+				MyTimerTask timer = new MyTimerTask();
+				timer.completeTask(0);
+				wizard.SelectionScreen.addLevel();
+				mapsound.stopSound();
+				wizard.SelectionScreen.queueMusic();
+				sbg.enterState(2);
+			}
+			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 11) {
+				MyTimerTask timer = new MyTimerTask();
+				timer.completeTask(0);
+				dial++;
+			}
+			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 10) {
+				MyTimerTask timer = new MyTimerTask();
+				timer.completeTask(0);
+				dial++;
+			}
+			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 9) {
+				MyTimerTask timer = new MyTimerTask();
+				timer.completeTask(0);
+				dial++;
+			}
+			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 8) {
+				MyTimerTask timer = new MyTimerTask();
+				timer.completeTask(0);
+				dialoguemode = false;
+			}
 			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 7) {
 				MyTimerTask timer = new MyTimerTask();
 				timer.completeTask(0);
-				sbg.enterState(1);
+				dial++;
 			}
 			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 6) {
 				MyTimerTask timer = new MyTimerTask();
@@ -921,7 +974,7 @@ public class LevelTwo extends BasicGameState {
 			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 3) {
 				MyTimerTask timer = new MyTimerTask();
 				timer.completeTask(0);
-				dialoguemode = false;
+				dial++;
 			}
 			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 2) {
 				MyTimerTask timer = new MyTimerTask();
@@ -1465,7 +1518,7 @@ public class LevelTwo extends BasicGameState {
 	}
 	public void Victory() {
 		dialoguemode = true;
-		dial = 4;
+		dial = 9;
 	}
 	
 }
