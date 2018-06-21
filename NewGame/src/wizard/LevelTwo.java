@@ -744,7 +744,7 @@ public class LevelTwo extends BasicGameState {
     	turns.add(enemy2);
     	grid[7][5].placeCharacter(enemy2);
     	grid[7][5].setBlocked();
-    	enemy3 = new Characters("Enemy3", 55,6,100,100,new String[]{"resources/enemyback1.png","resources/enemyback2.png","resources/enemyback3.png"}, new String[]{"resources/enemyleft1.png","resources/enemyleft2.png","resources/enemyleft3.png"},new String[]{"resources/enemyright1.png","resources/enemyright2.png","resources/enemyright3.png"}, new String[]{"resources/enemyfront1.png","resources/enemyfront2.png","resources/enemyfront3.png"},3,false,false,2,9,9,false,"fireball", "explosion", "thunder", "wind");
+    	enemy3 = new Characters("Enemy3", 53,10,100,100,new String[]{"resources/enemyback1.png","resources/enemyback2.png","resources/enemyback3.png"}, new String[]{"resources/enemyleft1.png","resources/enemyleft2.png","resources/enemyleft3.png"},new String[]{"resources/enemyright1.png","resources/enemyright2.png","resources/enemyright3.png"}, new String[]{"resources/enemyfront1.png","resources/enemyfront2.png","resources/enemyfront3.png"},3,false,false,2,9,9,false,"fireball", "explosion", "thunder", "wind");
     	turns.add(enemy3);
     	grid[9][9].placeCharacter(enemy3);
     	grid[9][9].setBlocked();
@@ -939,6 +939,8 @@ public class LevelTwo extends BasicGameState {
     		shownImage.draw(420,120);
 	        TrueTypeFont description = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 16),true);
 	        description.drawString(400.0f, 300.0f, items.get(ItemPos).getDescription(), Color.black);
+	        TrueTypeFont amt = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 16),true);
+	        amt.drawString(450.0f, 320.0f, Integer.toString(items.get(ItemPos).getAmt()), Color.black);
     	}
     	if (isHealing) {
     		if(items.get(ItemPos) instanceof HpItem) {

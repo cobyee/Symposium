@@ -54,10 +54,14 @@ public class Shop extends BasicGameState {
 		cost.drawString(20.0f, 670.0f, "Cost: " + costs[currentItem], Color.white);
 		TrueTypeFont gold = new TrueTypeFont(new Font("Verdana", Font.PLAIN , 20),true);
 		gold.drawString(520.0f, 30.0f, "Gold: " + SelectionScreen.getGold(), Color.white);
-		for(int i = 0; i < 4; i++) {
-			TrueTypeFont amt = new TrueTypeFont(new Font("Verdana", Font.PLAIN , 10),true);
-			amt.drawString(110+(i*128), 210.0f, Integer.toString(SelectionScreen.getInventory().get(i).getAmt()), Color.white);
-		}
+		TrueTypeFont amt1 = new TrueTypeFont(new Font("Verdana", Font.PLAIN , 10),true);
+		amt1.drawString(110, 210.0f, Integer.toString(SelectionScreen.getInventory().get(0).getAmt()), Color.white); 
+		TrueTypeFont amt2 = new TrueTypeFont(new Font("Verdana", Font.PLAIN , 10),true);
+		amt2.drawString(238, 210.0f, Integer.toString(SelectionScreen.getInventory().get(1).getAmt()), Color.white); 
+		TrueTypeFont amt3 = new TrueTypeFont(new Font("Verdana", Font.PLAIN , 10),true);
+		amt3.drawString(366, 210.0f, Integer.toString(SelectionScreen.getInventory().get(2).getAmt()), Color.white); 
+		TrueTypeFont amt4 = new TrueTypeFont(new Font("Verdana", Font.PLAIN , 10),true);
+		amt4.drawString(494, 210.0f, Integer.toString(SelectionScreen.getInventory().get(3).getAmt()), Color.white); 
 	}
 
 	@Override
@@ -71,12 +75,12 @@ public class Shop extends BasicGameState {
 			if(input.isKeyDown(Input.KEY_A) && canMove && currentItem > 0) {
 				canMove = false;
 				currentItem--;
-				threadMethod(150);
+				threadMethod(100);
 			}
 			if(input.isKeyDown(Input.KEY_D) && canMove && currentItem < 3) {
 				canMove = false;
 				currentItem++;
-				threadMethod(150);
+				threadMethod(100);
 			}
 			if(input.isKeyDown(Input.KEY_ENTER) && canMove) {
 				if(SelectionScreen.getGold() >= costs[currentItem]) {
