@@ -25,7 +25,6 @@ public class MainMenu extends BasicGameState {
 	private Color color1 = new Color(184,219,252);
 	private Color color2 = new Color(249,246,250);
 	private int optionPos = 0;
-	private boolean stringWritten = true;
 	private Image background;
 	
 	@Override

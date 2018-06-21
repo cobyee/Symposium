@@ -12,6 +12,7 @@ public class Application extends StateBasedGame {
     public static final int MAINMENU     = 1;
     public static final int LVLSELECTOR  = 2;
     public static final int GAME         = 3;
+    public static final int SHOP         = 4;
     
     public static boolean justSwapped = false;
 
@@ -32,6 +33,7 @@ public class Application extends StateBasedGame {
     	this.addState(new MainMenu());
     	this.addState(new SelectionScreen());
     	this.addState(new LevelOne());
+    	this.addState(new Shop());
     }
     
 	

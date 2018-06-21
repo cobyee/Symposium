@@ -18,8 +18,10 @@ public class SelectionScreen extends BasicGameState {
 
 	private Inventory inventory = new Inventory();
 	private static ArrayList<Item> items = new ArrayList<Item>();
+	private static int gold = 200;
 	private IntroSound intros;
 	private static int levelSelected = 1;
+	private static int levelPlaceHolder;
 	private static String[] levels = {"One","Two","Three"};
 	private static boolean canMove = true;
 	private Image background;
@@ -42,13 +44,17 @@ public class SelectionScreen extends BasicGameState {
 		background.draw(0,0);
 		// TODO Auto-generated method stub
 		g.setColor(Color.black);
-		g.fillRect(50,90+(55*(levelSelected-1)), 150, 50);
+		if(levelSelected != 0) {
+			g.fillRect(50,90+(55*(levelSelected-1)), 150, 50);
+		} else {
+			g.fillRect(500,500, 110, 50);
+		}
 		for(int i = 0; i < levels.length; i++) {
 			if(i+1 == levelSelected) {
-				TrueTypeFont levelName = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 40),true);
+				TrueTypeFont levelName = new TrueTypeFont(new Font("Verdana", Font.PLAIN , 40),true);
 				levelName.drawString(50.0f, (90 + (55 * i)), "Level " + (i+1), Color.white);
 			} else {
-				TrueTypeFont levelName = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 40),true);
+				TrueTypeFont levelName = new TrueTypeFont(new Font("Verdana", Font.PLAIN , 40),true);
 				levelName.drawString(50.0f, (90 + (55 * i)), "Level " + (i+1), Color.black);
 			}
 			if(i+1 > highestLevelUnlocked) {
@@ -56,55 +62,61 @@ public class SelectionScreen extends BasicGameState {
 				lock.draw(50,90+(55*i));
 			}
 		}
+		if(levelSelected == 0) {
+			TrueTypeFont levelName = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 40),true);
+			levelName.drawString(500.0f, 500.0f, "Shop", Color.white);
+		} else {
+			TrueTypeFont levelName = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 40),true);
+			levelName.drawString(470.0f, 500.0f, "Shop", Color.black);
+		}
 		if(levelSelected == 1) {
 			shownImage = new Image("resources/smallmap1.png");
-			shownImage.draw(300,100);
 		}
 		if(levelSelected == 2) {
 			shownImage = new Image("resources/smallmap2.png");
-			shownImage.draw(300,100);
 		}
+		shownImage.draw(300,100);
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame sbg, int arg2) throws SlickException {
 		Input input = container.getInput();
 		if (input.isKeyDown(Input.KEY_ENTER) && !Application.justSwapped()) {
-			Application.switchScreen();
-			sbg.enterState(3);
-			intros.stopSound(); 
+			if(levelSelected == 0) {
+				Application.switchScreen();
+				sbg.enterState(4);
+			}
+			if(levelSelected == 1) {
+				Application.switchScreen();
+				sbg.enterState(3);
+				intros.stopSound();
+			}
   		}
 		if(input.isKeyDown(Input.KEY_W) && canMove && levelSelected > 1 && levelSelected-1 < highestLevelUnlocked) {
 			canMove = false;
 			levelSelected--;
-	    	Thread thread = new Thread(){
-	    		public void run(){
-	    			try {
-						Thread.sleep(300);
-						canMove = true;
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    			
-	    		}
-	    	};
-	    	thread.start();
+	    	threadMethod();
 		}
 		if(input.isKeyDown(Input.KEY_S) && canMove && levelSelected < levels.length && levelSelected < highestLevelUnlocked) {
 			canMove = false;
 			levelSelected++;
-	    	Thread thread = new Thread(){
-	    		public void run(){
-	    			try {
-						Thread.sleep(300);
-						canMove = true;
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    			
-	    		}
-	    	};
-	    	thread.start();
+			threadMethod();
+		}
+		if(input.isKeyDown(Input.KEY_D) && canMove) {
+			canMove = false;
+			levelPlaceHolder = levelSelected;
+			levelSelected = 0;
+			threadMethod();
+		}
+		if(input.isKeyDown(Input.KEY_A) && canMove) {
+			canMove = false;
+			levelSelected = levelPlaceHolder;
+			levelPlaceHolder = 0;
+			threadMethod();
+		}
+		if(input.isKeyDown(Input.KEY_ESCAPE)) {
+			Application.switchScreen();
+			sbg.enterState(1);
 		}
 	}
 
@@ -118,4 +130,27 @@ public class SelectionScreen extends BasicGameState {
 		return items;
 	}
 
+	private static void threadMethod() {
+    	Thread thread = new Thread(){
+    		public void run(){
+    			try {
+					Thread.sleep(300);
+					canMove = true;
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+    			
+    		}
+    	};
+    	thread.start();
+	}
+	
+	public int getGold() {
+		return gold;
+	}
+	
+	public void setGold(int g) {
+		gold = g;
+	}
+	
 }
