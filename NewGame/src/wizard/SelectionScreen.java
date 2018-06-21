@@ -89,7 +89,7 @@ public class SelectionScreen extends BasicGameState {
 				}
 				if(levelSelected == 1) {
 					Application.switchScreen();
-					sbg.enterState(5);
+					sbg.enterState(3);
 					intros.stopSound();
 				}
 				if(levelSelected == 2) {

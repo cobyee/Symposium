@@ -605,17 +605,29 @@ public class LevelTwo extends BasicGameState {
 	}
 	public void updateMap() {
 		populateGrid();
-    	for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < 10; i++) {
     		grid[i][0].setBlocked();
     	}
-    		for(int j = 0; j < 8; j++) {
-    			grid[j][9].setBlocked();
-    		}
-    	for(int i = 5; i < 10; i++) {
-    		for(int j = 0; j < 2; j++) {
-    			grid[j][i].setBlocked();
-    		}
+		for(int i = 1; i < 8; i++) {
+    		grid[9][i].setBlocked();
     	}
+		for(int i = 1; i < 6; i++) {
+			for(int j = 2; j < 10; j++) {
+				grid[i][j].setBlocked();
+			}
+		}
+		for(int i = 3; i < 9; i++) {
+			grid[0][i].setBlocked();
+		}
+		for(int i = 3; i < 8; i++) {
+			grid[8][i].setBlocked();
+		}
+		for(int i = 6; i < 8; i++) {
+			grid[7][i].setBlocked();
+		}
+		for(int i = 6; i < 8; i++) {
+			grid[i][9].setBlocked();
+		}
     	for(int i = 0; i<turns.size(); i++) {
     		grid[turns.get(i).getX()][turns.get(i).getY()].setBlocked();
     		grid[turns.get(i).getX()][turns.get(i).getY()].placeCharacter(turns.get(i));
@@ -631,23 +643,18 @@ public class LevelTwo extends BasicGameState {
 		mapsound = new MapOneSound();
 		populateGrid();
 		clearRedArea();
-		for(int i = 0; i < 10; i++) {
-    		grid[i][0].setBlocked();
-    	}
-    
-    	
-    	enemy1 = new Characters("Enemy", 60, 5, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 2, 1, 2, false,"fireball", "heal", "thunder", "wind");
-    	grid[1][2].placeCharacter(enemy1);
-    	grid[1][2].setBlocked();
+    	enemy1 = new Characters("Enemy", 60, 5, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 8, 9, 2, false,"fireball", "heal", "thunder", "wind");
+    	grid[8][9].placeCharacter(enemy1);
+    	grid[8][9].setBlocked();
     	main = new Characters("Joe", 60, 6, 100, 100, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,0,1, false,"fireball", "explosion", "thunder", "wind");
     	turns.add(main);
     	grid[0][1].placeCharacter(main);
     	grid[0][1].setBlocked();
-    	side = new Characters("Kobe", 60, 6, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, true, false,1,2,1,false, "waterblast", "heal", "thunder", "wind");
+    	side = new Characters("Kobe", 60, 6, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, true, false,1,9,9,false, "waterblast", "heal", "thunder", "wind");
     	turns.add(enemy1);
     	turns.add(side);
-    	grid[2][1].placeCharacter(side);
-    	grid[2][1].setBlocked();
+    	grid[9][9].placeCharacter(side);
+    	grid[9][9].setBlocked();
     	currentTurn = turns.get(turnLoc);
     	
     	//grassMap = new TiledMap("resources/map1.tmx");
@@ -1264,77 +1271,6 @@ public class LevelTwo extends BasicGameState {
 					}
 				}
 			}
-		/**	if (currentTurn.getX()-i+j >= 0) {
-				if (grid[currentTurn.getX()-i+j][currentTurn.getY()].isOccupied()) {
-					if (grid[currentTurn.getX()-i+j][currentTurn.getY()].getCharacter().isAlly()) {
-						hahaxd[0] = currentTurn.getX()-i+j;
-						hahaxd[1] = currentTurn.getY();
-						return hahaxd;
-					}
-				}
-				if (currentTurn.getY()-i+j >= 0) {
-					if (grid[currentTurn.getX()-i+j][currentTurn.getY()-i+j].isOccupied()) {
-				if (grid[currentTurn.getX()-i+j][currentTurn.getY()-i+j].getCharacter().isAlly()) {
-					hahaxd[0] = currentTurn.getX()-i+j;
-					hahaxd[1] = currentTurn.getY()-i+j;
-					return hahaxd;
-				}
-			}}
-				if (currentTurn.getY()+i-j <10) {
-					if (grid[currentTurn.getX()-i+j][currentTurn.getY()+i-j].isOccupied()) {
-					if (grid[currentTurn.getX()-i+j][currentTurn.getY()+i-j].getCharacter().isAlly()) {
-						hahaxd[0] = currentTurn.getX()-i+j;
-						hahaxd[1] = currentTurn.getY()+i-j;
-						return hahaxd;
-					}
-				}
-				}
-			}
-			if (currentTurn.getX()+i-j < 10) {
-				if (grid[currentTurn.getX()+i-j][currentTurn.getY()].isOccupied()) {
-					if (grid[currentTurn.getX()+i-j][currentTurn.getY()].getCharacter().isAlly()) {
-						hahaxd[0] = currentTurn.getX()+i-j;
-						hahaxd[1] = currentTurn.getY();
-						return hahaxd;
-					}
-				}
-				if (currentTurn.getY()-i+j >= 0) {
-				if (grid[currentTurn.getX()+i-j][currentTurn.getY()-i+j].isOccupied()) {
-				if (grid[currentTurn.getX()+i-j][currentTurn.getY()-i+j].getCharacter().isAlly()){
-					hahaxd[0] = currentTurn.getX()+i-j;
-					hahaxd[1] = currentTurn.getY()-i+j;
-					return hahaxd;
-				}
-				}
-				}
-				if (currentTurn.getY()+i-j < 10) {
-					if (grid[currentTurn.getX()+i-j][currentTurn.getY()+i-j].isOccupied()) {
-					if (grid[currentTurn.getX()+i-j][currentTurn.getY()+i-j].getCharacter().isAlly()) {
-						hahaxd[0] = currentTurn.getX()+i-j;
-						hahaxd[1] = currentTurn.getY()+i-j;
-						return hahaxd;
-					}
-				}
-				}
-			}
-			if (currentTurn.getY()+i-j < 10) {
-				if (grid[currentTurn.getX()][currentTurn.getY()+i-j].isOccupied()) {
-					if (grid[currentTurn.getX()][currentTurn.getY()+i-j].getCharacter().isAlly()) {
-						hahaxd[0] = currentTurn.getX();
-						hahaxd[1] = currentTurn.getY()+i-j;
-						return hahaxd;
-					}
-				}
-			}
-			if (currentTurn.getY()-i+j >=0) {
-				if (grid[currentTurn.getX()][currentTurn.getY()-i+j].isOccupied()) {
-					if (grid[currentTurn.getX()][currentTurn.getY()-i+j].getCharacter().isAlly()) {
-						hahaxd[0] = currentTurn.getX();
-						hahaxd[1] = currentTurn.getY()-i+j;
-						return hahaxd;
-					}
-				}
-		} **/
 		}}
 		System.out.println("no");
 		return hahaxd;
