@@ -153,4 +153,7 @@ public class SelectionScreen extends BasicGameState {
 		gold = g;
 	}
 	
+	public void addLevel() {
+		highestLevelUnlocked++;
+	}
 }
