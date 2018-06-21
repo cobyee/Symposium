@@ -3,7 +3,12 @@ package wizard;
 import java.awt.Button;
 import java.awt.Component;
 import java.awt.Font;
+import java.io.File;
 import java.util.ArrayList;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.AppGameContainer;
@@ -46,7 +51,7 @@ public class LevelOne extends BasicGameState {
 	private static boolean isFireball = false;
 	private static boolean isExplosion = false;
 	private static boolean isWaterblast = false;
-	private static boolean isFinalspark = false;
+	private static boolean isWind = false;
 	private static boolean isThunder = false;
 	private static boolean usedItem = false;
 	private static boolean isHealskill = false;
@@ -56,7 +61,7 @@ public class LevelOne extends BasicGameState {
 	private Animation fireballani;
 	private Animation explosionani;
 	private Animation waterblastani;
-	private Animation finalsparkani;
+	private Animation windani;
 	private Animation thunderani;
 	private Animation healSkillani;
 	private Animation manapothealani;
@@ -99,6 +104,8 @@ public class LevelOne extends BasicGameState {
 	
 	private static boolean healingStarted;
 	
+	private Clip clip;
+	
 	private boolean startsong;
 	private MapOneSound mapsound;
 	
@@ -132,6 +139,15 @@ public class LevelOne extends BasicGameState {
 	}
     private void FireballMethod() {
     	isFireball = true;
+    	try {
+ 	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resources/explosions.wav"));
+ 	        clip = AudioSystem.getClip();
+ 	        clip.open(audioInputStream);
+ 	        clip.start();
+ 	    } catch(Exception ex) {
+ 	        System.out.println("Error with playing sound.");
+ 	        ex.printStackTrace();
+ 	    }
     	Thread thread = new Thread(){
 		    public void run(){
 		    	 MyTimerTask timer = new MyTimerTask();
@@ -140,12 +156,22 @@ public class LevelOne extends BasicGameState {
                  grid[targetplaceX][targetplaceY].getCharacter().setHp(grid[targetplaceX][targetplaceY].getCharacter().getHp()-damageskill);
                	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
                	updateMap();
+               	clip.stop();
 		    }
 	  };
 	  thread.start();
     }
     private void ThunderMethod() {
     	isThunder = true;
+    	try {
+ 	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resources/thunders.wav"));
+ 	        clip = AudioSystem.getClip();
+ 	        clip.open(audioInputStream);
+ 	        clip.start();
+ 	    } catch(Exception ex) {
+ 	        System.out.println("Error with playing sound.");
+ 	        ex.printStackTrace();
+ 	    }
     	Thread thread = new Thread(){
 		    public void run(){
 		    	 MyTimerTask timer = new MyTimerTask();
@@ -154,26 +180,46 @@ public class LevelOne extends BasicGameState {
                  grid[targetplaceX][targetplaceY].getCharacter().setHp(grid[targetplaceX][targetplaceY].getCharacter().getHp()-damageskill);
                	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
                	updateMap();
+               	clip.stop();
 		    }
 	  };
 	  thread.start();
     }
-    private void FinalsparkMethod() {
-    	isFinalspark = true;
+    private void WindMethod() {
+    	isWind = true;
+    	try {
+ 	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resources/winds.wav"));
+ 	        clip = AudioSystem.getClip();
+ 	        clip.open(audioInputStream);
+ 	        clip.start();
+ 	    } catch(Exception ex) {
+ 	        System.out.println("Error with playing sound.");
+ 	        ex.printStackTrace();
+ 	    }
     	Thread thread = new Thread(){
 		    public void run(){
 		    	 MyTimerTask timer = new MyTimerTask();
                  timer.completeTask(6);
-                 isFinalspark = false;
+                 isWind = false;
                  grid[targetplaceX][targetplaceY].getCharacter().setHp(grid[targetplaceX][targetplaceY].getCharacter().getHp()-damageskill);
                	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
                	updateMap();
+               	clip.stop();
 		    }
 	  };
 	  thread.start();
     }
     private void WaterblastMethod() {
     	isWaterblast = true;
+    	try {
+ 	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resources/waterblasts.wav"));
+ 	        clip = AudioSystem.getClip();
+ 	        clip.open(audioInputStream);
+ 	        clip.start();
+ 	    } catch(Exception ex) {
+ 	        System.out.println("Error with playing sound.");
+ 	        ex.printStackTrace();
+ 	    }
     	Thread thread = new Thread(){
 		    public void run(){
 		    	 MyTimerTask timer = new MyTimerTask();
@@ -182,22 +228,33 @@ public class LevelOne extends BasicGameState {
                  grid[targetplaceX][targetplaceY].getCharacter().setHp(grid[targetplaceX][targetplaceY].getCharacter().getHp()-damageskill);
                	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
                	updateMap();
+               	clip.stop();
 		    }
 	  };
 	  thread.start();
     }
     private void ExplosionMethod() {
     	isExplosion = true;
+    	try {
+ 	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resources/explosions.wav"));
+ 	        clip = AudioSystem.getClip();
+ 	        clip.open(audioInputStream);
+ 	        clip.start();
+ 	    } catch(Exception ex) {
+ 	        System.out.println("Error with playing sound.");
+ 	        ex.printStackTrace();
+ 	    }
     	Thread thread = new Thread(){
 		    public void run(){
 		    	 MyTimerTask timer = new MyTimerTask();
-                 timer.completeTask(5);
+                 timer.completeTask(7);
                  isExplosion = false;
                  grid[targetplaceX][targetplaceY].getCharacter().setHp(grid[targetplaceX][targetplaceY].getCharacter().getHp()-damageskill);
                	 currentTurn.setMana(currentTurn.getMana() - skillmanaused);
                	MyTimerTask timerx = new MyTimerTask();
                 timerx.completeTask(0);
                	updateMap();
+               	clip.stop();
 		    }
 	  };
 	  thread.start();
@@ -616,7 +673,7 @@ public class LevelOne extends BasicGameState {
     	SpriteSheet es = new SpriteSheet("resources/explosionanimate.png",64,64);
     	SpriteSheet ws = new SpriteSheet("resources/waterblastanimate.png",64,64);
     	SpriteSheet ts = new SpriteSheet("resources/thunderanimate.png",64,64);
-    	SpriteSheet fss = new SpriteSheet("resources/finalsparkanimate.png",64,64);
+    	SpriteSheet fss = new SpriteSheet("resources/windanimate.png",64,64);
     	SpriteSheet hs = new SpriteSheet("resources/healskill.png",64,64);
     	SpriteSheet manas = new SpriteSheet("resources/manapotheal.png",64,64);
     	
@@ -632,7 +689,7 @@ public class LevelOne extends BasicGameState {
     	explosionani = new Animation(es,100);
     	waterblastani = new Animation(ws,200);
     	thunderani = new Animation(ts,100);
-    	finalsparkani = new Animation(fss,100);
+    	windani = new Animation(fss,100);
     	healSkillani = new Animation(hs,100);
     	manapothealani = new Animation(manas, 100);
     	
@@ -760,8 +817,8 @@ public class LevelOne extends BasicGameState {
     	if (isWaterblast) {
     		waterblastani.draw(targetplaceX*64,targetplaceY*64);
     	}
-    	if (isFinalspark) {
-    		finalsparkani.draw(targetplaceX*64,targetplaceY*64);
+    	if (isWind) {
+    		windani.draw(targetplaceX*64,targetplaceY*64);
     	}
     	if (isHealskill) {
     		healSkillani.draw(targetplaceX*64,targetplaceY*64);
@@ -997,8 +1054,8 @@ public class LevelOne extends BasicGameState {
 						if (skillname.equals("waterblast")) {
 							WaterblastMethod();
 						}
-						if (skillname.equals("finalspark")) {
-							FinalsparkMethod();
+						if (skillname.equals("wind")) {
+							WindMethod();
 						}
 						cursormode = false;
 						skillmodedamage = false;
