@@ -727,14 +727,14 @@ public class LevelOne extends BasicGameState {
     	}
     
     	
-    	enemy1 = new Characters("Enemy", 60, 5, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 2, 8, 1, false,"fireball", "heal", "thunder", "wind");
+    	enemy1 = new Characters("Enemy", 60, 5, 100, 100, new String[] {"resources/asdf.png"},new String[] {"resources/asdf.png"}, new String[] {"resources/asdf.png"}, new String[] {"resources/asdf.png"},3, false, false, 2, 8, 1, false,"fireball", "heal", "thunder", "wind");
     	grid[8][1].placeCharacter(enemy1);
     	grid[8][1].setBlocked();
-    	main = new Characters("Joe", 60, 6, 100, 100, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,1,1, false,"fireball", "explosion", "thunder", "wind");
+    	main = new Characters("Joe", 60, 6, 100, 100, new String[] {"resources/mainfront1.png","resources/mainfront2.png","resources/mainfront3.png"},new String[] {"resources/mainleft1.png","resources/mainleft2.png","resources/mainleft3.png"}, new String[] {"resources/mainright1.png","resources/mainright2.png","resources/mainright3.png"}, new String[] {"resources/mainback1.png","resources/mainback2.png","resources/mainback3.png"},3, true, false,5,1,1, false,"fireball", "explosion", "thunder", "wind");
     	turns.add(main);
     	grid[1][1].placeCharacter(main);
     	grid[1][1].setBlocked();
-    	enemy2 = new Characters("Ally", 60, 6, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false,1,5,8,false, "waterblast", "heal", "thunder", "wind");
+    	enemy2 = new Characters("Ally", 60, 6, 100, 100, new String[] {"resources/asdf.png"},new String[] {"resources/asdf.png"}, new String[] {"resources/asdf.png"}, new String[] {"resources/asdf.png"},3, false, false,1,5,8,false, "waterblast", "heal", "thunder", "wind");
     	turns.add(enemy1);
     	grid[5][8].placeCharacter(enemy2);
     	grid[5][8].setBlocked();
