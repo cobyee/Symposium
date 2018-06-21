@@ -139,6 +139,12 @@ public class LevelOne extends BasicGameState {
 
 	private Animation a4;
 
+	static int XMoves;
+
+	static int YMoves;
+	
+	private boolean cantPress;
+
 	public static int OptionPos = 0;
 	public static int SkillPos = 0;
 	public static int ItemPos = 0;
@@ -713,6 +719,7 @@ public class LevelOne extends BasicGameState {
 
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
+		cantPress = false;
 		anis=new Animation[5];
 		anis[0]=a0;
 		anis[1]=a1;
@@ -755,6 +762,7 @@ public class LevelOne extends BasicGameState {
     	grid[1][1].placeCharacter(main);
     	grid[1][1].setBlocked();
     	enemy2 = new Characters("Enemy2", 50, 6, 100, 100, new String[]{"resources/enemyback1.png","resources/enemyback2.png","resources/enemyback3.png"}, new String[]{"resources/enemyleft1.png","resources/enemyleft2.png","resources/enemyleft3.png"},new String[]{"resources/enemyright1.png","resources/enemyright2.png","resources/enemyright3.png"}, new String[]{"resources/enemyfront1.png","resources/enemyfront2.png","resources/enemyfront3.png"},3, false, false,2,5,8,false, "waterblast", "heal", "thunder", "wind");
+
     	turns.add(enemy1);
     	grid[5][8].placeCharacter(enemy2);
     	grid[5][8].setBlocked();
@@ -885,23 +893,44 @@ public class LevelOne extends BasicGameState {
     	if(turns.size()>0) {
     		updateHealth();
     		for (int j=0; j<turns.size();j++) {
-    			anis[j].draw(turns.get(j).getX()*64, turns.get(j).getY()*64);
+    			if (j==turnLoc) {
+    			anis[j].draw((turns.get(j).getX()*64)+XMoves, (turns.get(j).getY()*64)+YMoves);
+    			}
+    			else {
+    				anis[j].draw((turns.get(j).getX()*64), (turns.get(j).getY()*64));
+    			}
     		}
     	} else {
     		System.out.println("game over");
     	}
     	for(int i = 0; i < turns.size(); i++) {
+    		if (i==turnLoc) {
     		if(specificPerc(turns.get(i)) >0) {
     			g.setColor(Color.red);
+    			g.drawRect((turns.get(i).getX() * 64 + 10)+XMoves, ((turns.get(i).getY() * 64)-3)+YMoves, 44, 2);
+        		g.fillRect((turns.get(i).getX() * 64 + 10)+XMoves, ((turns.get(i).getY() * 64)-3)+YMoves, (int)(specificPerc(turns.get(i))*44), 2);
+    		}
+    		}else {
+    			if(specificPerc(turns.get(i)) >0) {
+        			g.setColor(Color.red);
     			g.drawRect(turns.get(i).getX() * 64 + 10, (turns.get(i).getY() * 64)-3, 44, 2);
         		g.fillRect(turns.get(i).getX() * 64 + 10, (turns.get(i).getY() * 64)-3, (int)(specificPerc(turns.get(i))*44), 2);
     		}
     	}
+    	}
     	for (int l = 0; l<turns.size(); l++) {
-    		g.setColor(Color.blue);
-    		g.drawRect(turns.get(l).getX() * 64 + 10, turns.get(l).getY() * 64, 44, 2);
-    		if(specificPercMana(turns.get(l)) > 0) {
-    			g.fillRect(turns.get(l).getX() * 64 + 10, turns.get(l).getY() * 64, (int)(specificPercMana(turns.get(l))*44), 2);
+    		if (l==turnLoc) {
+    			g.setColor(Color.blue);
+        		g.drawRect((turns.get(l).getX() * 64 + 10)+XMoves, (turns.get(l).getY() * 64)+YMoves, 44, 2);
+        		if(specificPercMana(turns.get(l)) > 0) {
+        			g.fillRect((turns.get(l).getX() * 64 + 10)+XMoves, (turns.get(l).getY() * 64)+YMoves, (int)(specificPercMana(turns.get(l))*44), 2);
+        		}
+    		}else {
+    			g.setColor(Color.blue);
+        		g.drawRect(turns.get(l).getX() * 64 + 10, turns.get(l).getY() * 64, 44, 2);
+        		if(specificPercMana(turns.get(l)) > 0) {
+        			g.fillRect(turns.get(l).getX() * 64 + 10, turns.get(l).getY() * 64, (int)(specificPercMana(turns.get(l))*44), 2);
+        		}
     		}
     	}
     	Csprite.draw(cursor.getX()*64, cursor.getY()*64);
@@ -1002,6 +1031,7 @@ public class LevelOne extends BasicGameState {
 
 	@Override
 	public void update(GameContainer container, StateBasedGame sbg, int delta) throws SlickException {
+		if (cantPress == false ) {
 		if (startsong == false) {			
 			mapsound.playSound();
 			startsong = true;
@@ -1067,6 +1097,7 @@ public class LevelOne extends BasicGameState {
 		if(!Application.justSwapped()) {
 			if(currentTurn.isAlly() == false){
 				if(searchingTarget()[0] == -1 && searchingTarget()[1]==-1) {
+					System.out.println(turnLoc);
 					turnLoc++;
 					if(turnLoc > turns.size()-1) {
 						turnLoc = 0;
@@ -1115,9 +1146,18 @@ public class LevelOne extends BasicGameState {
 				}
 				else if(!cursormode && !pickingItem) {
 					if(input.isKeyDown(Input.KEY_W) && movable(2) && currentTurn.getY() != 0 && tileAmt != 0) { 
+						cantPress = true;
 							currentTurn.setFace(0);
 							sprite.update(delta);
-						currentTurn.setY(currentTurn.getY()-1);
+						Thread thread = new Thread(){
+						    public void run(){
+						    	MyTimerTask timer = new MyTimerTask();
+						        timer.completeTask(12);
+						        currentTurn.setY(currentTurn.getY()-1);
+						        cantPress = false;
+						    }
+					  };
+					  thread.start();
 						moveHelper();
 						for (int i=0;i<turns.size();i++) {
 			    			Image[] asdf = {new Image(turns.get(i).getPicU()[0]), new Image(turns.get(i).getPicU()[1]), new Image(turns.get(i).getPicU()[2])};
@@ -1143,9 +1183,18 @@ public class LevelOne extends BasicGameState {
 						updateMap();
 					}
 					if(input.isKeyDown(Input.KEY_S) && movable(4) && currentTurn.getY() != 9 && tileAmt != 0) {
+						cantPress = true;
 							currentTurn.setFace(3);
 							sprite.update(delta);
-						currentTurn.setY(currentTurn.getY()+1);
+						Thread thread = new Thread(){
+						    public void run(){
+						    	MyTimerTask timer = new MyTimerTask();
+						        timer.completeTask(10);
+						        currentTurn.setY(currentTurn.getY()+1);
+						        cantPress = false;
+						    }
+					  };
+					  thread.start();
 						moveHelper();
 						for (int i=0;i<turns.size();i++) {
 			    			Image[] asdf = {new Image(turns.get(i).getPicU()[0]), new Image(turns.get(i).getPicU()[1]), new Image(turns.get(i).getPicU()[2])};
@@ -1171,9 +1220,19 @@ public class LevelOne extends BasicGameState {
 						updateMap();
 					}
 					if (input.isKeyDown(Input.KEY_A)&& movable(3) && currentTurn.getX() != 0 && tileAmt != 0) { 
-						currentTurn.setFace(1);
-						sprite.update(delta);
-						currentTurn.setX(currentTurn.getX()-1);
+						cantPress = true;
+							currentTurn.setFace(1);
+							sprite.update(delta);
+						
+						Thread thread = new Thread(){
+						    public void run(){
+						    	MyTimerTask timer = new MyTimerTask();
+						        timer.completeTask(11);
+						        currentTurn.setX(currentTurn.getX()-1);
+						        cantPress = false;
+						    }
+					  };
+					  thread.start();
 						moveHelper();
 						for (int i=0;i<turns.size();i++) {
 			    			Image[] asdf = {new Image(turns.get(i).getPicU()[0]), new Image(turns.get(i).getPicU()[1]), new Image(turns.get(i).getPicU()[2])};
@@ -1199,9 +1258,18 @@ public class LevelOne extends BasicGameState {
 						updateMap();
 					}
 					if (input.isKeyDown(Input.KEY_D)&& movable(1) && currentTurn.getX() != 9 && tileAmt != 0) {
+						cantPress = true;
 							currentTurn.setFace(2);
 							sprite.update(delta);
-						currentTurn.setX(currentTurn.getX()+1);
+						Thread thread = new Thread(){
+						    public void run(){
+						    	MyTimerTask timer = new MyTimerTask();
+						        timer.completeTask(9);
+								currentTurn.setX(currentTurn.getX()+1);
+								cantPress = false;
+						    }
+					  };
+					  thread.start();
 						moveHelper();
 						for (int i=0;i<turns.size();i++) {
 			    			Image[] asdf = {new Image(turns.get(i).getPicU()[0]), new Image(turns.get(i).getPicU()[1]), new Image(turns.get(i).getPicU()[2])};
@@ -1454,6 +1522,9 @@ public class LevelOne extends BasicGameState {
 			}
 		}
 		}
+		}else {
+			
+		}
 		updateMap();
 	}
 	
@@ -1462,7 +1533,7 @@ public class LevelOne extends BasicGameState {
 		hahaxd[0] = -1;
 		hahaxd[1] = -1;
 		for (int j = currentTurn.getX()-currentTurn.getDistance(); j<currentTurn.getX()+currentTurn.getDistance()+1; j++) {
-			for (int i = currentTurn.getY()-currentTurn.getDistance(); i< currentTurn.getDistance()+currentTurn.getDistance()+1; i++) {
+			for (int i = currentTurn.getY()-currentTurn.getDistance(); i< currentTurn.getY()+currentTurn.getDistance()+1; i++) {
 				if (j >= 0 && j < 10 && i >= 0 && i<10) {
 				if (grid[j][i].isOccupied()) {
 					if (grid[j][i].getCharacter().isAlly()) {
