@@ -92,6 +92,11 @@ public class SelectionScreen extends BasicGameState {
 					sbg.enterState(5);
 					intros.stopSound();
 				}
+				if(levelSelected == 2) {
+					Application.switchScreen();
+					sbg.enterState(5);
+					intros.stopSound();
+				}
 			}
 			if(input.isKeyDown(Input.KEY_W) && canMove && levelSelected > 1 && levelSelected-1 < highestLevelUnlocked) {
 				canMove = false;
