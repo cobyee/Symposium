@@ -25,6 +25,7 @@ public class IntroSound {
 	 	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resources/DwarvenMines.wav"));
 	 	        Clip clip = AudioSystem.getClip();
 	 	        clip.open(audioInputStream);
+	 	        clip.start();
 	 	        while(vc == true) {
 	 	        clip.loop(Clip.LOOP_CONTINUOUSLY);
 	 	        }
@@ -39,5 +40,8 @@ public class IntroSound {
 	}
 	public void stopSound() {
 		vc = false;
+	}
+	public void startSound() {
+		vc = true;
 	}
 }

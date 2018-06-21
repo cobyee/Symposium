@@ -19,13 +19,13 @@ public class SelectionScreen extends BasicGameState {
 	private Inventory inventory = new Inventory();
 	private static ArrayList<Item> items = new ArrayList<Item>();
 	private static int gold = 200;
-	private IntroSound intros;
+	private static IntroSound intros;
 	private static int levelSelected = 1;
 	private static int levelPlaceHolder;
 	private static String[] levels = {"One","Two","Three"};
 	private static boolean canMove = true;
 	private Image background;
-	private static int highestLevelUnlocked = 1;
+	private static int highestLevelUnlocked = 2;
 	private Image lock;
 	private Image shownImage;
 	
@@ -155,7 +155,12 @@ public class SelectionScreen extends BasicGameState {
 		gold = g;
 	}
 	
-	public void addLevel() {
+	public static void addLevel() {
 		highestLevelUnlocked++;
+	}
+	public static void queueMusic() {
+		intros.startSound();
+		intros.playSound();
+	
 	}
 }
