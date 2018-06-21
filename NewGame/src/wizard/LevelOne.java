@@ -104,6 +104,9 @@ public class LevelOne extends BasicGameState {
 	
 	private static boolean healingStarted;
 	
+	private boolean dialoguemode;
+	private int dial;
+	
 	private Clip clip;
 	
 	private boolean startsong;
@@ -114,6 +117,12 @@ public class LevelOne extends BasicGameState {
 	TrueTypeFont currentMoves;
 	TrueTypeFont smallPotion;
 	private String skillname;
+
+	private Font dfont;
+
+	private TrueTypeFont dialogueFont;
+
+	private boolean alrdywon;
 
 	public static int OptionPos = 0;
 	public static int SkillPos = 0;
@@ -128,11 +137,21 @@ public class LevelOne extends BasicGameState {
     
     private void healingMethod() {
     	isHealing = true;
+    	try {
+ 	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("resources/pot1.wav"));
+ 	        clip = AudioSystem.getClip();
+ 	        clip.open(audioInputStream);
+ 	        clip.start();
+ 	    } catch(Exception ex) {
+ 	        System.out.println("Error with playing sound.");
+ 	        ex.printStackTrace();
+ 	    }
     	Thread thread = new Thread(){
 		    public void run(){
 		    	 MyTimerTask timer = new MyTimerTask();
                  timer.completeTask(5);
                  isHealing = false;
+                 clip.stop();
 		    }
 	  };
 	  thread.start();
@@ -461,6 +480,7 @@ public class LevelOne extends BasicGameState {
 		if(turns.size() >0) {
 			checkDead();
 		}
+		victoryCond();
 	}
 	public void checkDead() {
 		for (int q = 0; q < turns.size(); q++) {
@@ -611,6 +631,9 @@ public class LevelOne extends BasicGameState {
 
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
+		alrdywon = false;
+		dial = 1;
+		dialoguemode = true;
 		startsong = false;
 		mapsound = new MapOneSound();
 		populateGrid();
@@ -721,8 +744,10 @@ public class LevelOne extends BasicGameState {
         updateButtons();
         
         font = new Font("Verdana", Font.BOLD, 8);
+        dfont = new Font("Constantia", Font.BOLD, 16);
         trueTypeFont = new TrueTypeFont(font, true);
         currentMoves = new TrueTypeFont(font,true);
+        dialogueFont = new TrueTypeFont(dfont, true);
 
         updateHealth();
 	}
@@ -766,7 +791,7 @@ public class LevelOne extends BasicGameState {
     		System.out.println("game over");
     	}
     	for(int i = 0; i < turns.size(); i++) {
-    		if(specificPerc(turns.get(i)) > 0) {
+    		if(specificPerc(turns.get(i)) >0) {
     			g.setColor(Color.red);
     			g.drawRect(turns.get(i).getX() * 64 + 10, (turns.get(i).getY() * 64)-2, 44, 2);
         		g.fillRect(turns.get(i).getX() * 64 + 10, (turns.get(i).getY() * 64)-2, (int)(specificPerc(turns.get(i))*44), 2);
@@ -833,15 +858,92 @@ public class LevelOne extends BasicGameState {
     			}
     		}
     	}
+    	if (dialoguemode) {
+    		if (dial == 1) {
+    		g.drawRect(0, 600, 640, 104);
+    		g.fillRect(0, 600, 640, 104);
+    		dialogueFont.drawString(30.0f, 640.0f,  "Joe : I have arrived!", Color.white);
+    		}
+    		if (dial == 2) {
+    			g.drawRect(0, 600, 640, 104);
+        		g.fillRect(0, 600, 640, 104);
+        		dialogueFont.drawString(30.0f, 640.0f,  "Joe : That bastard better not think he can get away from me for long.", Color.white);
+    		}
+    		if (dial == 3) {
+    			g.drawRect(0, 600, 640, 104);
+        		g.fillRect(0, 600, 640, 104);
+        		dialogueFont.drawString(30.0f, 640.0f,  "Joe : But before chasing him down, let me test my skills on these shady thugs.", Color.white);
+    		}
+    		if (dial == 4) {
+    			g.drawRect(0, 600, 640, 104);
+        		g.fillRect(0, 600, 640, 104);
+        		dialogueFont.drawString(30.0f, 640.0f,  "Joe : Whew that was quite the work out.", Color.white);
+    		}
+    		if (dial == 5) {
+    			g.drawRect(0, 600, 640, 104);
+        		g.fillRect(0, 600, 640, 104);
+        		dialogueFont.drawString(30.0f, 640.0f,  "Joe : It seems I've lost quite a lot of my old prowess.", Color.white);
+    		}
+    		if (dial == 6) {
+    			g.drawRect(0, 600, 640, 104);
+        		g.fillRect(0, 600, 640, 104);
+        		dialogueFont.drawString(30.0f, 640.0f,  "Joe : It would've taken me 11 seconds to wipe the floor with these", Color.white);
+        		dialogueFont.drawString(67.0f, 660.0f,  "low level thugs before.", Color.white);
+    		}
+    		if (dial == 7) {
+    			g.drawRect(0, 600, 640, 104);
+        		g.fillRect(0, 600, 640, 104);
+        		dialogueFont.drawString(30.0f, 640.0f,  "Joe : That bastard will pay for reducing me to this level.", Color.white);
+    		}
+    	}
 	}
 
 	@Override
-	public void update(GameContainer container, StateBasedGame arg1, int delta) throws SlickException {
+	public void update(GameContainer container, StateBasedGame sbg, int delta) throws SlickException {
 		if (startsong == false) {			
 			mapsound.playSound();
 			startsong = true;
 			System.out.println("bcv");
 		}
+		if (dialoguemode == true) {
+			Input inputx = container.getInput();
+			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 7) {
+				MyTimerTask timer = new MyTimerTask();
+				timer.completeTask(0);
+				sbg.enterState(1);
+			}
+			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 6) {
+				MyTimerTask timer = new MyTimerTask();
+				timer.completeTask(0);
+				dial++;
+			}
+			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 5) {
+				MyTimerTask timer = new MyTimerTask();
+				timer.completeTask(0);
+				dial++;
+			}
+			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 4) {
+				MyTimerTask timer = new MyTimerTask();
+				timer.completeTask(0);
+				dial++;
+			}
+			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 3) {
+				MyTimerTask timer = new MyTimerTask();
+				timer.completeTask(0);
+				dialoguemode = false;
+			}
+			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 2) {
+				MyTimerTask timer = new MyTimerTask();
+				timer.completeTask(0);
+				dial++;
+			}
+			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 1) {
+				MyTimerTask timer = new MyTimerTask();
+				timer.completeTask(0);
+				dial++;
+			}
+			
+		}else {
 		if (currentTurn.isAlly() == false){
 			if(searchingTarget()[0] == -1 && searchingTarget()[1]==-1) {
 				turnLoc++;
@@ -1166,6 +1268,7 @@ public class LevelOne extends BasicGameState {
 				}
 			}
 		}
+		}
 	}
 	
 	public int[] searchingTarget() {
@@ -1357,6 +1460,21 @@ public class LevelOne extends BasicGameState {
 				redArea[i][j] = false;
 			}
 		}
+	}
+	public void victoryCond() {
+		for (int i=0;i<turns.size();i++) {
+			if (turns.get(i).isAlly() == false) {
+				return;
+			}
+		}
+		if (alrdywon == false) {
+		Victory();
+		alrdywon = true;
+		}
+	}
+	public void Victory() {
+		dialoguemode = true;
+		dial = 4;
 	}
 	
 }
