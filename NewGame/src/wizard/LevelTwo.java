@@ -652,14 +652,14 @@ public class LevelTwo extends BasicGameState {
 		mapsound = new MapOneSound();
 		populateGrid();
 		clearRedArea();
-    	enemy1 = new Characters("Enemy", 60, 5, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 2, 8, 1, false,"fireball", "heal", "thunder", "wind");
-    	grid[8][1].placeCharacter(enemy1);
-    	grid[8][1].setBlocked();
-    	turns.add(enemy1);
     	main = new Characters("Joe", 60, 6, 100, 100, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,3,1,1, false,"fireball", "explosion", "thunder", "wind");
-    	turns.add(main);
     	grid[1][1].placeCharacter(main);
     	grid[1][1].setBlocked();
+		enemy1 = new Characters("Enemy", 60, 5, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 2, 8, 1, false,"fireball", "heal", "thunder", "wind");
+    	grid[8][1].placeCharacter(enemy1);
+    	grid[8][1].setBlocked();
+    	turns.add(main);
+    	turns.add(enemy1);
     	enemy2 = new Characters("Enemy2", 60, 6, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false,2,7,5,false, "waterblast", "heal", "thunder", "wind");
     	turns.add(enemy2);
     	grid[7][5].placeCharacter(side);
@@ -668,10 +668,10 @@ public class LevelTwo extends BasicGameState {
     	turns.add(enemy3);
     	grid[9][9].placeCharacter(enemy3);
     	grid[9][9].setBlocked();
-    	side = new Characters("Jessica", 60,6,100,100,"resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3,true,false,2,0,1,false,"fireball", "explosion", "thunder", "wind");
+    	side = new Characters("Jessica", 60,6,100,100,"resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3,true,false,2,3,1,false,"fireball", "explosion", "thunder", "wind");
     	turns.add(side);
-    	grid[0][1].placeCharacter(side);
-    	grid[0][1].setBlocked();
+    	grid[3][1].placeCharacter(side);
+    	grid[3][1].setBlocked();
     	currentTurn = turns.get(turnLoc);
     	
     	//grassMap = new TiledMap("resources/map1.tmx");
@@ -764,6 +764,19 @@ public class LevelTwo extends BasicGameState {
     	button5.draw(276, (int)640);
     	trueTypeFont.drawString(600.0f, 10.0f, Double.toString(currentTurn.getHp()), Color.black);
     	currentMoves.drawString(600.0f, 30.0f, Integer.toString(tileAmt), Color.black);
+    	
+
+    	int x = 360;
+    	for(int i = 0; i < 4; i ++) {
+    		if(turnLoc+i >= turns.size()) {
+    			Image r = new Image(turns.get((turnLoc+i)%turns.size()).getPicD());
+        		r.draw(x,640);
+    		} else {
+    			Image r = new Image(turns.get(turnLoc+i).getPicD());
+        		r.draw(x,640);
+    		}
+    		x+=64;
+    	}
     	
     	if(turns.size()>0) {
     		updateHealth();
