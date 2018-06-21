@@ -713,23 +713,23 @@ public class LevelTwo extends BasicGameState {
 		mapsound = new MapTwoSound();
 		populateGrid();
 		clearRedArea();
-    	main = new Characters("Joe", 60, 6, 100, 100, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,3,1,1, false,"fireball", "explosion", "thunder", "wind");
+    	main = new Characters("Joe", 60, 6, 100, 100,String[]{"resources/back1w.png","resources/back2w.png","resources/back3w.png"}, new String[]{"resources/left1w.png","resources/left2w.png","resources/left3w.png"},new String[]{"resources/right1w.png","resources/right2w.png","resources/right3w.png"}, new String[]{"resources/front1w.png","resources/front2w.png","resources/front3w.png"},3, true, false,3,1,1, false,"fireball", "explosion", "thunder", "wind");
     	turns.add(main);
     	grid[1][1].placeCharacter(main);
     	grid[1][1].setBlocked();
-		enemy1 = new Characters("Enemy", 60, 5, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 2, 8, 1, false,"fireball", "heal", "thunder", "wind");
+		enemy1 = new Characters("Enemy", 60, 5, 100, 100, String[]{"resources/back1w.png","resources/back2w.png","resources/back3w.png"}, new String[]{"resources/left1w.png","resources/left2w.png","resources/left3w.png"},new String[]{"resources/right1w.png","resources/right2w.png","resources/right3w.png"}, new String[]{"resources/front1w.png","resources/front2w.png","resources/front3w.png"},3, false, false, 2, 8, 1, false,"fireball", "heal", "thunder", "wind");
     	grid[8][1].placeCharacter(enemy1);
     	grid[8][1].setBlocked();
     	turns.add(enemy1);
-    	enemy2 = new Characters("Enemy2", 60, 6, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false,2,7,5,false, "waterblast", "heal", "thunder", "wind");
+    	enemy2 = new Characters("Enemy2", 60, 6, 100, 100, String[]{"resources/back1w.png","resources/back2w.png","resources/back3w.png"}, new String[]{"resources/left1w.png","resources/left2w.png","resources/left3w.png"},new String[]{"resources/right1w.png","resources/right2w.png","resources/right3w.png"}, new String[]{"resources/front1w.png","resources/front2w.png","resources/front3w.png"},3, false, false,2,7,5,false, "waterblast", "heal", "thunder", "wind");
     	turns.add(enemy2);
     	grid[7][5].placeCharacter(side);
     	grid[7][5].setBlocked();
-    	enemy3 = new Characters("Enemy3", 60,6,100,100,"resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3,false,false,2,9,9,false,"fireball", "explosion", "thunder", "wind");
+    	enemy3 = new Characters("Enemy3", 60,6,100,100,String[]{"resources/back1w.png","resources/back2w.png","resources/back3w.png"}, new String[]{"resources/left1w.png","resources/left2w.png","resources/left3w.png"},new String[]{"resources/right1w.png","resources/right2w.png","resources/right3w.png"}, new String[]{"resources/front1w.png","resources/front2w.png","resources/front3w.png"},3,false,false,2,9,9,false,"fireball", "explosion", "thunder", "wind");
     	turns.add(enemy3);
     	grid[9][9].placeCharacter(enemy3);
     	grid[9][9].setBlocked();
-    	side = new Characters("Jessica", 60,6,100,100,"resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3,true,false,2,3,1,false,"fireball", "explosion", "thunder", "wind");
+    	side = new Characters("Jessica", 60,6,100,100,String[]{"resources/back1w.png","resources/back2w.png","resources/back3w.png"}, new String[]{"resources/left1w.png","resources/left2w.png","resources/left3w.png"},new String[]{"resources/right1w.png","resources/right2w.png","resources/right3w.png"}, new String[]{"resources/front1w.png","resources/front2w.png","resources/front3w.png"},3,true,false,2,3,1,false,"fireball", "explosion", "thunder", "wind");
     	turns.add(side);
     	grid[3][1].placeCharacter(side);
     	grid[3][1].setBlocked();
@@ -826,7 +826,7 @@ public class LevelTwo extends BasicGameState {
     	trueTypeFont.drawString(600.0f, 10.0f, Double.toString(currentTurn.getHp()), Color.black);
     	currentMoves.drawString(600.0f, 30.0f, Integer.toString(tileAmt), Color.black);
     	
-
+/**
     	int x = 360;
     	for(int i = 0; i < 4; i ++) {
     		if(turnLoc+i >= turns.size()) {
@@ -838,29 +838,30 @@ public class LevelTwo extends BasicGameState {
     		}
     		x+=64;
     	}
+    	**/
     	
     	if(turns.size()>0) {
     		updateHealth();
     		for (Characters d: turns) {
-    			Image[] asdf = {new Image(d.getPicU()), new Image(d.getPicU())};
+    			Image[] asdf = {new Image(d.getPicU()[0]), new Image(d.getPicU()[1]), new Image(d.getPicU()[2])};
     			if (d.getFace() == 0) {
-    				Image[] u = {new Image(d.getPicU()), new Image(d.getPicU())};
+    				Image[] u = {new Image(d.getPicU()[0]), new Image(d.getPicU()[1]), new Image(d.getPicU()[2])};
     				asdf = u;
     			}
     			if (d.getFace() == 1) {
-    				Image[] r = {new Image(d.getPicR()), new Image(d.getPicR())};	
+    				Image[] r = {new Image(d.getPicR()[0]), new Image(d.getPicR()[1]), new Image(d.getPicR()[2])};	
     				asdf = r;
     			}
     			if(d.getFace()==2) {
-    				Image[] l = {new Image(d.getPicL()), new Image(d.getPicL())};
+    				Image[] l = {new Image(d.getPicL()[0]), new Image(d.getPicL()[1]), new Image(d.getPicL()[2])};
     				asdf = l;
     			}
     			if(d.getFace()==3) {
-    				Image[] fda = {new Image(d.getPicD()), new Image(d.getPicD())};
+    				Image[] fda = {new Image(d.getPicD()[0]), new Image(d.getPicD()[1]), new Image(d.getPicD()[2])};
     				asdf = fda;
     			}
     			int [] duration = {300, 300}; 
-    			Animation df = new Animation(asdf,duration, false);
+    			Animation df = new Animation(asdf,duration, true);
     			df.draw(d.getX()*64, d.getY()*64);
     		}
     	} else {
@@ -1138,37 +1139,29 @@ public class LevelTwo extends BasicGameState {
 				}
 				else if(!cursormode && !pickingItem) {
 					if(input.isKeyDown(Input.KEY_W) && movable(2) && currentTurn.getY() != 0 && tileAmt != 0) { 
-						if(currentTurn == turns.get(0)) {
 							currentTurn.setFace(0);
 							sprite.update(delta);
-						}
 						currentTurn.setY(currentTurn.getY()-1);
 						moveHelper();
 						updateMap();
 					}
 					if(input.isKeyDown(Input.KEY_S) && movable(4) && currentTurn.getY() != 9 && tileAmt != 0) {
-						if(currentTurn == turns.get(0)) {
 							currentTurn.setFace(3);
 							sprite.update(delta);
-						}
 						currentTurn.setY(currentTurn.getY()+1);
 						moveHelper();
 						updateMap();
 					}
 					if (input.isKeyDown(Input.KEY_A)&& movable(3) && currentTurn.getX() != 0 && tileAmt != 0) { 
-						if(currentTurn == turns.get(0)) {
 							currentTurn.setFace(1);
 							sprite.update(delta);
-						}
 						currentTurn.setX(currentTurn.getX()-1);
 						moveHelper();
 						updateMap();
 					}
 					if (input.isKeyDown(Input.KEY_D)&& movable(1) && currentTurn.getX() != 9 && tileAmt != 0) {
-						if(currentTurn == turns.get(0)) {
 							currentTurn.setFace(2);
 							sprite.update(delta);
-						}
 						currentTurn.setX(currentTurn.getX()+1);
 						moveHelper();
 						updateMap();

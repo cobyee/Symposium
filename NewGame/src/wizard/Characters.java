@@ -5,10 +5,10 @@ public class Characters {
 	private String name;
 	private double hp;
 	private double attack;
-	private String picSourceU;
-	private String picSourceR;
-	private String picSourceL;
-	private String picSourceD;
+	private String[] picSourceU;
+	private String[] picSourceR;
+	private String[] picSourceL;
+	private String[] picSourceD;
 	private boolean ally;
 	private boolean canMove;
 	private int distance;
@@ -21,7 +21,7 @@ public class Characters {
 	private String[] skills = new String[4];
 	private double maxMana;
 	
-	public Characters(String name, double hp, double attack, double mana, double maxMana, String picSourceU, String picSourceR, String picSourceL, String picSourceD, int face, boolean ally, boolean canMove, int distance, int xCoord, int yCoord, boolean didattack, String skill1, String skill2, String skill3, String skill4) {
+	public Characters(String name, double hp, double attack, double mana, double maxMana, String[] picSourceU, String[] picSourceR, String[] picSourceL, String[] picSourceD, int face, boolean ally, boolean canMove, int distance, int xCoord, int yCoord, boolean didattack, String skill1, String skill2, String skill3, String skill4) {
 		this.name = name;
 		this.hp = hp;
 		this.currentHp = hp;
@@ -57,16 +57,16 @@ public class Characters {
 	public double getMaxHp() {
 		return this.hp;
 	}
-	public String getPicU() {
+	public String[] getPicU() {
 		return picSourceU;
 	}
-	public String getPicR() {
+	public String[] getPicR() {
 		return picSourceR;
 	}
-	public String getPicL() {
+	public String[] getPicL() {
 		return picSourceL;
 	}
-	public String getPicD() {
+	public String[] getPicD() {
 		return picSourceD;
 	}
 	public boolean isAlly() {

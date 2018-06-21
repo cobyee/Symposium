@@ -1028,7 +1028,6 @@ public class LevelOne extends BasicGameState {
 				timer.completeTask(0);
 				dial++;
 			}
-			
 		}else {
 		if (currentTurn.isAlly() == false){
 			if(searchingTarget()[0] == -1 && searchingTarget()[1]==-1) {
@@ -1095,37 +1094,29 @@ public class LevelOne extends BasicGameState {
 				}
 				else if(!cursormode && !pickingItem) {
 					if(input.isKeyDown(Input.KEY_W) && movable(2) && currentTurn.getY() != 0 && tileAmt != 0) { 
-						if(currentTurn == turns.get(0)) {
 							currentTurn.setFace(0);
 							sprite.update(delta);
-						}
 						currentTurn.setY(currentTurn.getY()-1);
 						moveHelper();
 						updateMap();
 					}
 					if(input.isKeyDown(Input.KEY_S) && movable(4) && currentTurn.getY() != 9 && tileAmt != 0) {
-						if(currentTurn == turns.get(0)) {
 							currentTurn.setFace(3);
 							sprite.update(delta);
-						}
 						currentTurn.setY(currentTurn.getY()+1);
 						moveHelper();
 						updateMap();
 					}
 					if (input.isKeyDown(Input.KEY_A)&& movable(3) && currentTurn.getX() != 0 && tileAmt != 0) { 
-						if(currentTurn == turns.get(0)) {
 							currentTurn.setFace(1);
 							sprite.update(delta);
-						}
 						currentTurn.setX(currentTurn.getX()-1);
 						moveHelper();
 						updateMap();
 					}
 					if (input.isKeyDown(Input.KEY_D)&& movable(1) && currentTurn.getX() != 9 && tileAmt != 0) {
-						if(currentTurn == turns.get(0)) {
 							currentTurn.setFace(2);
 							sprite.update(delta);
-						}
 						currentTurn.setX(currentTurn.getX()+1);
 						moveHelper();
 						updateMap();
