@@ -354,34 +354,95 @@ public class LevelTwo extends BasicGameState {
     public boolean canAttack() {
     	if(currentTurn.getX() == 0 || currentTurn.getX() == 9 || currentTurn.getY() == 0 || currentTurn.getY() == 9) {
     		if(currentTurn.getX() == 0) {
-    			if(grid[currentTurn.getX()][currentTurn.getY() - 1].isOccupied() || grid[currentTurn.getX()][currentTurn.getY() + 1].isOccupied() || 
-    					grid[currentTurn.getX()+1][currentTurn.getY()].isOccupied()) {
-    				return true;
+    			if (grid[currentTurn.getX()][currentTurn.getY() - 1].isOccupied()) {
+    				if (grid[currentTurn.getX()][currentTurn.getY() - 1].getCharacter().isAlly() == false) {
+    	    			return true;
+    	    			}
+    			}
+    			if (grid[currentTurn.getX()][currentTurn.getY() + 1].isOccupied()) {
+    				if (grid[currentTurn.getX()][currentTurn.getY() + 1].getCharacter().isAlly() == false) {
+    	    			return true;
+    	    			}
+    			}
+    			if (grid[currentTurn.getX()+1][currentTurn.getY()].isOccupied()) {
+    				if (grid[currentTurn.getX()+1][currentTurn.getY()].getCharacter().isAlly() == false) {
+    	    			return true;
+    	    			}
     			}
     		}
     		if(currentTurn.getX() == 9) {
-    			if(grid[currentTurn.getX()][currentTurn.getY() - 1].isOccupied() || grid[currentTurn.getX()][currentTurn.getY() + 1].isOccupied() || 
-    					grid[currentTurn.getX()-1][currentTurn.getY()].isOccupied()) {
-    				return true;
+    			if (grid[currentTurn.getX()][currentTurn.getY() - 1].isOccupied()) {
+    				if (grid[currentTurn.getX()][currentTurn.getY() - 1].getCharacter().isAlly() ==false) {
+    	    			return true;
+    	    			}
+    			}
+    			if (grid[currentTurn.getX()][currentTurn.getY() + 1].isOccupied()) {
+    				if (grid[currentTurn.getX()][currentTurn.getY() + 1].getCharacter().isAlly()==false) {
+    	    			return true;
+    	    			}
+    			}
+    			if (grid[currentTurn.getX()-1][currentTurn.getY()].isOccupied()) {
+    				if (grid[currentTurn.getX()-1][currentTurn.getY()].getCharacter().isAlly() == false) {
+    	    			return true;
+    	    			}
     			}
     		}
     		if(currentTurn.getY() == 9) {
-    			if(grid[currentTurn.getX()][currentTurn.getY() - 1].isOccupied() || grid[currentTurn.getX()-1][currentTurn.getY()].isOccupied() || 
-    					grid[currentTurn.getX()+1][currentTurn.getY()].isOccupied()) {
-    				return true;
+    			if (grid[currentTurn.getX()][currentTurn.getY() - 1].isOccupied()) {
+    				if (grid[currentTurn.getX()][currentTurn.getY() - 1].getCharacter().isAlly() == false) {
+    	    			return true;
+    	    			}
+    			}
+    			if (grid[currentTurn.getX()-1][currentTurn.getY()].isOccupied()) {
+    				if (grid[currentTurn.getX()-1][currentTurn.getY()].getCharacter().isAlly()== false) {
+    	    			return true;
+    	    			}
+    			}
+    			if (grid[currentTurn.getX()+1][currentTurn.getY()].isOccupied()) {
+    				if (grid[currentTurn.getX()+1][currentTurn.getY()].getCharacter().isAlly()==false) {
+    	    			return true;
+    	    			}
     			}
     		}
     		if(currentTurn.getY() == 0) {
-    			if(grid[currentTurn.getX()][currentTurn.getY() + 1].isOccupied() || grid[currentTurn.getX()-1][currentTurn.getY()].isOccupied() || 
-    					grid[currentTurn.getX()+1][currentTurn.getY()].isOccupied()) {
-    				return true;
+    			if (grid[currentTurn.getX()][currentTurn.getY() + 1].isOccupied()) {
+    				if (grid[currentTurn.getX()][currentTurn.getY() + 1].getCharacter().isAlly() == false) {
+    	    			return true;
+    	    			}
+    			}
+    			if (grid[currentTurn.getX()-1][currentTurn.getY()].isOccupied()) {
+    				if (grid[currentTurn.getX()-1][currentTurn.getY()].getCharacter().isAlly() == false) {
+    	    			return true;
+    	    			}
+    			}
+    			if (grid[currentTurn.getX()+1][currentTurn.getY()].isOccupied()) {
+    				if (grid[currentTurn.getX()+1][currentTurn.getY()].getCharacter().isAlly()==false) {
+    	    			return true;
+    	    			}
     			}
     		}
     	} else {
-    		if(grid[currentTurn.getX()][currentTurn.getY() - 1].isOccupied() || grid[currentTurn.getX()][currentTurn.getY() + 1].isOccupied() || grid[currentTurn.getX()-1][currentTurn.getY()].isOccupied() || 
-    				grid[currentTurn.getX()+1][currentTurn.getY()].isOccupied()) {
+    			if(grid[currentTurn.getX()][currentTurn.getY() - 1].isOccupied()){
+    			if (grid[currentTurn.getX()][currentTurn.getY() - 1].getCharacter().isAlly()==false) {
     			return true;
-    		}
+    			}
+    			}
+    			if(grid[currentTurn.getX()][currentTurn.getY() + 1].isOccupied()) {
+    				if (grid[currentTurn.getX()][currentTurn.getY() + 1].getCharacter().isAlly()==false) {
+    	    			return true;
+    	    			}
+    			}
+    			if (grid[currentTurn.getX()-1][currentTurn.getY()].isOccupied()) {
+    				if (grid[currentTurn.getX()-1][currentTurn.getY()].getCharacter().isAlly()==false) {
+    	    			return true;
+    	    			}
+    			}
+    			if (grid[currentTurn.getX()+1][currentTurn.getY()].isOccupied()) {
+    				if (grid[currentTurn.getX()+1][currentTurn.getY()].getCharacter().isAlly()==false) {
+    	    			return true;
+    	    			}
+    			}
+    		
     	}
     	return false;
     }
@@ -656,7 +717,7 @@ public class LevelTwo extends BasicGameState {
     	grid[8][1].placeCharacter(enemy1);
     	grid[8][1].setBlocked();
     	turns.add(enemy1);
-    	main = new Characters("Joe", 60, 6, 100, 100, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,3,1,1, false,"fireball", "explosion", "thunder", "wind");
+    	main = new Characters("Joe", 60, 6, 100, 100, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,1,1, false,"fireball", "explosion", "thunder", "wind");
     	turns.add(main);
     	grid[1][1].placeCharacter(main);
     	grid[1][1].setBlocked();
@@ -1327,6 +1388,7 @@ public class LevelTwo extends BasicGameState {
 			}
 		}
 		}
+		updateMap();
 	}
 	
 	public int[] searchingTarget() {
