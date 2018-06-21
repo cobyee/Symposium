@@ -634,19 +634,6 @@ public class LevelTwo extends BasicGameState {
 		for(int i = 0; i < 10; i++) {
     		grid[i][0].setBlocked();
     	}
-    		for(int j = 0; j < 8; j++) {
-    			grid[j][9].setBlocked();
-    		}
-    	for(int i = 3; i < 5; i++) {
-    		for(int j = 0; j < 5; j++) {
-    			grid[j][i].setBlocked();
-    		}
-    	}
-    	for(int i = 5; i < 10; i++) {
-    		for(int j = 0; j < 2; j++) {
-    			grid[j][i].setBlocked();
-    		}
-    	}
     
     	
     	enemy1 = new Characters("Enemy", 60, 5, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 2, 1, 2, false,"fireball", "heal", "thunder", "wind");
