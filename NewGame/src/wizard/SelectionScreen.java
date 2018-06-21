@@ -22,11 +22,14 @@ public class SelectionScreen extends BasicGameState {
 	private static int levelSelected = 1;
 	private static String[] levels = {"One","Two","Three"};
 	private static boolean canMove = true;
+	private Image background;
 	private static int highestLevelUnlocked = 1;
 	private Image lock;
+	private Image shownImage;
 	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
+		background = new Image("resources/selectionBackground.png");
 		for(Item i: Inventory.getInventory()) {
 			items.add(i);
 		}
@@ -36,18 +39,31 @@ public class SelectionScreen extends BasicGameState {
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+		background.draw(0,0);
 		// TODO Auto-generated method stub
-		g.setColor(Color.white);
-        TrueTypeFont words = new TrueTypeFont(new Font("Verdana", Font.BOLD, 8),true);
-        words.drawString(70.0f,100.0f, "LLLLLL", Color.white);
+		g.setColor(Color.black);
+		g.fillRect(50,90+(55*(levelSelected-1)), 150, 50);
 		for(int i = 0; i < levels.length; i++) {
-			g.drawString("Level " + (i+1), 50, 50 + (25 * i));
+			if(i+1 == levelSelected) {
+				TrueTypeFont levelName = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 40),true);
+				levelName.drawString(50.0f, (90 + (55 * i)), "Level " + (i+1), Color.white);
+			} else {
+				TrueTypeFont levelName = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 40),true);
+				levelName.drawString(50.0f, (90 + (55 * i)), "Level " + (i+1), Color.black);
+			}
 			if(i+1 > highestLevelUnlocked) {
 				lock = new Image("resources/LevelLocked.png");
-				lock.draw(50,50+(25*i));
+				lock.draw(50,90+(55*i));
 			}
 		}
-		g.drawRect(50,50+(25*(levelSelected-1)), 65, 24);
+		if(levelSelected == 1) {
+			shownImage = new Image("resources/smallmap1.png");
+			shownImage.draw(300,100);
+		}
+		if(levelSelected == 2) {
+			shownImage = new Image("resources/smallmap2.png");
+			shownImage.draw(300,100);
+		}
 	}
 
 	@Override
@@ -58,7 +74,7 @@ public class SelectionScreen extends BasicGameState {
 			sbg.enterState(3);
 			intros.stopSound(); 
   		}
-		if(input.isKeyDown(Input.KEY_W) && canMove && levelSelected > 1 && levelSelected < highestLevelUnlocked) {
+		if(input.isKeyDown(Input.KEY_W) && canMove && levelSelected > 1 && levelSelected-1 < highestLevelUnlocked) {
 			canMove = false;
 			levelSelected--;
 	    	Thread thread = new Thread(){

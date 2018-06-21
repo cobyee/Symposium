@@ -1124,7 +1124,7 @@ public class LevelOne extends BasicGameState {
 						return hahaxd;
 					}
 				}
-				}
+			}
 		/**	if (currentTurn.getX()-i+j >= 0) {
 				if (grid[currentTurn.getX()-i+j][currentTurn.getY()].isOccupied()) {
 					if (grid[currentTurn.getX()-i+j][currentTurn.getY()].getCharacter().isAlly()) {
