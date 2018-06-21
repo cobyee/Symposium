@@ -47,7 +47,7 @@ public class SelectionScreen extends BasicGameState {
 		if(levelSelected != 0) {
 			g.fillRect(50,90+(55*(levelSelected-1)), 150, 50);
 		} else {
-			g.fillRect(500,500, 110, 50);
+			g.fillRect(465,500, 110, 50);
 		}
 		for(int i = 0; i < levels.length; i++) {
 			if(i+1 == levelSelected) {
@@ -63,10 +63,10 @@ public class SelectionScreen extends BasicGameState {
 			}
 		}
 		if(levelSelected == 0) {
-			TrueTypeFont levelName = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 40),true);
-			levelName.drawString(500.0f, 500.0f, "Shop", Color.white);
+			TrueTypeFont levelName = new TrueTypeFont(new Font("Verdana", Font.PLAIN , 40),true);
+			levelName.drawString(470.0f, 500.0f, "Shop", Color.white);
 		} else {
-			TrueTypeFont levelName = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 40),true);
+			TrueTypeFont levelName = new TrueTypeFont(new Font("Verdana", Font.PLAIN , 40),true);
 			levelName.drawString(470.0f, 500.0f, "Shop", Color.black);
 		}
 		if(levelSelected == 1) {
@@ -81,42 +81,44 @@ public class SelectionScreen extends BasicGameState {
 	@Override
 	public void update(GameContainer container, StateBasedGame sbg, int arg2) throws SlickException {
 		Input input = container.getInput();
-		if (input.isKeyDown(Input.KEY_ENTER) && !Application.justSwapped()) {
-			if(levelSelected == 0) {
-				Application.switchScreen();
-				sbg.enterState(4);
+		if(!Application.justSwapped()) {
+			if (input.isKeyDown(Input.KEY_ENTER) && !Application.justSwapped()) {
+				if(levelSelected == 0) {
+					Application.switchScreen();
+					sbg.enterState(4);
+				}
+				if(levelSelected == 1) {
+					Application.switchScreen();
+					sbg.enterState(3);
+					intros.stopSound();
+				}
 			}
-			if(levelSelected == 1) {
-				Application.switchScreen();
-				sbg.enterState(3);
-				intros.stopSound();
+			if(input.isKeyDown(Input.KEY_W) && canMove && levelSelected > 1 && levelSelected-1 < highestLevelUnlocked) {
+				canMove = false;
+				levelSelected--;
+				threadMethod();
 			}
-  		}
-		if(input.isKeyDown(Input.KEY_W) && canMove && levelSelected > 1 && levelSelected-1 < highestLevelUnlocked) {
-			canMove = false;
-			levelSelected--;
-	    	threadMethod();
-		}
-		if(input.isKeyDown(Input.KEY_S) && canMove && levelSelected < levels.length && levelSelected < highestLevelUnlocked) {
-			canMove = false;
-			levelSelected++;
-			threadMethod();
-		}
-		if(input.isKeyDown(Input.KEY_D) && canMove) {
-			canMove = false;
-			levelPlaceHolder = levelSelected;
-			levelSelected = 0;
-			threadMethod();
-		}
-		if(input.isKeyDown(Input.KEY_A) && canMove) {
-			canMove = false;
-			levelSelected = levelPlaceHolder;
-			levelPlaceHolder = 0;
-			threadMethod();
-		}
-		if(input.isKeyDown(Input.KEY_ESCAPE)) {
-			Application.switchScreen();
-			sbg.enterState(1);
+			if(input.isKeyDown(Input.KEY_S) && canMove && levelSelected < levels.length && levelSelected < highestLevelUnlocked) {
+				canMove = false;
+				levelSelected++;
+				threadMethod();
+			}
+			if(input.isKeyDown(Input.KEY_D) && canMove) {
+				canMove = false;
+				levelPlaceHolder = levelSelected;
+				levelSelected = 0;
+				threadMethod();
+			}
+			if(input.isKeyDown(Input.KEY_A) && canMove) {
+				canMove = false;
+				levelSelected = levelPlaceHolder;
+				levelPlaceHolder = 0;
+				threadMethod();
+			}
+			if(input.isKeyDown(Input.KEY_ESCAPE)) {
+				Application.switchScreen();
+				sbg.enterState(1);
+			}
 		}
 	}
 
@@ -145,11 +147,11 @@ public class SelectionScreen extends BasicGameState {
     	thread.start();
 	}
 	
-	public int getGold() {
+	public static int getGold() {
 		return gold;
 	}
 	
-	public void setGold(int g) {
+	public static void setGold(int g) {
 		gold = g;
 	}
 	

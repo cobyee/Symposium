@@ -821,6 +821,8 @@ public class LevelOne extends BasicGameState {
     		shownImage.draw(420,120);
 	        TrueTypeFont description = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 16),true);
 	        description.drawString(400.0f, 300.0f, items.get(ItemPos).getDescription(), Color.black);
+	        TrueTypeFont amt = new TrueTypeFont(new Font("Verdana", Font.ITALIC , 16),true);
+	        amt.drawString(450.0f, 320.0f, Integer.toString(items.get(ItemPos).getAmt()), Color.black);
     	}
     	if (isHealing) {
     		if(items.get(ItemPos) instanceof HpItem) {
@@ -1286,77 +1288,6 @@ public class LevelOne extends BasicGameState {
 					}
 				}
 			}
-		/**	if (currentTurn.getX()-i+j >= 0) {
-				if (grid[currentTurn.getX()-i+j][currentTurn.getY()].isOccupied()) {
-					if (grid[currentTurn.getX()-i+j][currentTurn.getY()].getCharacter().isAlly()) {
-						hahaxd[0] = currentTurn.getX()-i+j;
-						hahaxd[1] = currentTurn.getY();
-						return hahaxd;
-					}
-				}
-				if (currentTurn.getY()-i+j >= 0) {
-					if (grid[currentTurn.getX()-i+j][currentTurn.getY()-i+j].isOccupied()) {
-				if (grid[currentTurn.getX()-i+j][currentTurn.getY()-i+j].getCharacter().isAlly()) {
-					hahaxd[0] = currentTurn.getX()-i+j;
-					hahaxd[1] = currentTurn.getY()-i+j;
-					return hahaxd;
-				}
-			}}
-				if (currentTurn.getY()+i-j <10) {
-					if (grid[currentTurn.getX()-i+j][currentTurn.getY()+i-j].isOccupied()) {
-					if (grid[currentTurn.getX()-i+j][currentTurn.getY()+i-j].getCharacter().isAlly()) {
-						hahaxd[0] = currentTurn.getX()-i+j;
-						hahaxd[1] = currentTurn.getY()+i-j;
-						return hahaxd;
-					}
-				}
-				}
-			}
-			if (currentTurn.getX()+i-j < 10) {
-				if (grid[currentTurn.getX()+i-j][currentTurn.getY()].isOccupied()) {
-					if (grid[currentTurn.getX()+i-j][currentTurn.getY()].getCharacter().isAlly()) {
-						hahaxd[0] = currentTurn.getX()+i-j;
-						hahaxd[1] = currentTurn.getY();
-						return hahaxd;
-					}
-				}
-				if (currentTurn.getY()-i+j >= 0) {
-				if (grid[currentTurn.getX()+i-j][currentTurn.getY()-i+j].isOccupied()) {
-				if (grid[currentTurn.getX()+i-j][currentTurn.getY()-i+j].getCharacter().isAlly()){
-					hahaxd[0] = currentTurn.getX()+i-j;
-					hahaxd[1] = currentTurn.getY()-i+j;
-					return hahaxd;
-				}
-				}
-				}
-				if (currentTurn.getY()+i-j < 10) {
-					if (grid[currentTurn.getX()+i-j][currentTurn.getY()+i-j].isOccupied()) {
-					if (grid[currentTurn.getX()+i-j][currentTurn.getY()+i-j].getCharacter().isAlly()) {
-						hahaxd[0] = currentTurn.getX()+i-j;
-						hahaxd[1] = currentTurn.getY()+i-j;
-						return hahaxd;
-					}
-				}
-				}
-			}
-			if (currentTurn.getY()+i-j < 10) {
-				if (grid[currentTurn.getX()][currentTurn.getY()+i-j].isOccupied()) {
-					if (grid[currentTurn.getX()][currentTurn.getY()+i-j].getCharacter().isAlly()) {
-						hahaxd[0] = currentTurn.getX();
-						hahaxd[1] = currentTurn.getY()+i-j;
-						return hahaxd;
-					}
-				}
-			}
-			if (currentTurn.getY()-i+j >=0) {
-				if (grid[currentTurn.getX()][currentTurn.getY()-i+j].isOccupied()) {
-					if (grid[currentTurn.getX()][currentTurn.getY()-i+j].getCharacter().isAlly()) {
-						hahaxd[0] = currentTurn.getX();
-						hahaxd[1] = currentTurn.getY()-i+j;
-						return hahaxd;
-					}
-				}
-		} **/
 		}}
 		System.out.println("no");
 		return hahaxd;

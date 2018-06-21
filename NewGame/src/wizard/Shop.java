@@ -20,8 +20,9 @@ public class Shop extends BasicGameState {
 	private static Image potion3;
 	private static Image potion4;
 	private static Image cursor;
-	private int currentItem = 1;
+	private int currentItem = 0;
 	private static boolean canMove = true;
+	private static int[] costs = {75,150,100,175};
 	
 	
 	@Override
@@ -38,12 +39,25 @@ public class Shop extends BasicGameState {
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2) throws SlickException {
 		background.draw(0,0);
-		cursor.draw(1+((currentItem-1)*128),104);
+		cursor.draw(1+((currentItem)*128),104);
 		potion1.draw(17,120);
 		potion2.draw(145,120);
 		potion3.draw(273,120);
 		potion4.draw(401,120);
-		
+		TrueTypeFont title = new TrueTypeFont(new Font("Verdana", Font.PLAIN , 30),true);
+		title.drawString(22.0f, 44.0f, "Shop", Color.white);
+		TrueTypeFont name = new TrueTypeFont(new Font("Verdana", Font.PLAIN , 30),true);
+		name.drawString(20.0f, 610.0f, SelectionScreen.getInventory().get(currentItem).getName(), Color.white);
+		TrueTypeFont description = new TrueTypeFont(new Font("Verdana", Font.PLAIN , 14),true);
+		description.drawString(20.0f, 650.0f, SelectionScreen.getInventory().get(currentItem).getDescription(), Color.white);
+		TrueTypeFont cost = new TrueTypeFont(new Font("Verdana", Font.PLAIN , 14),true);
+		cost.drawString(20.0f, 670.0f, "Cost: " + costs[currentItem], Color.white);
+		TrueTypeFont gold = new TrueTypeFont(new Font("Verdana", Font.PLAIN , 20),true);
+		gold.drawString(520.0f, 30.0f, "Gold: " + SelectionScreen.getGold(), Color.white);
+		for(int i = 0; i < 4; i++) {
+			TrueTypeFont amt = new TrueTypeFont(new Font("Verdana", Font.PLAIN , 10),true);
+			amt.drawString(110+(i*128), 210.0f, Integer.toString(SelectionScreen.getInventory().get(i).getAmt()), Color.white);
+		}
 	}
 
 	@Override
@@ -54,25 +68,33 @@ public class Shop extends BasicGameState {
 				Application.switchScreen();
 				sbg.enterState(2);
 			}
-			if(input.isKeyDown(Input.KEY_A) && canMove && currentItem > 1) {
+			if(input.isKeyDown(Input.KEY_A) && canMove && currentItem > 0) {
 				canMove = false;
 				currentItem--;
-				threadMethod();
+				threadMethod(150);
 			}
-			if(input.isKeyDown(Input.KEY_D) && canMove && currentItem < 4) {
+			if(input.isKeyDown(Input.KEY_D) && canMove && currentItem < 3) {
 				canMove = false;
 				currentItem++;
-				threadMethod();
+				threadMethod(150);
+			}
+			if(input.isKeyDown(Input.KEY_ENTER) && canMove) {
+				if(SelectionScreen.getGold() >= costs[currentItem]) {
+					SelectionScreen.getInventory().get(currentItem).setAmt(SelectionScreen.getInventory().get(currentItem).getAmt()+1);
+					SelectionScreen.setGold(SelectionScreen.getGold() - costs[currentItem]);
+					canMove = false;
+					threadMethod(200);
+				}
 			}
 		}
 	}
 
 
-	private static void threadMethod() {
+	private static void threadMethod(int n) {
     	Thread thread = new Thread(){
     		public void run(){
     			try {
-					Thread.sleep(300);
+					Thread.sleep(n);
 					canMove = true;
 				} catch (InterruptedException e) {
 					e.printStackTrace();
