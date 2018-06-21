@@ -456,7 +456,7 @@ public class LevelOne extends BasicGameState {
 			cursor.setX(currentTurn.getX());
 			cursor.setY(currentTurn.getY());
 		}
-		if(name.equals("finalspark") && currentTurn.getMana() >=  70) {
+		if(name.equals("wind") && currentTurn.getMana() >=  70) {
 			damageskill = 50;
 			skillmodedamage = true;
 			cursormode = true;
@@ -578,14 +578,14 @@ public class LevelOne extends BasicGameState {
     	}
     
     	
-    	enemy1 = new Characters("Enemy", 60, 5, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 2, 1, 2, false,"fireball", "heal", "thunder", "finalspark");
+    	enemy1 = new Characters("Enemy", 60, 5, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 2, 1, 2, false,"fireball", "heal", "thunder", "wind");
     	grid[1][2].placeCharacter(enemy1);
     	grid[1][2].setBlocked();
-    	main = new Characters("Joe", 60, 6, 100, 100, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,1,1, false,"fireball", "explosion", "thunder", "finalspark");
+    	main = new Characters("Joe", 60, 6, 100, 100, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,1,1, false,"fireball", "explosion", "thunder", "wind");
     	turns.add(main);
     	grid[1][1].placeCharacter(main);
     	grid[1][1].setBlocked();
-    	test1 = new Characters("Ally", 60, 6, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, true, false,1,4,4,false, "waterblast", "heal", "thunder", "finalspark");
+    	test1 = new Characters("Ally", 60, 6, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, true, false,1,4,4,false, "waterblast", "heal", "thunder", "wind");
     	turns.add(enemy1);
     	turns.add(test1);
     	grid[4][4].placeCharacter(test1);
@@ -619,6 +619,7 @@ public class LevelOne extends BasicGameState {
     	SpriteSheet fss = new SpriteSheet("resources/finalsparkanimate.png",64,64);
     	SpriteSheet hs = new SpriteSheet("resources/healskill.png",64,64);
     	SpriteSheet manas = new SpriteSheet("resources/manapotheal.png",64,64);
+    	
     	eDown = new Animation(enemyDown, duration, false);
     	
     	up = new Animation(movementUp, duration, false);
