@@ -39,15 +39,14 @@ public class MainMenu extends BasicGameState {
 		if(selectingOption) {
 			g.setColor(Color.white);
 			//99,99,101,61
-			g.drawRect(269, 479, 101, 61);
+			g.drawRect(269, 479, 101, 41);
 			g.setColor(color1);
-			g.fillRect(270, 480, 100, 60);
+			g.fillRect(270, 480, 100, 40);
 			g.setColor(color2);
 			g.fillRect(275, 482+(optionPos*20), 90, 18);
 			g.setColor(Color.black);
 			g.drawString("New Game",276,484);
-			g.drawString("Load Game",276,504);
-			g.drawString("Back",276,524);
+			g.drawString("Back",276,504);
 		} else {
 			g.setColor(Color.white);
 			g.drawString("Press Enter", 280, 480);
@@ -63,7 +62,7 @@ public class MainMenu extends BasicGameState {
 					Application.switchScreen();
 					sbg.enterState(2);
 				}
-				if(optionPos == 2) {
+				if(optionPos == 1) {
 					selectingOption = false;
 					MyTimerTask timer = new MyTimerTask();
 			        timer.completeTask(4);
@@ -79,7 +78,7 @@ public class MainMenu extends BasicGameState {
 				}
 			}
 			if(input.isKeyDown(input.KEY_S) && canMove) {
-				if(optionPos <= 1) {
+				if(optionPos <= 0) {
 					canMove = false;
 					optionPos++;
 					MyTimerTask timer = new MyTimerTask();

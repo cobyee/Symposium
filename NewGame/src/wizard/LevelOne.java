@@ -45,6 +45,7 @@ public class LevelOne extends BasicGameState {
 	private int turnLoc = 0;
 	private Characters currentTurn;
 	private static Characters cursor;
+	private static int thisLevel = 1;
 	
 	private static boolean pickingItem = false;
 	private static boolean isHealing = false;
@@ -753,14 +754,15 @@ public class LevelOne extends BasicGameState {
     	}
     
     	
-    	enemy1 = new Characters("Enemy", 60, 5, 100, 100, new String[]{"resources/back1w.png","resources/back2w.png","resources/back3w.png"}, new String[]{"resources/left1w.png","resources/left2w.png","resources/left3w.png"},new String[]{"resources/right1w.png","resources/right2w.png","resources/right3w.png"}, new String[]{"resources/front1w.png","resources/front2w.png","resources/front3w.png"},3, false, false, 2, 8, 1, false,"fireball", "heal", "thunder", "wind");
+    	enemy1 = new Characters("Enemy", 50, 5, 100, 100, new String[]{"resources/enemyback1.png","resources/enemyback2.png","resources/enemyback3.png"}, new String[]{"resources/enemyleft1.png","resources/enemyleft2.png","resources/enemyleft3.png"},new String[]{"resources/enemyright1.png","resources/enemyright2.png","resources/enemyright3.png"}, new String[]{"resources/enemyfront1.png","resources/enemyfront2.png","resources/enemyfront3.png"},3, false, false, 2, 8, 1, false,"fireball", "heal", "thunder", "wind");
     	grid[8][1].placeCharacter(enemy1);
     	grid[8][1].setBlocked();
-    	main = new Characters("Joe", 60, 6, 100, 100, new String[] {"resources/mainback1.png","resources/mainback2.png","resources/mainback3.png"},new String[] {"resources/mainleft1.png","resources/mainleft2.png","resources/mainleft3.png"}, new String[] {"resources/mainright1.png","resources/mainright2.png","resources/mainright3.png"}, new String[] {"resources/mainfront1.png","resources/mainfront2.png","resources/mainfront3.png"} ,3, true, false,5,1,1, false,"fireball", "explosion", "thunder", "wind");
+    	main = new Characters("Joe", 60, 8, 100, 100, new String[] {"resources/mainback1.png","resources/mainback2.png","resources/mainback3.png"},new String[] {"resources/mainleft1.png","resources/mainleft2.png","resources/mainleft3.png"}, new String[] {"resources/mainright1.png","resources/mainright2.png","resources/mainright3.png"}, new String[] {"resources/mainfront1.png","resources/mainfront2.png","resources/mainfront3.png"} ,3, true, false,3,1,1, false,"fireball", "explosion", "thunder", "wind");
     	turns.add(main);
     	grid[1][1].placeCharacter(main);
     	grid[1][1].setBlocked();
-    	enemy2 = new Characters("Enemy2", 60, 6, 100, 100, new String[]{"resources/back1w.png","resources/back2w.png","resources/back3w.png"}, new String[]{"resources/left1w.png","resources/left2w.png","resources/left3w.png"},new String[]{"resources/right1w.png","resources/right2w.png","resources/right3w.png"}, new String[]{"resources/front1w.png","resources/front2w.png","resources/front3w.png"},3, false, false,2,5,8,false, "waterblast", "heal", "thunder", "wind");
+    	enemy2 = new Characters("Enemy2", 50, 6, 100, 100, new String[]{"resources/enemyback1.png","resources/enemyback2.png","resources/enemyback3.png"}, new String[]{"resources/enemyleft1.png","resources/enemyleft2.png","resources/enemyleft3.png"},new String[]{"resources/enemyright1.png","resources/enemyright2.png","resources/enemyright3.png"}, new String[]{"resources/enemyfront1.png","resources/enemyfront2.png","resources/enemyfront3.png"},3, false, false,2,5,8,false, "waterblast", "heal", "thunder", "wind");
+
     	turns.add(enemy1);
     	grid[5][8].placeCharacter(enemy2);
     	grid[5][8].setBlocked();
@@ -792,19 +794,19 @@ public class LevelOne extends BasicGameState {
     	map = new Image("resources/FE Map.png");
     	
     	itemScreen = new Image("resources/scroll.png");
-    	Image [] movementUp = {new Image("resources/spriteUp.png"), new Image("resources/spriteUp.png")};
-    	Image [] movementDown = {new Image("resources/spriteFront.png"), new Image("resources/spriteFront.png")};
-    	Image [] movementLeft = {new Image("resources/spriteLeft.png"), new Image("resources/spriteLeft.png")};
-    	Image [] movementRight = {new Image("resources/spriteRight.png"), new Image("resources/spriteRight.png")};
-    	Image [] cursord = {new Image("resources/cursor.png"), new Image("resources/cursor.png")};
+    	Image [] movementUp = {new Image("resources/mainback1.png"), new Image("resources/mainback2.png"), new Image("resources/mainback3.png")};
+    	Image [] movementDown = {new Image("resources/mainfront1.png"), new Image("resources/mainfront2.png"),new Image("resources/mainfront3.png")};
+    	Image [] movementLeft = {new Image("resources/spriteLeft.png"), new Image("resources/spriteLeft.png"), new Image("resources/spriteLeft.png")};
+    	Image [] movementRight = {new Image("resources/spriteRight.png"), new Image("resources/spriteRight.png"),new Image("resources/spriteRight.png")};
+    	Image [] cursord = {new Image("resources/cursor.png"), new Image("resources/cursor.png"), new Image("resources/cursor.png")};
     	Image [] healingPics = {new Image("resources/heal1.png"),new Image("resources/heal2.png"),new Image("resources/heal3.png"),
     			new Image("resources/heal4.png"),new Image("resources/heal5.png"),new Image("resources/heal6.png"),
     			new Image("resources/heal7.png"),new Image("resources/heal8.png"),new Image("resources/heal9.png"),
     			new Image("resources/heal10.png"),new Image("resources/heal11.png"),new Image("resources/heal12.png"),
     			new Image("resources/heal13.png"),new Image("resources/heal14.png"),new Image("resources/heal15.png"),
     			new Image("resources/heal16.png"),new Image("resources/heal17.png")};
-    	Image [] test = {new Image("resources/asdf.png"), new Image("resources/asdf.png")};
-    	int [] duration = {300,300};
+    	Image [] test = {new Image("resources/asdf.png"), new Image("resources/asdf.png"), new Image("resources/asdf.png")};
+    	int [] duration = {300,300,300};
     	int [] healingDuration = {100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100};
     	
     //	Image [] enemyDown = {new Image(enemy1.getPicU()), new Image(enemy1.getPicU())};
@@ -815,11 +817,10 @@ public class LevelOne extends BasicGameState {
     	SpriteSheet fss = new SpriteSheet("resources/windanimate.png",64,64);
     	SpriteSheet hs = new SpriteSheet("resources/healskill.png",64,64);
     	SpriteSheet manas = new SpriteSheet("resources/manapotheal.png",64,64);
+   
     	
-    //	eDown = new Animation(enemyDown, duration, false);
-    	
-    	up = new Animation(movementUp, duration, false);
-    	down = new Animation(movementDown, duration, false);
+    	up = new Animation(movementUp, duration, true);
+    	down = new Animation(movementDown, duration, true);
     	left = new Animation(movementLeft, duration, false);
     	right = new Animation(movementRight, duration, false); 
     	allyTest = new Animation(test, duration, false);
@@ -876,21 +877,19 @@ public class LevelOne extends BasicGameState {
     	button3.draw(148, (int)640);
     	button4.draw(212, (int)640);
     	button5.draw(276, (int)640);
-    	trueTypeFont.drawString(600.0f, 10.0f, Double.toString(currentTurn.getHp()), Color.black);
-    	currentMoves.drawString(600.0f, 30.0f, Integer.toString(tileAmt), Color.black);
-   /** 	
+        TrueTypeFont tiles = new TrueTypeFont(new Font("Verdana", Font.BOLD, 20),true);
+        tiles.drawString(600.0f,7.0f, Integer.toString(tileAmt), Color.black);
     	int x = 360;
     	for(int i = 0; i < 4; i ++) {
     		if(turnLoc+i >= turns.size()) {
-    			Image r = new Image(turns.get((turnLoc+i)%turns.size()).getPicD());
+    			Image r = new Image(turns.get((turnLoc+i)%turns.size()).getPicD()[1]);
         		r.draw(x,640);
     		} else {
-    			Image r = new Image(turns.get(turnLoc+i).getPicD());
+    			Image r = new Image(turns.get(turnLoc+i).getPicD()[1]);
         		r.draw(x,640);
     		}
     		x+=64;
     	}
-    	**/
     	if(turns.size()>0) {
     		updateHealth();
     		for (int j=0; j<turns.size();j++) {
@@ -908,16 +907,16 @@ public class LevelOne extends BasicGameState {
     		if (i==turnLoc) {
     		if(specificPerc(turns.get(i)) >0) {
     			g.setColor(Color.red);
-    			g.drawRect((turns.get(i).getX() * 64 + 10)+XMoves, ((turns.get(i).getY() * 64)-2)+YMoves, 44, 2);
-        		g.fillRect((turns.get(i).getX() * 64 + 10)+XMoves, ((turns.get(i).getY() * 64)-2)+YMoves, (int)(specificPerc(turns.get(i))*44), 2);
+    			g.drawRect((turns.get(i).getX() * 64 + 10)+XMoves, ((turns.get(i).getY() * 64)-3)+YMoves, 44, 2);
+        		g.fillRect((turns.get(i).getX() * 64 + 10)+XMoves, ((turns.get(i).getY() * 64)-3)+YMoves, (int)(specificPerc(turns.get(i))*44), 2);
     		}
     		}else {
     			if(specificPerc(turns.get(i)) >0) {
         			g.setColor(Color.red);
-        			g.drawRect(turns.get(i).getX() * 64 + 10, (turns.get(i).getY() * 64)-2, 44, 2);
-            		g.fillRect(turns.get(i).getX() * 64 + 10, (turns.get(i).getY() * 64)-2, (int)(specificPerc(turns.get(i))*44), 2);
-        		}
+    			g.drawRect(turns.get(i).getX() * 64 + 10, (turns.get(i).getY() * 64)-3, 44, 2);
+        		g.fillRect(turns.get(i).getX() * 64 + 10, (turns.get(i).getY() * 64)-3, (int)(specificPerc(turns.get(i))*44), 2);
     		}
+    	}
     	}
     	for (int l = 0; l<turns.size(); l++) {
     		if (l==turnLoc) {
@@ -1043,7 +1042,9 @@ public class LevelOne extends BasicGameState {
 			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 7) {
 				MyTimerTask timer = new MyTimerTask();
 				timer.completeTask(0);
-				wizard.SelectionScreen.addLevel();
+				if(SelectionScreen.getLevel() == thisLevel) {
+					wizard.SelectionScreen.addLevel();
+				}
 				mapsound.stopSound();
 				wizard.SelectionScreen.queueMusic();
 				sbg.enterState(2);
@@ -1547,7 +1548,6 @@ public class LevelOne extends BasicGameState {
 		return hahaxd;
 	}
 	public void checkClose(int[] target) {
-		System.out.println("zxcv");
 		System.out.println(target[0]+ " and " + target[1]);
 		if (target[0] == currentTurn.getX()-1 && target[1] == currentTurn.getY()) {
 			Attackuh(target);
@@ -1594,21 +1594,25 @@ public class LevelOne extends BasicGameState {
 		if (target[0] < currentTurn.getX() && (grid[currentTurn.getX()-1][currentTurn.getY()].getBlocked() == false)) {
 			currentTurn.setX(currentTurn.getX()-1);
 			checkClose(target);
+			currentTurn.setFace(2);
 			return;
 		}
 		if (target[0] > currentTurn.getX() && (grid[currentTurn.getX()+1][currentTurn.getY()].getBlocked() == false)) {
 			currentTurn.setX(currentTurn.getX()+1);
 			checkClose(target);
+			currentTurn.setFace(1);
 			return;
 		}
 		if (target[1] < currentTurn.getY() && (grid[currentTurn.getX()][currentTurn.getY()-1].getBlocked() == false)) {
 			currentTurn.setY(currentTurn.getY()-1);
 			checkClose(target);
+			currentTurn.setFace(0);
 			return;
 		}
 		if (target[1] > currentTurn.getY() && (grid[currentTurn.getX()][currentTurn.getY()+1].getBlocked() == false)) {
 			currentTurn.setY(currentTurn.getY()+1);
 			checkClose(target);
+			currentTurn.setFace(3);
 			return;
 		}
 		turnLoc++;

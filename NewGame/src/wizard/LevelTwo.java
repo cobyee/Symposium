@@ -732,23 +732,23 @@ public class LevelTwo extends BasicGameState {
 		mapsound = new MapTwoSound();
 		populateGrid();
 		clearRedArea();
-    	main = new Characters("Joe", 60, 6, 100, 100,new String[]{"resources/back1w.png","resources/back2w.png","resources/back3w.png"}, new String[]{"resources/left1w.png","resources/left2w.png","resources/left3w.png"},new String[]{"resources/right1w.png","resources/right2w.png","resources/right3w.png"}, new String[]{"resources/front1w.png","resources/front2w.png","resources/front3w.png"},3, true, false,3,1,1, false,"fireball", "explosion", "thunder", "wind");
+    	main = new Characters("Joe", 60, 8, 100, 100,new String[] {"resources/mainback1.png","resources/mainback2.png","resources/mainback3.png"},new String[] {"resources/mainleft1.png","resources/mainleft2.png","resources/mainleft3.png"}, new String[] {"resources/mainright1.png","resources/mainright2.png","resources/mainright3.png"}, new String[] {"resources/mainfront1.png","resources/mainfront2.png","resources/mainfront3.png"},3, true, false,3,1,1, false,"fireball", "explosion", "thunder", "wind");
     	turns.add(main);
     	grid[1][1].placeCharacter(main);
     	grid[1][1].setBlocked();
-		enemy1 = new Characters("Enemy", 60, 5, 100, 100, new String[]{"resources/back1w.png","resources/back2w.png","resources/back3w.png"}, new String[]{"resources/left1w.png","resources/left2w.png","resources/left3w.png"},new String[]{"resources/right1w.png","resources/right2w.png","resources/right3w.png"}, new String[]{"resources/front1w.png","resources/front2w.png","resources/front3w.png"},3, false, false, 2, 8, 1, false,"fireball", "heal", "thunder", "wind");
+		enemy1 = new Characters("Enemy", 50, 5, 100, 100, new String[]{"resources/enemyback1.png","resources/enemyback2.png","resources/enemyback3.png"}, new String[]{"resources/enemyleft1.png","resources/enemyleft2.png","resources/enemyleft3.png"},new String[]{"resources/enemyright1.png","resources/enemyright2.png","resources/enemyright3.png"}, new String[]{"resources/enemyfront1.png","resources/enemyfront2.png","resources/enemyfront3.png"},3, false, false, 2, 8, 1, false,"fireball", "heal", "thunder", "wind");
     	grid[8][1].placeCharacter(enemy1);
     	grid[8][1].setBlocked();
     	turns.add(enemy1);
-    	enemy2 = new Characters("Enemy2", 60, 6, 100, 100, new String[]{"resources/back1w.png","resources/back2w.png","resources/back3w.png"}, new String[]{"resources/left1w.png","resources/left2w.png","resources/left3w.png"},new String[]{"resources/right1w.png","resources/right2w.png","resources/right3w.png"}, new String[]{"resources/front1w.png","resources/front2w.png","resources/front3w.png"},3, false, false,2,7,5,false, "waterblast", "heal", "thunder", "wind");
+    	enemy2 = new Characters("Enemy2", 50, 6, 100, 100, new String[]{"resources/enemyback1.png","resources/enemyback2.png","resources/enemyback3.png"}, new String[]{"resources/enemyleft1.png","resources/enemyleft2.png","resources/enemyleft3.png"},new String[]{"resources/enemyright1.png","resources/enemyright2.png","resources/enemyright3.png"}, new String[]{"resources/enemyfront1.png","resources/enemyfront2.png","resources/enemyfront3.png"},3, false, false,2,7,5,false, "waterblast", "heal", "thunder", "wind");
     	turns.add(enemy2);
     	grid[7][5].placeCharacter(side);
     	grid[7][5].setBlocked();
-    	enemy3 = new Characters("Enemy3", 60,6,100,100,new String[]{"resources/back1w.png","resources/back2w.png","resources/back3w.png"}, new String[]{"resources/left1w.png","resources/left2w.png","resources/left3w.png"},new String[]{"resources/right1w.png","resources/right2w.png","resources/right3w.png"}, new String[]{"resources/front1w.png","resources/front2w.png","resources/front3w.png"},3,false,false,2,9,9,false,"fireball", "explosion", "thunder", "wind");
+    	enemy3 = new Characters("Enemy3", 55,6,100,100,new String[]{"resources/enemyback1.png","resources/enemyback2.png","resources/enemyback3.png"}, new String[]{"resources/enemyleft1.png","resources/enemyleft2.png","resources/enemyleft3.png"},new String[]{"resources/enemyright1.png","resources/enemyright2.png","resources/enemyright3.png"}, new String[]{"resources/enemyfront1.png","resources/enemyfront2.png","resources/enemyfront3.png"},3,false,false,2,9,9,false,"fireball", "explosion", "thunder", "wind");
     	turns.add(enemy3);
     	grid[9][9].placeCharacter(enemy3);
     	grid[9][9].setBlocked();
-    	side = new Characters("Jessica", 60,6,100,100,new String[]{"resources/back1w.png","resources/back2w.png","resources/back3w.png"}, new String[]{"resources/left1w.png","resources/left2w.png","resources/left3w.png"},new String[]{"resources/right1w.png","resources/right2w.png","resources/right3w.png"}, new String[]{"resources/front1w.png","resources/front2w.png","resources/front3w.png"},3,true,false,2,3,1,false,"fireball", "explosion", "thunder", "wind");
+    	side = new Characters("Jessica", 50,4,100,100,new String[]{"resources/back1w.png","resources/back2w.png","resources/back3w.png"}, new String[]{"resources/left1w.png","resources/left2w.png","resources/left3w.png"},new String[]{"resources/right1w.png","resources/right2w.png","resources/right3w.png"}, new String[]{"resources/front1w.png","resources/front2w.png","resources/front3w.png"},3,true,false,2,3,1,false,"fireball", "explosion", "thunder", "wind");
     	turns.add(side);
     	grid[3][1].placeCharacter(side);
     	grid[3][1].setBlocked();
@@ -864,22 +864,20 @@ public class LevelTwo extends BasicGameState {
     	button3.draw(148, (int)640);
     	button4.draw(212, (int)640);
     	button5.draw(276, (int)640);
-    	trueTypeFont.drawString(600.0f, 10.0f, Double.toString(currentTurn.getHp()), Color.black);
-    	currentMoves.drawString(600.0f, 30.0f, Integer.toString(tileAmt), Color.black);
+        TrueTypeFont tiles = new TrueTypeFont(new Font("Verdana", Font.BOLD, 20),true);
+        tiles.drawString(600.0f,7.0f, Integer.toString(tileAmt), Color.white);
     	
-/**
     	int x = 360;
     	for(int i = 0; i < 4; i ++) {
     		if(turnLoc+i >= turns.size()) {
-    			Image r = new Image(turns.get((turnLoc+i)%turns.size()).getPicD());
+    			Image r = new Image(turns.get((turnLoc+i)%turns.size()).getPicD()[1]);
         		r.draw(x,640);
     		} else {
-    			Image r = new Image(turns.get(turnLoc+i).getPicD());
+    			Image r = new Image(turns.get(turnLoc+i).getPicD()[1]);
         		r.draw(x,640);
     		}
     		x+=64;
     	}
-    	**/
     	
     	if(turns.size()>0) {
     		updateHealth();
@@ -904,8 +902,8 @@ public class LevelTwo extends BasicGameState {
     		}else {
     			if(specificPerc(turns.get(i)) >0) {
         			g.setColor(Color.red);
-        			g.drawRect(turns.get(i).getX() * 64 + 10, (turns.get(i).getY() * 64)-2, 44, 2);
-            		g.fillRect(turns.get(i).getX() * 64 + 10, (turns.get(i).getY() * 64)-2, (int)(specificPerc(turns.get(i))*44), 2);
+        			g.drawRect(turns.get(i).getX() * 64 + 10, (turns.get(i).getY() * 64)-3, 44, 2);
+            		g.fillRect(turns.get(i).getX() * 64 + 10, (turns.get(i).getY() * 64)-3, (int)(specificPerc(turns.get(i))*44), 2);
         		}
     		}
     	}
