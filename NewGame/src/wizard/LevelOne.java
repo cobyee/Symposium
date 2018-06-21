@@ -832,6 +832,18 @@ public class LevelOne extends BasicGameState {
     	trueTypeFont.drawString(600.0f, 10.0f, Double.toString(currentTurn.getHp()), Color.black);
     	currentMoves.drawString(600.0f, 30.0f, Integer.toString(tileAmt), Color.black);
     	
+    	int x = 360;
+    	for(int i = 0; i < 4; i ++) {
+    		if(turnLoc+i >= turns.size()) {
+    			Image r = new Image(turns.get((turnLoc+i)%turns.size()).getPicD());
+        		r.draw(x,640);
+    		} else {
+    			Image r = new Image(turns.get(turnLoc+i).getPicD());
+        		r.draw(x,640);
+    		}
+    		x+=64;
+    	}
+    	
     	if(turns.size()>0) {
     		updateHealth();
     		for (Characters d: turns) {
