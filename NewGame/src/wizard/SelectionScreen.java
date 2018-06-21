@@ -168,4 +168,8 @@ public class SelectionScreen extends BasicGameState {
 		intros.playSound();
 	
 	}
+	
+	public static int getLevel() {
+		return highestLevelUnlocked;
+	}
 }

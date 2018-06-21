@@ -612,7 +612,7 @@ public class FireEmblem extends BasicGameState {
     	int [] duration = {300,300};
     	int [] healingDuration = {100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100};
     	
-    	Image [] enemyDown = {new Image(enemy1.getPicU()), new Image(enemy1.getPicU())};
+    	//Image [] enemyDown = {new Image(enemy1.getPicU()), new Image(enemy1.getPicU())};
     	SpriteSheet fbs = new SpriteSheet("resources/fireballanimate.png", 64,64);
     	SpriteSheet es = new SpriteSheet("resources/explosionanimate.png",64,64);
     	SpriteSheet ws = new SpriteSheet("resources/waterblastanimate.png",64,64);
