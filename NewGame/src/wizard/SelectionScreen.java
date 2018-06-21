@@ -71,11 +71,16 @@ public class SelectionScreen extends BasicGameState {
 		}
 		if(levelSelected == 1) {
 			shownImage = new Image("resources/smallmap1.png");
+			shownImage.draw(300,100);
 		}
 		if(levelSelected == 2) {
 			shownImage = new Image("resources/smallmap2.png");
+			shownImage.draw(300,100);
 		}
-		shownImage.draw(300,100);
+		if(levelSelected == 3) {
+			TrueTypeFont continued = new TrueTypeFont(new Font("Verdana", Font.PLAIN , 40),true);
+			continued.drawString(250.0f, 200.0f, "TO BE CONTINUED", Color.black);
+		}
 	}
 
 	@Override
@@ -161,7 +166,9 @@ public class SelectionScreen extends BasicGameState {
 	}
 	
 	public static void addLevel() {
-		highestLevelUnlocked++;
+		if(highestLevelUnlocked < levels.length) {
+			highestLevelUnlocked++;
+		}
 	}
 	public static void queueMusic() {
 		intros.startSound();

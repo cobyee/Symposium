@@ -765,7 +765,7 @@ public class LevelOne extends BasicGameState {
     	turns.add(main);
     	grid[1][1].placeCharacter(main);
     	grid[1][1].setBlocked();
-    	enemy2 = new Characters("Enemy2", 50, 6, 100, 100, new String[]{"resources/enemyback1.png","resources/enemyback2.png","resources/enemyback3.png"}, new String[]{"resources/enemyleft1.png","resources/enemyleft2.png","resources/enemyleft3.png"},new String[]{"resources/enemyright1.png","resources/enemyright2.png","resources/enemyright3.png"}, new String[]{"resources/enemyfront1.png","resources/enemyfront2.png","resources/enemyfront3.png"},3, false, false,2,5,8,false, "waterblast", "heal", "thunder", "wind");
+    	enemy2 = new Characters("Enemy2", 50, 8, 100, 100, new String[]{"resources/enemyback1.png","resources/enemyback2.png","resources/enemyback3.png"}, new String[]{"resources/enemyleft1.png","resources/enemyleft2.png","resources/enemyleft3.png"},new String[]{"resources/enemyright1.png","resources/enemyright2.png","resources/enemyright3.png"}, new String[]{"resources/enemyfront1.png","resources/enemyfront2.png","resources/enemyfront3.png"},3, false, false,2,5,8,false, "waterblast", "heal", "thunder", "wind");
 
     	turns.add(enemy1);
     	grid[5][8].placeCharacter(enemy2);
