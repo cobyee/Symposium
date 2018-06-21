@@ -17,6 +17,7 @@ public class MyTimerTask extends TimerTask {
     	if(n == 0) {
     		try {
     			LevelOne.setMovable(true);
+    			LevelTwo.setMovable(true);
     			Thread.sleep(400);
     		} catch (InterruptedException e) {
     			e.printStackTrace();
@@ -25,6 +26,7 @@ public class MyTimerTask extends TimerTask {
     	if(n == 1) {
     		try {
     			LevelOne.setOptionMovable(true);
+    			LevelTwo.setOptionMovable(true);
     			Thread.sleep(400);
     		} catch (InterruptedException e) {
     			e.printStackTrace();
@@ -33,6 +35,7 @@ public class MyTimerTask extends TimerTask {
     	if(n == 2) {
     		try {
     			LevelOne.setOptionItem(true);
+    			LevelTwo.setOptionItem(true);
     			Thread.sleep(100);
     		} catch (InterruptedException e) {
     			e.printStackTrace();
@@ -42,6 +45,7 @@ public class MyTimerTask extends TimerTask {
     		try {
     			Thread.sleep(1700);
     			LevelOne.stopHealingAnimation();
+    			LevelTwo.stopHealingAnimation();
     		} catch (InterruptedException e) {
     			e.printStackTrace();
     		}

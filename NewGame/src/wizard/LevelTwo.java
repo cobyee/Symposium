@@ -36,11 +36,11 @@ import sun.java2d.loops.DrawRect;
 //-Djava.library.path=C:\Users\BT_1N3_27\git\Symposium\NewGame\lib\slick
 
 //https://mrbubblewand.wordpress.com/page/8/?archives-list=1
-public class LevelOne extends BasicGameState {
+public class LevelTwo extends BasicGameState {
 	
 	private ArrayList<Item> items = SelectionScreen.getInventory();
 	
-	private static Characters test1;
+	private static Characters side;
 	private static ArrayList<Characters> turns = new ArrayList<Characters>();
 	private int turnLoc = 0;
 	private Characters currentTurn;
@@ -131,7 +131,7 @@ public class LevelOne extends BasicGameState {
 	private static Characters main;
 	
 	
-    public LevelOne() {
+    public LevelTwo() {
     	super();
     } 
     
@@ -608,16 +608,9 @@ public class LevelOne extends BasicGameState {
     	for(int i = 0; i < 10; i++) {
     		grid[i][0].setBlocked();
     	}
-    	for(int i = 3; i < 10; i++) {
-    	    for(int j = 7; j < 10; j++) {
-    			grid[j][i].setBlocked();
+    		for(int j = 0; j < 8; j++) {
+    			grid[j][9].setBlocked();
     		}
-    	}
-    	for(int i = 3; i < 5; i++) {
-    		for(int j = 0; j < 5; j++) {
-    			grid[j][i].setBlocked();
-    		}
-    	}
     	for(int i = 5; i < 10; i++) {
     		for(int j = 0; j < 2; j++) {
     			grid[j][i].setBlocked();
@@ -638,14 +631,12 @@ public class LevelOne extends BasicGameState {
 		mapsound = new MapOneSound();
 		populateGrid();
 		clearRedArea();
-    	for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < 10; i++) {
     		grid[i][0].setBlocked();
     	}
-    	for(int i = 3; i < 10; i++) {
-    	    for(int j = 7; j < 10; j++) {
-    			grid[j][i].setBlocked();
+    		for(int j = 0; j < 8; j++) {
+    			grid[j][9].setBlocked();
     		}
-    	}
     	for(int i = 3; i < 5; i++) {
     		for(int j = 0; j < 5; j++) {
     			grid[j][i].setBlocked();
@@ -661,19 +652,19 @@ public class LevelOne extends BasicGameState {
     	enemy1 = new Characters("Enemy", 60, 5, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, false, false, 2, 1, 2, false,"fireball", "heal", "thunder", "wind");
     	grid[1][2].placeCharacter(enemy1);
     	grid[1][2].setBlocked();
-    	main = new Characters("Joe", 60, 6, 100, 100, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,1,1, false,"fireball", "explosion", "thunder", "wind");
+    	main = new Characters("Joe", 60, 6, 100, 100, "resources/spriteUp.png","resources/spriteLeft.png", "resources/spriteRight.png", "resources/SpriteFront.png",3, true, false,5,0,1, false,"fireball", "explosion", "thunder", "wind");
     	turns.add(main);
-    	grid[1][1].placeCharacter(main);
-    	grid[1][1].setBlocked();
-    	test1 = new Characters("Ally", 60, 6, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, true, false,1,4,4,false, "waterblast", "heal", "thunder", "wind");
+    	grid[0][1].placeCharacter(main);
+    	grid[0][1].setBlocked();
+    	side = new Characters("Kobe", 60, 6, 100, 100, "resources/asdf.png","resources/asdf.png","resources/asdf.png","resources/asdf.png",3, true, false,1,2,1,false, "waterblast", "heal", "thunder", "wind");
     	turns.add(enemy1);
-    	turns.add(test1);
-    	grid[4][4].placeCharacter(test1);
-    	grid[4][4].setBlocked();
+    	turns.add(side);
+    	grid[2][1].placeCharacter(side);
+    	grid[2][1].setBlocked();
     	currentTurn = turns.get(turnLoc);
     	
     	//grassMap = new TiledMap("resources/map1.tmx");
-    	map = new Image("resources/FE Map.png");
+    	map = new Image("resources/FE Map 2.png");
     	
     	itemScreen = new Image("resources/scroll.png");
     	Image [] movementUp = {new Image("resources/spriteUp.png"), new Image("resources/spriteUp.png")};
@@ -910,10 +901,7 @@ public class LevelOne extends BasicGameState {
 			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 7) {
 				MyTimerTask timer = new MyTimerTask();
 				timer.completeTask(0);
-				wizard.SelectionScreen.addLevel();
-				mapsound.stopSound();
-				wizard.SelectionScreen.queueMusic();
-				sbg.enterState(2);
+				sbg.enterState(1);
 			}
 			if (inputx.isKeyDown(Input.KEY_ENTER) && dial == 6) {
 				MyTimerTask timer = new MyTimerTask();
@@ -1439,7 +1427,7 @@ public class LevelOne extends BasicGameState {
 	@Override
 	public int getID() {
 		// TODO Auto-generated method stub
-		return 3;
+		return 5;
 	}
 	
 	public void settingRedArea() {

@@ -34,6 +34,7 @@ public class Application extends StateBasedGame {
     	this.addState(new SelectionScreen());
     	this.addState(new LevelOne());
     	this.addState(new Shop());
+    	this.addState(new LevelTwo());
     }
     
 	
